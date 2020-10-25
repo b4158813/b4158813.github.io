@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/blog/css/main.css">
+
+
+<link rel="stylesheet" href="/blog/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/blog/lib/pace/pace-theme-minimal.min.css">
+  <script src="/blog/lib/pace/pace.min.js"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://b4158813.gitee.io/blog').hostname,
+    root: '/blog/',
+    scheme: 'Gemini',
+    version: '7.7.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":"mac"},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="《计算流体力学基础及其应用》第三章笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[CFD笔记2] 偏微分方程分类">
+<meta property="og:url" content="https://b4158813.gitee.io/blog/2020/02/10/CFD%E7%AC%94%E8%AE%B0-%E5%81%8F%E5%BE%AE%E5%88%86%E6%96%B9%E7%A8%8B%E5%88%86%E7%B1%BB/index.html">
+<meta property="og:site_name" content="BlablaWu">
+<meta property="og:description" content="《计算流体力学基础及其应用》第三章笔记">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-02-10T08:43:25.000Z">
+<meta property="article:modified_time" content="2020-02-14T11:29:12.000Z">
+<meta property="article:author" content="琉璃糖">
+<meta property="article:tag" content="流体力学">
+<meta property="article:tag" content="CFD">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://b4158813.gitee.io/blog/2020/02/10/CFD%E7%AC%94%E8%AE%B0-%E5%81%8F%E5%BE%AE%E5%88%86%E6%96%B9%E7%A8%8B%E5%88%86%E7%B1%BB/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>[CFD笔记2] 偏微分方程分类 | BlablaWu</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/blog/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">BlablaWu</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">蒟蒻の家</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/blog/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/blog/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/blog/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签<span class="badge">75</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/blog/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类<span class="badge">10</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/blog/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">99</span></a>
+
+  </li>
+        <li class="menu-item menu-item-tools">
+
+    <a href="/blog/tools/" rel="section"><i class="fa fa-fw fa-heartbeat"></i>工具&网站</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/b4158813" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://b4158813.gitee.io/blog/2020/02/10/CFD%E7%AC%94%E8%AE%B0-%E5%81%8F%E5%BE%AE%E5%88%86%E6%96%B9%E7%A8%8B%E5%88%86%E7%B1%BB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/blog/images/boxhead.jpeg">
+      <meta itemprop="name" content="琉璃糖">
+      <meta itemprop="description" content="探索宇宙の奥秘">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BlablaWu">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          [CFD笔记2] 偏微分方程分类
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-02-10 16:43:25" itemprop="dateCreated datePublished" datetime="2020-02-10T16:43:25+08:00">2020-02-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-02-14 19:29:12" itemprop="dateModified" datetime="2020-02-14T19:29:12+08:00">2020-02-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/%E7%89%A9%E7%90%86/" itemprop="url" rel="index">
+                    <span itemprop="name">物理</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/blog/2020/02/10/CFD%E7%AC%94%E8%AE%B0-%E5%81%8F%E5%BE%AE%E5%88%86%E6%96%B9%E7%A8%8B%E5%88%86%E7%B1%BB/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/blog/2020/02/10/CFD%E7%AC%94%E8%AE%B0-%E5%81%8F%E5%BE%AE%E5%88%86%E6%96%B9%E7%A8%8B%E5%88%86%E7%B1%BB/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="《计算流体力学基础及其应用》第三章笔记"><a href="#《计算流体力学基础及其应用》第三章笔记" class="headerlink" title="《计算流体力学基础及其应用》第三章笔记"></a><center>《计算流体力学基础及其应用》第三章笔记</center></h2><a id="more"></a>
+<ul>
+<li>这一章也比较硬核，下面我用比较简洁的语言总结一下知识点。</li>
+</ul>
+<hr>
+<h2 id="拟线性偏微分方程分类"><a href="#拟线性偏微分方程分类" class="headerlink" title="拟线性偏微分方程分类"></a>拟线性偏微分方程分类</h2><h3 id="方法1：克莱姆法则"><a href="#方法1：克莱姆法则" class="headerlink" title="方法1：克莱姆法则"></a>方法1：克莱姆法则</h3><p>考虑如下的<strong>拟线性偏微分方程组</strong>：</p>
+<script type="math/tex; mode=display">
+a_1\frac{\partial u}{\partial x}+b_1\frac{\partial u}{\partial y}+c_1\frac{\partial v}{\partial x}+d_1\frac{\partial v}{\partial y}=f_1\\a_2\frac{\partial u}{\partial x}+b_2\frac{\partial u}{\partial y}+c_2\frac{\partial v}{\partial x}+d_2\frac{\partial v}{\partial y}=f_2\\</script><p>矩阵形式：</p>
+<script type="math/tex; mode=display">
+\begin{pmatrix} a_{1} & b_{1} & c_{1} & d_{1} \\ a_{2} & b_{2} & c_{2} & d_{2} \\ dx & dy & 0 & 0 \\ 0 & 0 & dx & dy \end{pmatrix}\begin{pmatrix}\frac{\partial u}{\partial x}\\\frac{\partial u}{\partial y}\\\frac{\partial v}{\partial x}\\\frac{\partial v}{\partial y}\end{pmatrix}=\begin{pmatrix}f_1\\f_2\\du\\dv\end{pmatrix}</script><p>令<strong>系数矩阵</strong></p>
+<script type="math/tex; mode=display">
+[A]=\begin{pmatrix} a_{1} & b_{1} & c_{1} & d_{1} \\ a_{2} & b_{2} & c_{2} & d_{2} \\ dx & dy & 0 & 0 \\ 0 & 0 & dx & dy \end{pmatrix}</script><script type="math/tex; mode=display">
+[B]=\begin{pmatrix} f_{1} & b_{1} & c_{1} & d_{1} \\ f_{2} & b_{2} & c_{2} & d_{2} \\ du & dy & 0 & 0 \\ dv & 0 & dx & dy \end{pmatrix}</script><p>则利用<strong>克莱姆法则</strong>解得：</p>
+<script type="math/tex; mode=display">
+\frac{\partial u}{\partial x}=\frac{|B|}{|A|}</script><p>同理可解出其他解</p>
+<ul>
+<li><p>现在我们需要在$xy$平面内找到一条曲线，使得$u$和$v$的导数都是不确定的，而且跨过这条曲线时，这些导数还是不连续的，我们称这样的曲线为<strong>特征线</strong></p>
+</li>
+<li><p>显然当$|A|=0$该导数不确定，通过数学推导可以得出以下结论：</p>
+<script type="math/tex; mode=display">
+D=b^2-4ac\begin{cases} >0 \ \ 平面上每一点都有两条不同的实特征线\rightarrow双曲型方程组\\ =0\ \ 只有一条特征线\rightarrow抛物型方程组\\ <0\ \ 虚特征线\rightarrow椭圆型方程组\end{cases}\\</script><p>其中</p>
+<script type="math/tex; mode=display">
+\begin{aligned}a&=(a_1c_2-a_2c_1)\\b&=-(a_1d_2-a_2d_1+b_1c_2-b_2c_1)\\c&=(b_1d_2-b_2d_1)\end{aligned}</script></li>
+</ul>
+<h3 id="方法2：特征值法"><a href="#方法2：特征值法" class="headerlink" title="方法2：特征值法"></a>方法2：特征值法</h3><p>将上述方程组写为如下形式：</p>
+<script type="math/tex; mode=display">
+W=\begin{pmatrix}u\\v\end{pmatrix}\\\begin{pmatrix}a_1&c_1\\a_2&c_2\end{pmatrix}\frac{\partial W}{\partial x}+\begin{pmatrix}b_1&d_1\\b_2&d_2\end{pmatrix}\frac{\partial W}{\partial y}=0</script><p>或</p>
+<script type="math/tex; mode=display">
+[K]\frac{\partial W}{\partial x}+[M]\frac{\partial W}{\partial y}=0</script><p>变形得：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}&\frac{\partial W}{\partial x}+[K]^{-1}[M]\frac{\partial W}{\partial y}=0\\&\rightarrow \frac{\partial W}{\partial x}+[N]\frac{\partial W}{\partial y}=0\end{aligned}</script><p>求出$[N]$的特征值$\lambda$，即可判断方程组类型：</p>
+<script type="math/tex; mode=display">
+\lambda均为实数：双曲型\\\lambda均为复数：椭圆型\\\lambda有实有虚：混合型</script><h2 id="不同类型偏微分方程性质"><a href="#不同类型偏微分方程性质" class="headerlink" title="不同类型偏微分方程性质"></a>不同类型偏微分方程性质</h2><h3 id="术语"><a href="#术语" class="headerlink" title="术语"></a>术语</h3><p>以下术语均针对$xy$平面上一点$P$而言：</p>
+<ul>
+<li>左行特征曲线：站在点$P$上，面对$x$轴正向，必须向左转头才能看见的特征曲线</li>
+<li><p>右行特征曲线：同上，向右转头才能看见的特征曲线</p>
+</li>
+<li><p>影响区域：沿$x$轴正向夹在两条特征曲线之间的区域（受点$P$扰动影响的区域）</p>
+</li>
+<li>依赖区域：影响点$P$的区域</li>
+</ul>
+<h3 id="双曲型"><a href="#双曲型" class="headerlink" title="双曲型"></a>双曲型</h3><ul>
+<li>有两条特征曲线</li>
+<li>可以利用<strong>“推进”</strong>求解（给定初始条件和边界条件，从前往后一步步求解）</li>
+</ul>
+<h4 id="举例1-定常无粘超声速流动"><a href="#举例1-定常无粘超声速流动" class="headerlink" title="举例1. 定常无粘超声速流动"></a>举例1. 定常无粘超声速流动</h4><ul>
+<li>注意：任何定常的局部<strong>亚声速</strong>流动都是<strong>椭圆型方程</strong>决定的，因此不可以“推进”求解</li>
+</ul>
+<h4 id="举例2-非定常无粘流动"><a href="#举例2-非定常无粘流动" class="headerlink" title="举例2. 非定常无粘流动"></a>举例2. 非定常无粘流动</h4><ul>
+<li><p>对<strong>时间是双曲型</strong>的，如：一维管道内波的运动、绕过振荡翼型的二维非定常流动</p>
+</li>
+<li><p>无论是<strong>亚声速</strong>还是<strong>超声速</strong>都是<strong>双曲型</strong>方程决定，因此都可以“推进”求解</p>
+</li>
+<li>通过对非定常流动的长时间“推进”求解，可以得到最终的<strong>定常流场</strong>的解</li>
+</ul>
+<h3 id="抛物型"><a href="#抛物型" class="headerlink" title="抛物型"></a>抛物型</h3><ul>
+<li>只有一条铅垂的特征线</li>
+<li>可以利用<strong>“推进”</strong>求解</li>
+</ul>
+<h4 id="举例1-定常边界层流动"><a href="#举例1-定常边界层流动" class="headerlink" title="举例1. 定常边界层流动"></a>举例1. 定常边界层流动</h4><ul>
+<li><p>适用于雷诺数很大时，简化的$NS$方程——<strong>边界层方程</strong></p>
+</li>
+<li><p><strong>边界层方程是抛物型的</strong></p>
+</li>
+</ul>
+<h4 id="举例2-“抛物化”粘性流动"><a href="#举例2-“抛物化”粘性流动" class="headerlink" title="举例2. “抛物化”粘性流动"></a>举例2. “抛物化”粘性流动</h4><ul>
+<li>当雷诺数很小时，对于尖头物体，激波和流场都可能是粘性的</li>
+<li>对$NS$方程做另一种简化，将包含流向导数的粘性项忽略，而且流动定常，从而导出——<strong>抛物化$NS$方程（$PNS$）</strong></li>
+<li>$PNS$可以通过<strong>推进求解</strong></li>
+</ul>
+<h4 id="举例3-非定常热传导"><a href="#举例3-非定常热传导" class="headerlink" title="举例3. 非定常热传导"></a>举例3. 非定常热传导</h4><p>导热微分方程如下：</p>
+<script type="math/tex; mode=display">
+\rho\frac{\partial e}{\partial t}=\rho \dot q +\frac{\partial}{\partial x}\left(k\frac{\partial T}{\partial x}\right)+\frac{\partial}{\partial y}\left(k\frac{\partial T}{\partial y}\right)+\frac{\partial}{\partial z}\left(k\frac{\partial T}{\partial z}\right)</script><p>若<strong>无内热源</strong>且内能$e=c_vT$，则上述方程化简为：</p>
+<script type="math/tex; mode=display">
+\frac{\partial T}{\partial t}=\frac{1}{\rho c_v}\left[\frac{\partial}{\partial x}\left(k\frac{\partial T}{\partial x}\right)+\frac{\partial}{\partial y}\left(k\frac{\partial T}{\partial y}\right)+\frac{\partial}{\partial z}\left(k\frac{\partial T}{\partial z}\right)\right]</script><p>若$k$为常数，则进一步化简为：</p>
+<script type="math/tex; mode=display">
+\frac{\partial T}{\partial t}=\alpha \nabla^2T\\热扩散系数：\alpha=\frac{k}{\rho c_v}</script><h3 id="椭圆型"><a href="#椭圆型" class="headerlink" title="椭圆型"></a>椭圆型</h3><ul>
+<li>没有限制的影响区域和依赖区域，信息可以向任何方向传播到任何地方</li>
+<li><p>“陪审团”问题，无法通过“推进”求解，需要对流场中所有点同时求解</p>
+</li>
+<li><p>必须给定边界条件：</p>
+<ul>
+<li>在边界上指定未知函数$u$和$v$：$Dirichlet$条件</li>
+<li>在边界上指定未知函数的导数,如$\frac{\partial u}{\partial x}$：$Neumann$条件</li>
+<li>上述两种条件的混合条件</li>
+</ul>
+</li>
+</ul>
+<h4 id="举例1-定常亚声速无粘流动"><a href="#举例1-定常亚声速无粘流动" class="headerlink" title="举例1. 定常亚声速无粘流动"></a>举例1. 定常亚声速无粘流动</h4><ul>
+<li>如：绕翼型的亚声速流动</li>
+<li>由于翼型的存在所造成的扰动将会传遍整个流场，包括上游</li>
+</ul>
+<h4 id="举例2-不可压无粘流动"><a href="#举例2-不可压无粘流动" class="headerlink" title="举例2. 不可压无粘流动"></a>举例2. 不可压无粘流动</h4><ul>
+<li>是马赫数趋于零时的亚声速流动的极限情况</li>
+</ul>
+<h3 id="定解问题的适定性"><a href="#定解问题的适定性" class="headerlink" title="定解问题的适定性"></a>定解问题的适定性</h3><ul>
+<li>适定性：如果一个偏微分方程的解存在并且是唯一的，同时，解连续地依赖于初始条件和边界条件，那么这个问题就是<strong>适定的</strong></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+	  <div>
+      
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束啦<i class="fa fa-paw"></i>感谢您的阅读~-------------</div>
+    
+</div>
+
+      
+	  </div>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/blog/tags/%E6%B5%81%E4%BD%93%E5%8A%9B%E5%AD%A6/" rel="tag"># 流体力学</a>
+              <a href="/blog/tags/CFD/" rel="tag"># CFD</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/2020/02/08/wxPython%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="prev" title="wxPython学习笔记">
+      <i class="fa fa-chevron-left"></i> wxPython学习笔记
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/2020/02/11/%E5%9B%BE%E8%AE%BA%E6%9C%80%E7%9F%AD%E8%B7%AF/" rel="next" title="$Dijkstra$ & $SPFA$">
+      $Dijkstra$ & $SPFA$ <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+  
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#《计算流体力学基础及其应用》第三章笔记"><span class="nav-number">1.</span> <span class="nav-text">《计算流体力学基础及其应用》第三章笔记</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#拟线性偏微分方程分类"><span class="nav-number">2.</span> <span class="nav-text">拟线性偏微分方程分类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#方法1：克莱姆法则"><span class="nav-number">2.1.</span> <span class="nav-text">方法1：克莱姆法则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#方法2：特征值法"><span class="nav-number">2.2.</span> <span class="nav-text">方法2：特征值法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#不同类型偏微分方程性质"><span class="nav-number">3.</span> <span class="nav-text">不同类型偏微分方程性质</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#术语"><span class="nav-number">3.1.</span> <span class="nav-text">术语</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#双曲型"><span class="nav-number">3.2.</span> <span class="nav-text">双曲型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#举例1-定常无粘超声速流动"><span class="nav-number">3.2.1.</span> <span class="nav-text">举例1. 定常无粘超声速流动</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#举例2-非定常无粘流动"><span class="nav-number">3.2.2.</span> <span class="nav-text">举例2. 非定常无粘流动</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#抛物型"><span class="nav-number">3.3.</span> <span class="nav-text">抛物型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#举例1-定常边界层流动"><span class="nav-number">3.3.1.</span> <span class="nav-text">举例1. 定常边界层流动</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#举例2-“抛物化”粘性流动"><span class="nav-number">3.3.2.</span> <span class="nav-text">举例2. “抛物化”粘性流动</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#举例3-非定常热传导"><span class="nav-number">3.3.3.</span> <span class="nav-text">举例3. 非定常热传导</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#椭圆型"><span class="nav-number">3.4.</span> <span class="nav-text">椭圆型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#举例1-定常亚声速无粘流动"><span class="nav-number">3.4.1.</span> <span class="nav-text">举例1. 定常亚声速无粘流动</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#举例2-不可压无粘流动"><span class="nav-number">3.4.2.</span> <span class="nav-text">举例2. 不可压无粘流动</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#定解问题的适定性"><span class="nav-number">3.5.</span> <span class="nav-text">定解问题的适定性</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+	  
+	  
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="琉璃糖"
+      src="/blog/images/boxhead.jpeg">
+  <p class="site-author-name" itemprop="name">琉璃糖</p>
+  <div class="site-description" itemprop="description">探索宇宙の奥秘</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/blog/archives/">
+        
+          <span class="site-state-item-count">99</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/blog/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/blog/tags/">
+          
+        <span class="site-state-item-count">75</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/b4158813" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;b4158813" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://blog.csdn.net/weixin_44042643" title="CSDN → https:&#x2F;&#x2F;blog.csdn.net&#x2F;weixin_44042643" rel="noopener" target="_blank"><i class="fa fa-fw fa-crosshairs"></i>CSDN</a>
+      </span>
+  </div>
+
+
+
+      </div>
+	 
+	</div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">琉璃糖</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">343k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">10:24</span>
+</div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='255,251,240' opacity='0.8' zIndex='-1' count='100' src="/blog/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/blog/lib/anime.min.js"></script>
+  <script src="/blog/lib/velocity/velocity.min.js"></script>
+  <script src="/blog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/blog/js/utils.js"></script>
+
+<script src="/blog/js/motion.js"></script>
+
+
+<script src="/blog/js/schemes/pisces.js"></script>
+
+
+<script src="/blog/js/next-boot.js"></script>
+
+
+  <script defer src="/blog/lib/three/three.min.js"></script>
+
+
+  
+
+
+
+
+  
+<script src="/blog/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('div.pdf').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/pdfobject@2/pdfobject.min.js', () => {
+    document.querySelectorAll('div.pdf').forEach(element => {
+      PDFObject.embed(element.getAttribute('target'), element, {
+        pdfOpenParams: {
+          navpanes: 0,
+          toolbar: 0,
+          statusbar: 0,
+          pagemode: 'thumbs',
+          view: 'FitH'
+        },
+        PDFJS_URL: '/lib/pdf/web/viewer.html',
+        height: element.getAttribute('height') || '500px'
+      });
+    });
+  }, window.PDFObject);
+}
+</script>
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el: '#valine-comments',
+      verify: true,
+      notify: true,
+      appId: '8WpS33YNRGD4IQNVQgVCmHQy-gzGzoHsz',
+      appKey: 'jed4H3219MxS5igBfmfTU81w',
+      placeholder: "Just go go",
+      avatar: 'mm',
+      meta: guest,
+      pageSize: '10' || 10,
+      visitor: false,
+      lang: '' || 'zh-cn',
+      path: location.pathname,
+      recordIP: false,
+      serverURLs: ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+

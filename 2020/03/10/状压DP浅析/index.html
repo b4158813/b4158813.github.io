@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/blog/css/main.css">
+
+
+<link rel="stylesheet" href="/blog/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/blog/lib/pace/pace-theme-minimal.min.css">
+  <script src="/blog/lib/pace/pace.min.js"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://b4158813.gitee.io/blog').hostname,
+    root: '/blog/',
+    scheme: 'Gemini',
+    version: '7.7.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":"mac"},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="动态规划の状压dp">
+<meta property="og:type" content="article">
+<meta property="og:title" content="状压DP浅析">
+<meta property="og:url" content="https://b4158813.gitee.io/blog/2020/03/10/%E7%8A%B6%E5%8E%8BDP%E6%B5%85%E6%9E%90/index.html">
+<meta property="og:site_name" content="BlablaWu">
+<meta property="og:description" content="动态规划の状压dp">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2020/03/09/AsyhKmX7zH6lc9R.png">
+<meta property="article:published_time" content="2020-03-10T11:18:00.000Z">
+<meta property="article:modified_time" content="2020-03-10T14:50:48.000Z">
+<meta property="article:author" content="琉璃糖">
+<meta property="article:tag" content="动态规划">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/03/09/AsyhKmX7zH6lc9R.png">
+
+<link rel="canonical" href="https://b4158813.gitee.io/blog/2020/03/10/%E7%8A%B6%E5%8E%8BDP%E6%B5%85%E6%9E%90/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>状压DP浅析 | BlablaWu</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/blog/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">BlablaWu</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">蒟蒻の家</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/blog/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/blog/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/blog/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签<span class="badge">75</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/blog/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类<span class="badge">10</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/blog/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">99</span></a>
+
+  </li>
+        <li class="menu-item menu-item-tools">
+
+    <a href="/blog/tools/" rel="section"><i class="fa fa-fw fa-heartbeat"></i>工具&网站</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/b4158813" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://b4158813.gitee.io/blog/2020/03/10/%E7%8A%B6%E5%8E%8BDP%E6%B5%85%E6%9E%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/blog/images/boxhead.jpeg">
+      <meta itemprop="name" content="琉璃糖">
+      <meta itemprop="description" content="探索宇宙の奥秘">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BlablaWu">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          状压DP浅析
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-03-10 19:18:00 / 修改时间：22:50:48" itemprop="dateCreated datePublished" datetime="2020-03-10T19:18:00+08:00">2020-03-10</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index">
+                    <span itemprop="name">算法</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/blog/2020/03/10/%E7%8A%B6%E5%8E%8BDP%E6%B5%85%E6%9E%90/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/blog/2020/03/10/%E7%8A%B6%E5%8E%8BDP%E6%B5%85%E6%9E%90/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>5.2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>9 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="动态规划の状压dp"><a href="#动态规划の状压dp" class="headerlink" title="动态规划の状压dp"></a><center>动态规划の状压dp</center></h2><a id="more"></a>
+<h2 id="核心思想"><a href="#核心思想" class="headerlink" title="核心思想"></a>核心思想</h2><ul>
+<li><p><strong>当我们有时无法用普通的dp以及一些算法表示一些状态、解决一些问题的时候，我们就可以想到状态压缩动态规划</strong></p>
+</li>
+<li><p>通常情况下，我们可以利用一个整数的二进制表示来表达一个状态</p>
+<p>如：101(5)，其中1表示该位处理过，0表示未处理（或一些别的物理意义）</p>
+<p>因此，我们便可以用一个整数来表示dp的状态，十分简便</p>
+</li>
+<li><p>然而，由于该状态表示法十分吃空间（如一个状态有十个决策，那么就要用$2^{10}$这么大的数来表示所有可能的状态），因此使用状压的题一般数据范围都很小（<strong>十几</strong>的样子）</p>
+</li>
+</ul>
+<h2 id="二进制状压操作"><a href="#二进制状压操作" class="headerlink" title="二进制状压操作"></a>二进制状压操作</h2><p>可以康康下图（网上复制来的，不太严谨，有的括号没加，要记住<strong>算术运算的优先级高于移位运算</strong>）</p>
+<p><img src="https://i.loli.net/2020/03/09/AsyhKmX7zH6lc9R.png" alt="image.png"></p>
+<p>除此之外，一些最常用的操作如下：</p>
+<ul>
+<li><p>要求一行（or 一列）的状态不能有两个相邻</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> !((x&amp;(x&lt;&lt;<span class="number">1</span>))||(x&amp;(x&gt;&gt;<span class="number">1</span>)));</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>要求一行（or 一列）的状态不能间隔一个相邻</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> !((x&amp;(x&lt;&lt;<span class="number">2</span>))||(x&amp;(x&gt;&gt;<span class="number">2</span>)));</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>要求一行（or 一列）的状态不能连续三个相邻</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> !(((x&amp;(x&lt;&lt;<span class="number">1</span>))&amp;&amp;(x&amp;(x&lt;&lt;<span class="number">2</span>)))||((x&amp;(x&gt;&gt;<span class="number">1</span>))&amp;&amp;(x&amp;(x&gt;&gt;<span class="number">2</span>))));</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>以此类推。。。总之就是<strong>本身和本身左移（或右移）若干位相与</strong>之后有没有重合的部分</p>
+<ul>
+<li>计算一个数的二进制位总共多少个1</li>
+</ul>
+<p><code>__builtin_popcount()</code>当然可以，但有时候会出玄学bug，慎用</p>
+<p>下面的方法要牢记</p>
+ <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">int</span> <span class="title">getnum</span><span class="params">(<span class="keyword">int</span> x)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> ans=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span>(x)&#123;</span><br><span class="line">        ++ans;</span><br><span class="line">        x-=(x&amp;(-x)); <span class="comment">//同lowbit操作</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="一般的板子-amp-优化操作"><a href="#一般的板子-amp-优化操作" class="headerlink" title="一般的板子&amp;优化操作"></a>一般的板子&amp;优化操作</h2><p>其实dp没有板子。。。</p>
+<p>强行写一个最普通的吧</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;n;i++)&#123; <span class="comment">//枚举每一行</span></span><br><span class="line">    <span class="number">1.f</span><span class="keyword">or</span>(<span class="keyword">int</span> j=<span class="number">1</span>;j&lt;=cnt) <span class="comment">//如果预处理过状态总数，就用这个</span></span><br><span class="line">    <span class="number">2.f</span><span class="keyword">or</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;<span class="number">1</span>&lt;&lt;m;j++) <span class="comment">//不担心时间复杂度的话，也可现在枚举所有状态</span></span><br><span class="line">    &#123;</span><br><span class="line">        ...(各种嵌套循环和条件判断)</span><br><span class="line">        dp[][]...=<span class="built_in">max</span>/<span class="built_in">min</span>(d[][]...,something) <span class="comment">//转移</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>优化的话，一般情况是<strong>爆空间</strong><del>（本蒟蒻只会这个）</del>，那么可以考虑预处理状态</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> cnt,sta[];</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">1</span>&lt;&lt;m;i++)&#123;</span><br><span class="line">    <span class="keyword">if</span>(ok(i)) <span class="comment">//ok函数用来判断该状态是否合理</span></span><br><span class="line">        sta[++cnt]=i; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以及<strong>滚动数组</strong>（对就是01背包里面那个滚动数组），即将一维开小，然后 <strong>根据当前状态需要前几个状态转移过来</strong> 来确定该维度大小，最后更新时只需取模即可</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">状态转移时：<span class="comment">//需要前t个状态转移过来</span></span><br><span class="line">    dp[i%t][]...=<span class="built_in">max</span>/<span class="built_in">min</span>(dp[i%t][]...,...)</span><br></pre></td></tr></table></figure>
+<h2 id="习题"><a href="#习题" class="headerlink" title="习题"></a>习题</h2><p>dp当然要多做题啦~</p>
+<h3 id="洛谷-P1879-玉米地"><a href="#洛谷-P1879-玉米地" class="headerlink" title="洛谷 P1879 玉米地"></a><a href="https://www.luogu.com.cn/problem/P1879" target="_blank" rel="noopener">洛谷 P1879 玉米地</a></h3><p>题意：给一个n*m的田地，有些地方可以种草地，要求种的草地不能相邻（没有公共边），求共有多少种种植方案？(答案模1e9)</p>
+<p>题解：经典状压dp</p>
+<p>定义<code>dp[i][j]</code>：处理到第<code>i</code>行状态为<code>j</code>时的方案总数，转移方程如下</p>
+<script type="math/tex; mode=display">
+dp[i][j]=(dp[i][j]+dp[i-1][k])\%mod</script><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> mod=<span class="number">1e9</span>;</span><br><span class="line"><span class="keyword">int</span> n,m,dp[<span class="number">15</span>][<span class="number">1</span>&lt;&lt;<span class="number">13</span>],a[<span class="number">15</span>][<span class="number">15</span>];</span><br><span class="line"><span class="keyword">int</span> f[<span class="number">15</span>];</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">bool</span> <span class="title">ok</span><span class="params">(<span class="keyword">int</span> x)</span></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> !(x&amp;(x&lt;&lt;<span class="number">1</span>)||x&amp;(x&gt;&gt;<span class="number">1</span>)); <span class="comment">//判断状态是否满足不相邻</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">"%d%d"</span>,&amp;n,&amp;m);</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=n;i++)&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">1</span>;j&lt;=m;j++)&#123;</span><br><span class="line">			<span class="built_in">scanf</span>(<span class="string">"%d"</span>,&amp;a[i][j]);</span><br><span class="line">			<span class="keyword">if</span>(a[i][j]==<span class="number">1</span>) f[i]+=<span class="number">1</span>&lt;&lt;(m-j);<span class="comment">//把每行输入转为二进制状态</span></span><br><span class="line">		&#125;</span><br><span class="line"><span class="comment">//		printf("%d:%d\n",i,f[i]);</span></span><br><span class="line">	&#125;</span><br><span class="line">	dp[<span class="number">0</span>][<span class="number">0</span>]=<span class="number">1</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=n;i++)&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;(<span class="number">1</span>&lt;&lt;m);j++)&#123; <span class="comment">//枚举当前行状态</span></span><br><span class="line">			<span class="keyword">if</span>(ok(j)&amp;&amp;((j&amp;f[i])==j))&#123; <span class="comment">//右边这个是满足这块田可以种草地</span></span><br><span class="line">				<span class="keyword">for</span>(<span class="keyword">int</span> k=<span class="number">0</span>;k&lt;(<span class="number">1</span>&lt;&lt;m);k++)&#123;<span class="comment">//枚举前一行状态</span></span><br><span class="line">					<span class="keyword">if</span>(ok(k)&amp;&amp;((k&amp;j)==<span class="number">0</span>))&#123;<span class="comment">//同上</span></span><br><span class="line">						dp[i][j]=(dp[i][j]+dp[i<span class="number">-1</span>][k])%mod;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">int</span> ans=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">1</span>&lt;&lt;m;i++) ans=(ans+dp[n][i])%mod; </span><br><span class="line">    <span class="comment">//求所有可能方案数</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%d\n"</span>,ans);</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125; <span class="comment">//https://www.luogu.com.cn/problem/P1879</span></span><br></pre></td></tr></table></figure>
+<h3 id="HDU-1565-方格取数"><a href="#HDU-1565-方格取数" class="headerlink" title="HDU 1565 方格取数"></a><a href="https://vjudge.net/problem/HDU-1565" target="_blank" rel="noopener">HDU 1565 方格取数</a></h3><p>题意：给定一个n*n的非负数矩阵，你可以从中取出不相邻（没有公共边）的若干个数，求取出的数的最大的和</p>
+<p>题解：经典状压dp</p>
+<p>定义<code>dp[i][j]</code>：处理到第<code>i</code>行的状态为<code>j</code>时的取出的最大的和，转移方程如下，其中<code>sum[j]</code>为<code>j</code>状态取出数的和</p>
+<script type="math/tex; mode=display">
+dp[i][j]=max(dp[i][j],dp[i-1][k]+sum[j])</script><p>这题数据范围有点大（&lt;=20），因此需要预处理，否则T爆</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">long</span> <span class="keyword">long</span> ll;</span><br><span class="line">ll dp[<span class="number">21</span>][<span class="number">1</span>&lt;&lt;<span class="number">17</span>];</span><br><span class="line">ll a[<span class="number">21</span>][<span class="number">21</span>];</span><br><span class="line">ll cnm[<span class="number">1</span>&lt;&lt;<span class="number">17</span>];</span><br><span class="line"><span class="keyword">int</span> n;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">bool</span> <span class="title">ok</span><span class="params">(<span class="keyword">int</span> x)</span></span>&#123; <span class="comment">//老骚操作了</span></span><br><span class="line">	<span class="keyword">return</span> (!(x&amp;(x&lt;&lt;<span class="number">1</span>))&amp;&amp;(!(x&amp;(x&gt;&gt;<span class="number">1</span>))));</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">int</span> <span class="title">getsum</span><span class="params">(<span class="keyword">int</span> row,<span class="keyword">int</span> sta)</span></span>&#123; <span class="comment">//获得当前行取数状态的和</span></span><br><span class="line">	ll sum=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=n;i++)&#123;</span><br><span class="line">		<span class="keyword">if</span>(sta&amp;(<span class="number">1</span>&lt;&lt;i<span class="number">-1</span>)) sum+=a[row][n-i+<span class="number">1</span>];</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> sum;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">while</span>(<span class="built_in">scanf</span>(<span class="string">"%d"</span>,&amp;n)!=EOF)&#123;</span><br><span class="line">		<span class="built_in">memset</span>(dp,<span class="number">0</span>,<span class="keyword">sizeof</span>(dp));</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=n;i++)&#123;</span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">1</span>;j&lt;=n;j++)&#123;</span><br><span class="line">				<span class="built_in">scanf</span>(<span class="string">"%lld"</span>,&amp;a[i][j]);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">int</span> cnt=<span class="number">0</span>;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">1</span>&lt;&lt;n;i++)&#123; <span class="comment">//预处理可行状态</span></span><br><span class="line">			<span class="keyword">if</span>(ok(i)) cnm[cnt++]=i;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=n;i++)&#123;</span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;cnt;j++)&#123;</span><br><span class="line">				ll sum=getsum(i,cnm[j]); <span class="comment">//获得和</span></span><br><span class="line">				<span class="keyword">for</span>(<span class="keyword">int</span> k=<span class="number">0</span>;k&lt;cnt;k++)&#123;</span><br><span class="line">					<span class="keyword">if</span>((cnm[j]&amp;cnm[k])==<span class="number">0</span>)&#123;</span><br><span class="line">						dp[i][j]=<span class="built_in">max</span>(dp[i][j],dp[i<span class="number">-1</span>][k]+sum);</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		ll ans=<span class="number">0</span>;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;cnt;i++)&#123; <span class="comment">//千万别忘了这个</span></span><br><span class="line">			ans=<span class="built_in">max</span>(ans,dp[n][i]); <span class="comment">//取最终状态中和最大的状态的答案</span></span><br><span class="line">		&#125;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"%lld\n"</span>,ans);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125; <span class="comment">//https://vjudge.net/problem/HDU-1565</span></span><br></pre></td></tr></table></figure>
+<h3 id="洛谷-P1123-取数游戏"><a href="#洛谷-P1123-取数游戏" class="headerlink" title="洛谷 P1123 取数游戏"></a><a href="https://www.luogu.com.cn/problem/P1123" target="_blank" rel="noopener">洛谷 P1123 取数游戏</a></h3><p>题意：跟上一题一样，只不过相邻的定义中改为 周围八个数</p>
+<p>题解：同上，只不过枚举上一层时更新答案的条件需要改改了</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">long</span> <span class="keyword">long</span> ll;</span><br><span class="line">ll dp[<span class="number">7</span>][<span class="number">1</span>&lt;&lt;<span class="number">7</span>];</span><br><span class="line">ll a[<span class="number">7</span>][<span class="number">7</span>];</span><br><span class="line">ll cnm[<span class="number">1</span>&lt;&lt;<span class="number">7</span>];</span><br><span class="line"><span class="keyword">int</span> n,m;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">bool</span> <span class="title">ok</span><span class="params">(<span class="keyword">int</span> x)</span></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> (!(x&amp;(x&lt;&lt;<span class="number">1</span>))&amp;&amp;(!(x&amp;(x&gt;&gt;<span class="number">1</span>))));</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">int</span> <span class="title">getsum</span><span class="params">(<span class="keyword">int</span> row,<span class="keyword">int</span> sta)</span></span>&#123;</span><br><span class="line">	ll sum=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=m;i++)&#123;</span><br><span class="line">		<span class="keyword">if</span>(sta&amp;(<span class="number">1</span>&lt;&lt;i<span class="number">-1</span>)) sum+=a[row][m-i+<span class="number">1</span>];</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> sum;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> t;<span class="built_in">cin</span>&gt;&gt;t;</span><br><span class="line">	<span class="keyword">while</span>(t--)&#123;</span><br><span class="line">		<span class="built_in">cin</span>&gt;&gt;n&gt;&gt;m;</span><br><span class="line">		<span class="built_in">memset</span>(dp,<span class="number">0</span>,<span class="keyword">sizeof</span>(dp));</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=n;i++)&#123;</span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">1</span>;j&lt;=m;j++)&#123;</span><br><span class="line">				<span class="built_in">scanf</span>(<span class="string">"%lld"</span>,&amp;a[i][j]);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">int</span> cnt=<span class="number">0</span>;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">1</span>&lt;&lt;m;i++)&#123;</span><br><span class="line">			<span class="keyword">if</span>(ok(i)) cnm[cnt++]=i;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=n;i++)&#123;</span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;cnt;j++)&#123;</span><br><span class="line">				ll sum=getsum(i,cnm[j]);</span><br><span class="line">				<span class="keyword">for</span>(<span class="keyword">int</span> k=<span class="number">0</span>;k&lt;cnt;k++)&#123;</span><br><span class="line"><span class="comment">// 如果当前行状态和上一行状态不移/左移/右移相与为0则合理</span></span><br><span class="line">					<span class="keyword">if</span>((cnm[k]&amp;cnm[j])==<span class="number">0</span>&amp;&amp;((cnm[k]&lt;&lt;<span class="number">1</span>)&amp;cnm[j])==<span class="number">0</span>&amp;&amp;((cnm[k]&gt;&gt;<span class="number">1</span>)&amp;cnm[j])==<span class="number">0</span>)&#123;</span><br><span class="line">						dp[i][j]=<span class="built_in">max</span>(dp[i][j],dp[i<span class="number">-1</span>][k]+sum);</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		ll ans=<span class="number">0</span>;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;cnt;i++)&#123;</span><br><span class="line">			ans=<span class="built_in">max</span>(ans,dp[n][i]);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"%lld\n"</span>,ans);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125; <span class="comment">//https://www.luogu.com.cn/problem/P1123</span></span><br></pre></td></tr></table></figure>
+<h3 id="洛谷-P1171-售货员的难题（旅行商问题）"><a href="#洛谷-P1171-售货员的难题（旅行商问题）" class="headerlink" title="洛谷 P1171 售货员的难题（旅行商问题）"></a><a href="https://www.luogu.com.cn/problem/P1171" target="_blank" rel="noopener">洛谷 P1171 售货员的难题（旅行商问题）</a></h3><p>题意：TSP问题，即求出从起点出发访问图中所有点再回到起点的最短路</p>
+<p>题解：超级经典的NP完全问题，数据量大的话只能用一些选学算法来搞，不过如果数据量小的话，就可以用强大的状压dp啦</p>
+<p>定义状态<code>dp[i][j]</code>：访问情况为<code>i</code>状态时当前在<code>j</code>这个节点的最短路，其中状态用二进制整数表示，1表示该节点走过，0表示未走过，那么显然有状态转移方程（其中dis为图的邻接矩阵，值为两点间距离）</p>
+<script type="math/tex; mode=display">
+dp[i|(1<<(j-1))][j]=min(dp[i|(1<<(j-1))][j],dp[i][k]+dis[k][j])</script><p>那么最终答案就是</p>
+<script type="math/tex; mode=display">
+dp[(1<<n)-1][i]+dis[i][1]中的最小值</script><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> mod=<span class="number">1e9</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> inf=<span class="number">1</span>&lt;&lt;<span class="number">30</span>;</span><br><span class="line"><span class="keyword">int</span> n,dp[<span class="number">1</span>&lt;&lt;<span class="number">20</span>][<span class="number">25</span>];</span><br><span class="line"><span class="keyword">int</span> a[<span class="number">25</span>][<span class="number">25</span>];</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">"%d"</span>,&amp;n);</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=n;i++)&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">1</span>;j&lt;=n;j++)&#123;</span><br><span class="line">			<span class="built_in">scanf</span>(<span class="string">"%d"</span>,&amp;a[i][j]);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">memset</span>(dp,<span class="number">67</span>,<span class="keyword">sizeof</span>(dp));<span class="comment">//求最小值，dp初始化为最大</span></span><br><span class="line">	dp[<span class="number">1</span>][<span class="number">1</span>]=<span class="number">0</span>;<span class="comment">//初始状态</span></span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">1</span>&lt;&lt;n;i++)&#123;<span class="comment">//枚举当前状态</span></span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">1</span>;j&lt;=n;j++)&#123;<span class="comment">//枚举每个节点</span></span><br><span class="line">			<span class="keyword">if</span>(!((<span class="number">1</span>&lt;&lt;(j<span class="number">-1</span>))&amp;i))&#123;<span class="comment">//如果这个节点没走过</span></span><br><span class="line">				<span class="keyword">for</span>(<span class="keyword">int</span> k=<span class="number">1</span>;k&lt;=n;k++)&#123;<span class="comment">//枚举每个节点</span></span><br><span class="line">					<span class="keyword">if</span>((<span class="number">1</span>&lt;&lt;(k<span class="number">-1</span>))&amp;i)<span class="comment">//如果走过，则个可用它更新j</span></span><br><span class="line">						dp[i|(<span class="number">1</span>&lt;&lt;(j<span class="number">-1</span>))][j]=<span class="built_in">min</span>(dp[i|(<span class="number">1</span>&lt;&lt;(j<span class="number">-1</span>))][j],dp[i][k]+a[k][j]); <span class="comment">//愉快地更新j</span></span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">int</span> ans=inf;</span><br><span class="line">    <span class="comment">//取所有合法状态的最短路</span></span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">2</span>;i&lt;=n;i++) ans=<span class="built_in">min</span>(ans,dp[(<span class="number">1</span>&lt;&lt;n)<span class="number">-1</span>][i]+a[i][<span class="number">1</span>]);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%d\n"</span>,ans);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;  <span class="comment">//https://www.luogu.com.cn/problem/P1171</span></span><br></pre></td></tr></table></figure>
+<h3 id="洛谷-P2622-关灯问题Ⅱ"><a href="#洛谷-P2622-关灯问题Ⅱ" class="headerlink" title="洛谷 P2622 关灯问题Ⅱ"></a><a href="https://www.luogu.com.cn/problem/P2622" target="_blank" rel="noopener">洛谷 P2622 关灯问题Ⅱ</a></h3><p>题意：见链接（已经够简洁了）</p>
+<p>题解：状压dp，按照 灯的状态 、按下每个按钮、按下按钮后每个灯的变化情况枚举，就一定能枚举到所有情况，用按下按钮后的状态来更新按下之前的状态即可</p>
+<p>定义<code>dp[i]</code>：灯在<code>i</code>状态下最少需要按下的按钮次数，则转移方程为</p>
+<script type="math/tex; mode=display">
+dp[i]=min(dp[i],dp[j]+1)</script><p>最后处理一下不存在的情况即可</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">int</span> dp[<span class="number">1</span>&lt;&lt;<span class="number">15</span>];</span><br><span class="line"><span class="keyword">int</span> a[<span class="number">105</span>][<span class="number">15</span>];</span><br><span class="line"><span class="keyword">int</span> n,m;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">"%d%d"</span>,&amp;n,&amp;m);</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=m;i++)</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">1</span>;j&lt;=n;j++)</span><br><span class="line">			<span class="built_in">scanf</span>(<span class="string">"%d"</span>,&amp;a[i][j]);</span><br><span class="line">	<span class="built_in">memset</span>(dp,<span class="number">0x3f</span>,<span class="keyword">sizeof</span>(dp));<span class="comment">//初始化</span></span><br><span class="line">	dp[(<span class="number">1</span>&lt;&lt;n)<span class="number">-1</span>]=<span class="number">0</span>;<span class="comment">//一开始全开着灯，不需要按</span></span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=(<span class="number">1</span>&lt;&lt;n)<span class="number">-1</span>;i&gt;=<span class="number">0</span>;i--)&#123;<span class="comment">//注意枚举顺序</span></span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">1</span>;j&lt;=m;j++)&#123;<span class="comment">//枚举按钮</span></span><br><span class="line">			<span class="keyword">int</span> now=i; <span class="comment">//这个now稍后会变成按之后的状态，便于转移</span></span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> k=<span class="number">1</span>;k&lt;=n;k++)&#123;<span class="comment">//枚举处理每个灯的变化</span></span><br><span class="line">				<span class="keyword">if</span>(a[j][k]==<span class="number">0</span>) <span class="keyword">continue</span>;<span class="comment">//不变</span></span><br><span class="line">				<span class="keyword">else</span> <span class="keyword">if</span>(a[j][k]==<span class="number">1</span>)&#123;<span class="comment">//如果开着，把它关了</span></span><br><span class="line">					<span class="keyword">if</span>(i&amp;(<span class="number">1</span>&lt;&lt;n-k)) now=now^(<span class="number">1</span>&lt;&lt;n-k);<span class="comment">//该位取反操作</span></span><br><span class="line">				&#125;<span class="keyword">else</span> <span class="keyword">if</span>(a[j][k]==<span class="number">-1</span>)&#123;<span class="comment">//如果关着，把它开开</span></span><br><span class="line">					<span class="keyword">if</span>(!(i&amp;(<span class="number">1</span>&lt;&lt;n-k))) now=now^(<span class="number">1</span>&lt;&lt;n-k);<span class="comment">//同上</span></span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			dp[now]=<span class="built_in">min</span>(dp[now],dp[i]+<span class="number">1</span>);<span class="comment">//转移</span></span><br><span class="line">		&#125;</span><br><span class="line">	<span class="comment">//如果不存在（这个奇怪的数就是memset 0x3f之后的数），输出-1</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%d\n"</span>,dp[<span class="number">0</span>]==<span class="number">1061109567</span>?<span class="number">-1</span>:dp[<span class="number">0</span>]);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="洛谷-P2704-炮兵阵地"><a href="#洛谷-P2704-炮兵阵地" class="headerlink" title="洛谷 P2704 炮兵阵地"></a><a href="https://www.luogu.com.cn/problem/P2704" target="_blank" rel="noopener">洛谷 P2704 炮兵阵地</a></h3><p>题意：给一个n*m的矩阵，有些地方可以建炮塔，炮塔可以打上下左右两个格子的地方，求不误伤友军的前提下最多可以建多少炮塔</p>
+<p>题解：稍微有点恶心的状压dp，恶心就恶心在每一行的状态是由前两行决定的，因此我们的dp方程需要多开一维</p>
+<p>定义<code>dp[i][j][k]</code>：处理到第<code>i</code>行时第<code>i</code>行为<code>j</code>状态且第<code>i-1</code>行为<code>k</code>状态的最多炮塔总数，那么显然状态转移方程如下</p>
+<script type="math/tex; mode=display">
+dp[i][j][k]=max(dp[i][j][k],dp[i-1][k][l]+sum[j])</script><p>注意初始化时需要初始化第一行和第二行的所有状态，然后从第三行开始递推，虽然维数较多，预处理肯定是需要的，但亲测不用滚动数组也可AC</p>
+<p>下面上代码（这个<code>for</code>循环给爷写吐了）</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">int</span> n,m,a[<span class="number">105</span>];</span><br><span class="line"><span class="keyword">char</span> mm[<span class="number">105</span>][<span class="number">35</span>];</span><br><span class="line"><span class="keyword">int</span> dp[<span class="number">105</span>][<span class="number">70</span>][<span class="number">70</span>];</span><br><span class="line"><span class="keyword">int</span> sta[<span class="number">70</span>],cnt;</span><br><span class="line"><span class="keyword">int</span> num[<span class="number">300</span>];</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">bool</span> <span class="title">ok</span><span class="params">(<span class="keyword">int</span> x)</span></span>&#123;<span class="comment">//常规操作</span></span><br><span class="line">	<span class="keyword">if</span>(!((x&amp;x&lt;&lt;<span class="number">1</span>)||(x&amp;x&gt;&gt;<span class="number">1</span>)||(x&amp;x&lt;&lt;<span class="number">2</span>)||(x&amp;x&gt;&gt;<span class="number">2</span>))) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">int</span> <span class="title">getnum</span><span class="params">(<span class="keyword">int</span> x)</span></span>&#123; <span class="comment">//常规操作</span></span><br><span class="line">	<span class="keyword">int</span> ans=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">while</span>(x)&#123;</span><br><span class="line">		ans++;</span><br><span class="line">		x-=(x&amp;(-x));</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">"%d%d"</span>,&amp;n,&amp;m);</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=n;i++)&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">1</span>;j&lt;=m;j++)&#123;</span><br><span class="line">			<span class="built_in">cin</span>&gt;&gt;mm[i][j];</span><br><span class="line">			<span class="keyword">if</span>(mm[i][j]==<span class="string">'H'</span>) a[i]|=<span class="number">1</span>&lt;&lt;m-j; <span class="comment">//输入转状态</span></span><br><span class="line">		&#125;</span><br><span class="line"><span class="comment">//		cout&lt;&lt;a[i]&lt;&lt;endl;</span></span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">1</span>&lt;&lt;m;i++)&#123;<span class="comment">//预处理状态</span></span><br><span class="line">		<span class="keyword">if</span>(ok(i))&#123;</span><br><span class="line"><span class="comment">//			cout&lt;&lt;i&lt;&lt;endl;</span></span><br><span class="line">			sta[++cnt]=i;</span><br><span class="line">			num[cnt]=getnum(i);<span class="comment">//预处理该状态的和</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"><span class="comment">//	cout&lt;&lt;cnt&lt;&lt;endl;</span></span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=cnt;i++)&#123;<span class="comment">//初始化第一行</span></span><br><span class="line">		<span class="keyword">if</span>((sta[i]&amp;a[<span class="number">1</span>])==<span class="number">0</span>)&#123; <span class="comment">//不与地图冲突就可</span></span><br><span class="line">			dp[<span class="number">1</span>][i][<span class="number">0</span>]=num[i];</span><br><span class="line"><span class="comment">//			cout&lt;&lt;dp[1][i][0]&lt;&lt;endl;</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"><span class="comment">//	exit(0);</span></span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=cnt;i++)&#123;<span class="comment">//初始化第二行</span></span><br><span class="line">		<span class="keyword">if</span>((sta[i]&amp;a[<span class="number">2</span>])==<span class="number">0</span>)&#123;</span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">1</span>;j&lt;=cnt;j++)&#123;</span><br><span class="line">				<span class="keyword">if</span>((sta[j]&amp;a[<span class="number">1</span>])==<span class="number">0</span>&amp;&amp;(sta[j]&amp;sta[i])==<span class="number">0</span>)&#123;</span><br><span class="line">					dp[<span class="number">2</span>][i][j]=num[i]+num[j];</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"><span class="comment">//	exit(0);</span></span><br><span class="line">    <span class="comment">//这个for循环惊了</span></span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">3</span>;i&lt;=n;i++)&#123;<span class="comment">//从第三行开始</span></span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">1</span>;j&lt;=cnt;j++)&#123;</span><br><span class="line">			<span class="keyword">if</span>((sta[j]&amp;a[i])==<span class="number">0</span>)&#123;</span><br><span class="line">				<span class="keyword">for</span>(<span class="keyword">int</span> k=<span class="number">1</span>;k&lt;=cnt;k++)&#123;</span><br><span class="line">					<span class="keyword">if</span>((sta[j]&amp;sta[k])==<span class="number">0</span>&amp;&amp;(sta[k]&amp;a[i<span class="number">-1</span>])==<span class="number">0</span>)&#123;</span><br><span class="line">						<span class="keyword">for</span>(<span class="keyword">int</span> l=<span class="number">1</span>;l&lt;=cnt;l++)&#123;</span><br><span class="line">                            <span class="comment">//这个条件判断真长</span></span><br><span class="line">							<span class="keyword">if</span>((sta[l]&amp;sta[j])==<span class="number">0</span>&amp;&amp;(sta[l]&amp;sta[k])==<span class="number">0</span>&amp;&amp;(sta[l]&amp;a[i<span class="number">-2</span>])==<span class="number">0</span>)&#123;</span><br><span class="line">								dp[i][j][k]=<span class="built_in">max</span>(dp[i][j][k],dp[i<span class="number">-1</span>][k][l]+num[j]);</span><br><span class="line">							&#125;</span><br><span class="line">						&#125;</span><br><span class="line">					&#125; </span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"><span class="comment">//	exit(0);</span></span><br><span class="line">	<span class="keyword">int</span> ans=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=cnt;i++)&#123;<span class="comment">//获取最大数目</span></span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">1</span>;j&lt;=cnt;j++)&#123;</span><br><span class="line">			ans=<span class="built_in">max</span>(ans,dp[n][i][j]);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%d\n"</span>,ans);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125; <span class="comment">//https://www.luogu.com.cn/problem/P2704</span></span><br></pre></td></tr></table></figure>
+<hr>
+<p>感想：感觉没区间dp那么玄学（前提是二进制操作非常熟练），但是题目感觉可以难上天</p>
+
+    </div>
+
+    
+    
+    
+	  <div>
+      
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束啦<i class="fa fa-paw"></i>感谢您的阅读~-------------</div>
+    
+</div>
+
+      
+	  </div>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/blog/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" rel="tag"># 动态规划</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/2020/03/08/%E5%8C%BA%E9%97%B4DP%E6%B5%85%E6%9E%90/" rel="prev" title="区间DP浅析">
+      <i class="fa fa-chevron-left"></i> 区间DP浅析
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/2020/03/12/%E8%A1%A5%E9%A2%98-2020USST%E7%AE%97%E6%B3%95%E7%AB%9E%E8%B5%9B%E7%BB%83%E4%B9%A0%E5%9C%BA9/" rel="next" title="补题-2020USST算法竞赛练习场9">
+      补题-2020USST算法竞赛练习场9 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+  
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#动态规划の状压dp"><span class="nav-number">1.</span> <span class="nav-text">动态规划の状压dp</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#核心思想"><span class="nav-number">2.</span> <span class="nav-text">核心思想</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二进制状压操作"><span class="nav-number">3.</span> <span class="nav-text">二进制状压操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一般的板子-amp-优化操作"><span class="nav-number">4.</span> <span class="nav-text">一般的板子&amp;优化操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#习题"><span class="nav-number">5.</span> <span class="nav-text">习题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#洛谷-P1879-玉米地"><span class="nav-number">5.1.</span> <span class="nav-text">洛谷 P1879 玉米地</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HDU-1565-方格取数"><span class="nav-number">5.2.</span> <span class="nav-text">HDU 1565 方格取数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#洛谷-P1123-取数游戏"><span class="nav-number">5.3.</span> <span class="nav-text">洛谷 P1123 取数游戏</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#洛谷-P1171-售货员的难题（旅行商问题）"><span class="nav-number">5.4.</span> <span class="nav-text">洛谷 P1171 售货员的难题（旅行商问题）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#洛谷-P2622-关灯问题Ⅱ"><span class="nav-number">5.5.</span> <span class="nav-text">洛谷 P2622 关灯问题Ⅱ</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#洛谷-P2704-炮兵阵地"><span class="nav-number">5.6.</span> <span class="nav-text">洛谷 P2704 炮兵阵地</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+	  
+	  
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="琉璃糖"
+      src="/blog/images/boxhead.jpeg">
+  <p class="site-author-name" itemprop="name">琉璃糖</p>
+  <div class="site-description" itemprop="description">探索宇宙の奥秘</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/blog/archives/">
+        
+          <span class="site-state-item-count">99</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/blog/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/blog/tags/">
+          
+        <span class="site-state-item-count">75</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/b4158813" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;b4158813" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://blog.csdn.net/weixin_44042643" title="CSDN → https:&#x2F;&#x2F;blog.csdn.net&#x2F;weixin_44042643" rel="noopener" target="_blank"><i class="fa fa-fw fa-crosshairs"></i>CSDN</a>
+      </span>
+  </div>
+
+
+
+      </div>
+	 
+	</div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">琉璃糖</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">343k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">10:24</span>
+</div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='255,251,240' opacity='0.8' zIndex='-1' count='100' src="/blog/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/blog/lib/anime.min.js"></script>
+  <script src="/blog/lib/velocity/velocity.min.js"></script>
+  <script src="/blog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/blog/js/utils.js"></script>
+
+<script src="/blog/js/motion.js"></script>
+
+
+<script src="/blog/js/schemes/pisces.js"></script>
+
+
+<script src="/blog/js/next-boot.js"></script>
+
+
+  <script defer src="/blog/lib/three/three.min.js"></script>
+
+
+  
+
+
+
+
+  
+<script src="/blog/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('div.pdf').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/pdfobject@2/pdfobject.min.js', () => {
+    document.querySelectorAll('div.pdf').forEach(element => {
+      PDFObject.embed(element.getAttribute('target'), element, {
+        pdfOpenParams: {
+          navpanes: 0,
+          toolbar: 0,
+          statusbar: 0,
+          pagemode: 'thumbs',
+          view: 'FitH'
+        },
+        PDFJS_URL: '/lib/pdf/web/viewer.html',
+        height: element.getAttribute('height') || '500px'
+      });
+    });
+  }, window.PDFObject);
+}
+</script>
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el: '#valine-comments',
+      verify: true,
+      notify: true,
+      appId: '8WpS33YNRGD4IQNVQgVCmHQy-gzGzoHsz',
+      appKey: 'jed4H3219MxS5igBfmfTU81w',
+      placeholder: "Just go go",
+      avatar: 'mm',
+      meta: guest,
+      pageSize: '10' || 10,
+      visitor: false,
+      lang: '' || 'zh-cn',
+      path: location.pathname,
+      recordIP: false,
+      serverURLs: ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+

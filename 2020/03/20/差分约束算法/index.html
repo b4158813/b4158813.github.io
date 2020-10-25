@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/blog/css/main.css">
+
+
+<link rel="stylesheet" href="/blog/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/blog/lib/pace/pace-theme-minimal.min.css">
+  <script src="/blog/lib/pace/pace.min.js"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://b4158813.gitee.io/blog').hostname,
+    root: '/blog/',
+    scheme: 'Gemini',
+    version: '7.7.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":"mac"},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta property="og:type" content="article">
+<meta property="og:title" content="差分约束算法">
+<meta property="og:url" content="https://b4158813.gitee.io/blog/2020/03/20/%E5%B7%AE%E5%88%86%E7%BA%A6%E6%9D%9F%E7%AE%97%E6%B3%95/index.html">
+<meta property="og:site_name" content="BlablaWu">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-03-20T01:06:58.000Z">
+<meta property="article:modified_time" content="2020-03-20T02:18:20.000Z">
+<meta property="article:author" content="琉璃糖">
+<meta property="article:tag" content="图论">
+<meta property="article:tag" content="差分约束">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://b4158813.gitee.io/blog/2020/03/20/%E5%B7%AE%E5%88%86%E7%BA%A6%E6%9D%9F%E7%AE%97%E6%B3%95/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>差分约束算法 | BlablaWu</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/blog/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">BlablaWu</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">蒟蒻の家</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/blog/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/blog/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/blog/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签<span class="badge">75</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/blog/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类<span class="badge">10</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/blog/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">99</span></a>
+
+  </li>
+        <li class="menu-item menu-item-tools">
+
+    <a href="/blog/tools/" rel="section"><i class="fa fa-fw fa-heartbeat"></i>工具&网站</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/b4158813" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://b4158813.gitee.io/blog/2020/03/20/%E5%B7%AE%E5%88%86%E7%BA%A6%E6%9D%9F%E7%AE%97%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/blog/images/boxhead.jpeg">
+      <meta itemprop="name" content="琉璃糖">
+      <meta itemprop="description" content="探索宇宙の奥秘">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BlablaWu">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          差分约束算法
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-03-20 09:06:58 / 修改时间：10:18:20" itemprop="dateCreated datePublished" datetime="2020-03-20T09:06:58+08:00">2020-03-20</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index">
+                    <span itemprop="name">算法</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/blog/2020/03/20/%E5%B7%AE%E5%88%86%E7%BA%A6%E6%9D%9F%E7%AE%97%E6%B3%95/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/blog/2020/03/20/%E5%B7%AE%E5%88%86%E7%BA%A6%E6%9D%9F%E7%AE%97%E6%B3%95/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <hr>
+<a id="more"></a>
+<ul>
+<li>参考博客<a href="https://www.cnblogs.com/wjhstudy/p/9757046.html" target="_blank" rel="noopener">差分约束算法总结</a></li>
+</ul>
+<h2 id="差分约束系统"><a href="#差分约束系统" class="headerlink" title="差分约束系统"></a>差分约束系统</h2><p>如果一个系统由$n$个变量和$m$个约束条件组成，形成$m$个形如$a_i-a_j\leq k$的不等式（$i,j\in [1,n],k为常数$），则称之为<strong>差分约束系统</strong></p>
+<h3 id="引例"><a href="#引例" class="headerlink" title="引例"></a>引例</h3><p>给定$n$个变量和$m$个不等式，不等式形式为$x[i]-x[j]\leq a[k](0\leq i,j \leq n,0\eq k\leq m,a[k]已知)$，求某个$x[i]-x[j]$的最大值</p>
+<p>例如当$n=4,m=5$，给出如下不等式组：</p>
+<script type="math/tex; mode=display">
+x_1-x_0\leq1（1）\\
+x_2-x_0\leq2（2）\\
+x_3-x_0\leq4（3）\\
+x_2-x_1\leq3（4）\\
+x_3-x_2\leq1（5）\\
+求max(x_3-x_0)</script><p>一般的解法是：把这些不等式拼拼凑凑最后得出我们要的式子，然后取一个最小值就行了，比如上例中：</p>
+<script type="math/tex; mode=display">
+(3)\Rightarrow x_3-x_0\leq4\\
+(1)+(4)+(5)\Rightarrow x_3-x_0\leq5\\
+(2)+(5)\Rightarrow x_3-x_0\leq 3\\
+\Rightarrow max(x_3-x_0)=3</script><p>然而，谁能想到求解这个系统的过程却和我们学过的<strong>最短路算法</strong>有着密切的联系？！</p>
+<h3 id="与最短路的联系"><a href="#与最短路的联系" class="headerlink" title="与最短路的联系"></a>与最短路的联系</h3><p>我们对$x[i]-x[j]\leq a[k]$这样一个式子进行移项，得到$x[i]\leq x[j]+a[k]$，令$a[k]=w(j,i),dis[i]=x[i]=x[v],dis[j]=x[j]=x[u]$，原式变为$dis[u]+w(u,v)\geq dis[v]$，这TM不就是求最短路里的<strong>松弛操作</strong>嘛！</p>
+<p>但好像符号反了，实际上并不矛盾，对于$x[i]-x[j]\leq a[k]$这样的不等式，我们考虑建图如下：从$j$往$i$连边，边权为$a[k]$，求$x[n-1]-x[0]$的最大值就是求$0到n-1$的最短路，两者刚好吻合，至此，<strong>差分约束问题被转化为了最短路问题</strong></p>
+<h3 id="特殊情况的讨论"><a href="#特殊情况的讨论" class="headerlink" title="特殊情况的讨论"></a>特殊情况的讨论</h3><h4 id="1-存在负环"><a href="#1-存在负环" class="headerlink" title="1. 存在负环"></a>1. 存在负环</h4><p>负环就是最短路可以无限小，所以就不存在最短路，那么上式就表示为$x[n-1]-x[0]\leq T$中的$T$可以无限小，即不存在这样的最大值</p>
+<h4 id="2-终点不可达"><a href="#2-终点不可达" class="headerlink" title="2. 终点不可达"></a>2. 终点不可达</h4><p>如果出现了$dis[n-1]=inf$的情况，说明终点不可达到，此时对应的不等式意义就是$x[n-1]和x[0]$之间没有约束关系，任意取值都行，即取值有无限多种</p>
+<h4 id="3-不等式组转化"><a href="#3-不等式组转化" class="headerlink" title="3. 不等式组转化"></a>3. 不等式组转化</h4><p>对于不等号不相同的情况，可以考虑转化：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+x[n-1]-x[0]\geq T&\Rightarrow x[0]-x[n-1]\leq -T\\
+x[n-1]-x[0]<T&\Rightarrow x[n-1]-x[0]\leq T-1\\
+x[n-1]-x[0]=T&\Rightarrow x[n-1]-x[0]\leq T\&\&x[n-1]-x[0]\geq T
+\end{aligned}</script><h4 id="4-其他问法-amp-应用"><a href="#4-其他问法-amp-应用" class="headerlink" title="4. 其他问法&amp;应用"></a>4. 其他问法&amp;应用</h4><p>如果是问$x[n-1]-x[0]$的<strong>最小值</strong>呢？那么只需要把不等号全部改为$\geq$，然后泡一下从$0到n-1$的最长路就行啦</p>
+<p>另外会有一些类似于求$max(\frac{x[n-1]}{x[0]})$，此时需要做一些数学变换（比如取对数）就可以将其转换为差分约束系统开始搞了</p>
+<h3 id="习题"><a href="#习题" class="headerlink" title="习题"></a>习题</h3><p>通常这种题的问法都比较绕口。。（导致读题跟阅读理解一样）</p>
+<h4 id="POJ-3159-Candies"><a href="#POJ-3159-Candies" class="headerlink" title="POJ 3159 Candies"></a><a href="https://vjudge.net/problem/POJ-3159" target="_blank" rel="noopener">POJ 3159 Candies</a></h4><p>题意：</p>
+<p>给出若干组 同学B永远不会比同学A多拥有的糖果数量（即最大值），n号同学和1号同学拥有糖果数的最大差异（保证差异有限）</p>
+<p>题解：</p>
+<p>把题目翻译成数学语言就是给了一堆$x_B-x_A\leq W$的式子，求$max(x_n-x_1)$，差分约束走起，由于题目给了一定存在，因此不需要再判是否存在</p>
+<p>注：此题会卡时间，请用堆优化Dijkstra</p>
+<p>AC代码：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;queue&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">long</span> <span class="keyword">long</span> ll;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> inf=<span class="number">1e8</span>;</span><br><span class="line"><span class="keyword">int</span> n,m;</span><br><span class="line"><span class="keyword">int</span> cnt,head[<span class="number">30005</span>],dis[<span class="number">30005</span>];</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Edge</span>&#123;</span></span><br><span class="line">	<span class="keyword">int</span> u,v,w,next;</span><br><span class="line">&#125;e[<span class="number">150005</span>];</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">node</span>&#123;</span></span><br><span class="line">	<span class="keyword">int</span> u,dis;</span><br><span class="line">	<span class="keyword">bool</span> <span class="keyword">operator</span>&lt;(<span class="keyword">const</span> node &amp;rhs)<span class="keyword">const</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> dis&gt;rhs.dis;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">addedge</span><span class="params">(<span class="keyword">int</span> u,<span class="keyword">int</span> v,<span class="keyword">int</span> w)</span></span>&#123;</span><br><span class="line">	e[++cnt]=Edge&#123;u,v,w,head[u]&#125;;</span><br><span class="line">	head[u]=cnt;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">spfa</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=n;i++) dis[i]=inf;</span><br><span class="line">	priority_queue&lt;node&gt; q;</span><br><span class="line">	q.push(node&#123;<span class="number">1</span>,<span class="number">0</span>&#125;);</span><br><span class="line">	dis[<span class="number">1</span>]=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">while</span>(!q.empty())&#123;</span><br><span class="line">		node q1=q.top();q.pop();</span><br><span class="line">		<span class="keyword">int</span> u=q1.u;</span><br><span class="line">		<span class="keyword">if</span>(q1.dis&gt;dis[u]) <span class="keyword">continue</span>;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=head[u];i;i=e[i].next)&#123;</span><br><span class="line">			<span class="keyword">int</span> v=e[i].v,w=e[i].w;</span><br><span class="line">			<span class="keyword">if</span>(dis[v]&gt;dis[u]+w)&#123;</span><br><span class="line">				dis[v]=dis[u]+w;</span><br><span class="line">				q.push(node&#123;v,dis[v]&#125;);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">"%d%d"</span>,&amp;n,&amp;m);</span><br><span class="line">	<span class="keyword">int</span> x,y,z;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=m;i++)&#123;</span><br><span class="line">		<span class="built_in">scanf</span>(<span class="string">"%d%d%d"</span>,&amp;x,&amp;y,&amp;z);</span><br><span class="line">		addedge(x,y,z);</span><br><span class="line">	&#125;</span><br><span class="line">	spfa();</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%d\n"</span>,dis[n]);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="POJ-3169-Layout"><a href="#POJ-3169-Layout" class="headerlink" title="POJ 3169 Layout"></a><a href="https://vjudge.net/problem/POJ-3169" target="_blank" rel="noopener">POJ 3169 Layout</a></h4><p>题意：</p>
+<p>给出若干组两头牛之间的最大距离和最小距离，求1号牛和n号牛的最大可能距离（如果不存在输出-1，如果可以随便取值输出-2）</p>
+<p>题解：</p>
+<p>翻译过来就是给出若干组小于等于和大于等于的约数，求$max(x_n-x_1)$，差分约束</p>
+<p>注：需要考虑负环和终点不可达的情况</p>
+<p>AC代码：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;queue&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">long</span> <span class="keyword">long</span> ll;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> inf=<span class="number">1e8</span>;</span><br><span class="line"><span class="keyword">int</span> n,m,k;</span><br><span class="line">ll cnt,head[<span class="number">30005</span>],dis[<span class="number">30005</span>],ring[<span class="number">30005</span>],vis[<span class="number">30005</span>];</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Edge</span>&#123;</span></span><br><span class="line">	ll u,v,w,next;</span><br><span class="line">&#125;e[<span class="number">150005</span>];</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">addedge</span><span class="params">(ll u,ll v,ll w)</span></span>&#123;</span><br><span class="line">	e[++cnt]=Edge&#123;u,v,w,head[u]&#125;;</span><br><span class="line">	head[u]=cnt;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">bool</span> <span class="title">spfa</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=n;i++) dis[i]=inf;</span><br><span class="line">	<span class="built_in">queue</span>&lt;<span class="keyword">int</span>&gt; q;</span><br><span class="line">	q.push(<span class="number">1</span>);</span><br><span class="line">	ring[<span class="number">1</span>]=<span class="number">1</span>;</span><br><span class="line">	dis[<span class="number">1</span>]=<span class="number">0</span>;</span><br><span class="line">	vis[<span class="number">1</span>]=<span class="number">1</span>;</span><br><span class="line">	<span class="keyword">while</span>(!q.empty())&#123;</span><br><span class="line">		ll u=q.front();q.pop();</span><br><span class="line">		vis[u]=<span class="number">0</span>;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=head[u];i;i=e[i].next)&#123;</span><br><span class="line">			ll v=e[i].v,w=e[i].w;</span><br><span class="line">			<span class="keyword">if</span>(dis[v]&gt;dis[u]+w)&#123;</span><br><span class="line">				dis[v]=dis[u]+w;</span><br><span class="line">				ring[v]=ring[u]+<span class="number">1</span>;</span><br><span class="line">				<span class="keyword">if</span>(ring[v]&gt;n) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">				<span class="keyword">if</span>(vis[v]==<span class="number">0</span>)&#123;</span><br><span class="line">					vis[v]=<span class="number">1</span>;</span><br><span class="line">					q.push(v);</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">"%d%d%d"</span>,&amp;n,&amp;m,&amp;k);</span><br><span class="line">	ll x,y,z;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=m;i++)&#123;</span><br><span class="line">		<span class="built_in">scanf</span>(<span class="string">"%lld%lld%lld"</span>,&amp;x,&amp;y,&amp;z);</span><br><span class="line">		addedge(x,y,z);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=k;i++)&#123;</span><br><span class="line">		<span class="built_in">scanf</span>(<span class="string">"%lld%lld%lld"</span>,&amp;x,&amp;y,&amp;z);</span><br><span class="line">		addedge(y,x,-z);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span>(spfa()) <span class="built_in">printf</span>(<span class="string">"-1\n"</span>);</span><br><span class="line">	<span class="keyword">else</span>&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"%lld\n"</span>,dis[n]&gt;=inf?<span class="number">-2</span>:dis[n]);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="POJ-1716-Integer-Intervals"><a href="#POJ-1716-Integer-Intervals" class="headerlink" title="POJ 1716 Integer Intervals"></a><a href="https://vjudge.net/problem/POJ-1716" target="_blank" rel="noopener">POJ 1716 Integer Intervals</a></h4><p>题意：</p>
+<p>给出若干区间，求一个点集满足所有区间都至少有两个点在这个点集里，求这样的点集的最小大小</p>
+<p>题解：</p>
+<p>关键在于转化为差分约束问题，可以考虑$dis[x]表示[0,x]这个区间在点集内的点的个数$，那么题目就可以转化为（加一是为了防止数组下标有-1出现）</p>
+<script type="math/tex; mode=display">
+dis[r_i+1]-dis[l_i]\geq 2\\</script><p>除此之外，还有非常关键的题目隐含条件（都是整数点）</p>
+<script type="math/tex; mode=display">
+0\leq dis[i+1]-dis[i]\leq1</script><p>现在就可以建图+跑最短路了</p>
+<p>AC代码：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;queue&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">long</span> <span class="keyword">long</span> ll;</span><br><span class="line">ll maxn=<span class="number">10005</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> inf=<span class="number">1e8</span>;</span><br><span class="line"><span class="keyword">int</span> n,m,k;</span><br><span class="line">ll Max,cnt,head[<span class="number">30005</span>],dis[<span class="number">30005</span>],ring[<span class="number">30005</span>],vis[<span class="number">30005</span>];</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Edge</span>&#123;</span></span><br><span class="line">	ll u,v,w,next;</span><br><span class="line">&#125;e[<span class="number">150005</span>];</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">addedge</span><span class="params">(ll u,ll v,ll w)</span></span>&#123;</span><br><span class="line">	e[++cnt]=Edge&#123;u,v,w,head[u]&#125;;</span><br><span class="line">	head[u]=cnt;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">bool</span> <span class="title">spfa</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;=Max;i++) dis[i]=-inf;</span><br><span class="line">	<span class="built_in">queue</span>&lt;<span class="keyword">int</span>&gt; q;</span><br><span class="line">	q.push(<span class="number">0</span>);</span><br><span class="line">	dis[<span class="number">0</span>]=<span class="number">0</span>;</span><br><span class="line">	vis[<span class="number">0</span>]=<span class="number">1</span>;</span><br><span class="line">	<span class="keyword">while</span>(!q.empty())&#123;</span><br><span class="line">		ll u=q.front();q.pop();</span><br><span class="line">		vis[u]=<span class="number">0</span>;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=head[u];i;i=e[i].next)&#123;</span><br><span class="line">			ll v=e[i].v,w=e[i].w;</span><br><span class="line">			<span class="keyword">if</span>(dis[v]&lt;dis[u]+w)&#123;</span><br><span class="line">				dis[v]=dis[u]+w;</span><br><span class="line">				<span class="keyword">if</span>(vis[v]==<span class="number">0</span>)&#123;</span><br><span class="line">					vis[v]=<span class="number">1</span>;</span><br><span class="line">					q.push(v);</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">"%d"</span>,&amp;n);</span><br><span class="line">	ll x,y;</span><br><span class="line">	Max=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=n;i++)&#123;</span><br><span class="line">		<span class="built_in">scanf</span>(<span class="string">"%lld%lld"</span>,&amp;x,&amp;y);</span><br><span class="line">		addedge(x,y+<span class="number">1</span>,<span class="number">2</span>);</span><br><span class="line">		Max=<span class="built_in">max</span>(Max,y+<span class="number">1</span>);<span class="comment">//存区间最大值</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;=Max;i++)&#123;</span><br><span class="line">		addedge(i,i+<span class="number">1</span>,<span class="number">0</span>);</span><br><span class="line">		addedge(i+<span class="number">1</span>,i,<span class="number">-1</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	spfa();</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%lld\n"</span>,dis[Max]);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="HDU-3666-THE-MATRIX-PROBLEM"><a href="#HDU-3666-THE-MATRIX-PROBLEM" class="headerlink" title="HDU 3666 THE MATRIX PROBLEM"></a><a href="https://vjudge.net/problem/HDU-3666" target="_blank" rel="noopener">HDU 3666 THE MATRIX PROBLEM</a></h4><p><del><strong>这真是一道TMD无敌宇宙霹雳巨恶心的题，甚至还带点玄学算法，搞得我半夜十二点不能睡觉</strong></del></p>
+<p>题意：</p>
+<p>给出一个$n*m$的矩阵，要求构造两个数列$a<em>n,b_m$使矩阵第$i$行元素乘上$a_i$，第$j$列元素除以$b_j$得到一个新矩阵$C$，且需要满足$C</em>{i,j}\in [L,U]$，问能否构造成功？</p>
+<p>题解：</p>
+<p>这TM？？第一眼看到：神仙题？</p>
+<p>考虑将题目条件转换为数学文字：</p>
+<script type="math/tex; mode=display">
+L\leq \frac{x_{i,j}\cdot A_i}{B_j}\leq U\Rightarrow \frac{L}{x_{i,j}}\leq \frac{A_i}{B_j}\leq\frac{U}{x_{i,j}}\\
+两边取对数，得出\\
+log(\frac{L}{x_{i,j}})\leq log(A_i)-log(B_i)\leq log(\frac{U}{x_{i,j}})</script><p>可以差分约束+判负环搞起来了</p>
+<p>什么？？TLE了！什么？传统判负环方法不行了？？</p>
+<p>于是上网找到这道题TMD居然会卡时间卡得这么紧？？！</p>
+<h5 id="MARK-新姿势"><a href="#MARK-新姿势" class="headerlink" title="MARK 新姿势"></a>MARK 新姿势</h5><p>于是查到有两种方案（玄学剪枝法）：</p>
+<ol>
+<li><p>一个节点更新次数大于$\sqrt{n}$就判定位负环（无法证明？有什么办法，这题只能这么胡搞）</p>
+</li>
+<li><p>所有节点更新总次数大于$k*n$就判定为负环（一般k取2，然并卵，也是个玄学方法）</p>
+</li>
+</ol>
+<p>除此之外，我还发现我一直使用的判负环方法会WA？？</p>
+<p>因此我得出结论：</p>
+<p>对于此类题，先用我自己的判负环方法，如果WA了，改为更强的方法，如果还TLE，那么就用上面的玄学剪枝法</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">long</span> <span class="keyword">long</span> ll;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">double</span> inf=<span class="number">0x3f3f3f3f</span>;</span><br><span class="line"><span class="keyword">int</span> n,m,k;</span><br><span class="line"><span class="keyword">double</span> l,r;</span><br><span class="line">ll cnt,head[<span class="number">600005</span>],ring[<span class="number">600005</span>],vis[<span class="number">600005</span>];</span><br><span class="line"><span class="keyword">double</span> dis[<span class="number">600005</span>];</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Edge</span>&#123;</span></span><br><span class="line">	ll u,v,next;</span><br><span class="line">	<span class="keyword">double</span> w;</span><br><span class="line">&#125;e[<span class="number">3500005</span>];</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">addedge</span><span class="params">(ll u,ll v,<span class="keyword">double</span> w)</span></span>&#123;</span><br><span class="line">	e[++cnt]=Edge&#123;u,v,head[u],w&#125;;</span><br><span class="line">	head[u]=cnt;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">bool</span> <span class="title">spfa</span><span class="params">(<span class="keyword">int</span> st)</span></span>&#123;</span><br><span class="line">	<span class="built_in">memset</span>(vis,<span class="number">0</span>,<span class="keyword">sizeof</span>(vis));</span><br><span class="line">	<span class="built_in">memset</span>(ring,<span class="number">0</span>,<span class="keyword">sizeof</span>(ring));</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=n+m+<span class="number">10</span>;i++) dis[i]=inf;</span><br><span class="line">	<span class="built_in">queue</span>&lt;<span class="keyword">int</span>&gt; q;</span><br><span class="line">	q.push(st);</span><br><span class="line">	dis[st]=<span class="number">0</span>;</span><br><span class="line">	vis[st]=<span class="number">1</span>;</span><br><span class="line">	<span class="keyword">while</span>(!q.empty())&#123;</span><br><span class="line">		ll u=q.front();q.pop();</span><br><span class="line">		vis[u]=<span class="number">0</span>;</span><br><span class="line">		ring[u]++; <span class="comment">//新判法</span></span><br><span class="line">		<span class="keyword">if</span>(ring[u]&gt;<span class="built_in">sqrt</span>(n+m)) <span class="keyword">return</span> <span class="literal">true</span>; <span class="comment">//超级玄学搞法</span></span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=head[u];i!=<span class="number">-1</span>;i=e[i].next)&#123;</span><br><span class="line">			ll v=e[i].v;</span><br><span class="line">			<span class="keyword">double</span> w=e[i].w;</span><br><span class="line">			<span class="keyword">if</span>(dis[v]&gt;dis[u]+w)&#123;</span><br><span class="line">				dis[v]=dis[u]+w;</span><br><span class="line">				<span class="keyword">if</span>(vis[v]==<span class="number">0</span>)&#123;</span><br><span class="line">					vis[v]=<span class="number">1</span>;</span><br><span class="line">					q.push(v);</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">while</span>(~<span class="built_in">scanf</span>(<span class="string">"%d%d%lf%lf"</span>,&amp;n,&amp;m,&amp;l,&amp;r))&#123;</span><br><span class="line">		cnt=<span class="number">0</span>;</span><br><span class="line">		l=log2(l);</span><br><span class="line">		r=log2(r);</span><br><span class="line">		<span class="built_in">memset</span>(head,<span class="number">-1</span>,<span class="keyword">sizeof</span>(head));</span><br><span class="line">		<span class="keyword">double</span> x;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=n;i++)&#123;</span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">1</span>;j&lt;=m;j++)&#123;</span><br><span class="line">				<span class="built_in">scanf</span>(<span class="string">"%lf"</span>,&amp;x);</span><br><span class="line">				<span class="keyword">double</span> temp=log2(x);</span><br><span class="line">				addedge(n+j,i,r-temp);</span><br><span class="line">				addedge(i,n+j,temp-l);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line"><span class="comment">//		for(int i=1;i&lt;=n+m;i++) addedge(0,i,0);</span></span><br><span class="line">		<span class="keyword">if</span>(spfa(<span class="number">1</span>)) <span class="built_in">printf</span>(<span class="string">"NO\n"</span>);</span><br><span class="line">		<span class="keyword">else</span> <span class="built_in">printf</span>(<span class="string">"YES\n"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+	  <div>
+      
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束啦<i class="fa fa-paw"></i>感谢您的阅读~-------------</div>
+    
+</div>
+
+      
+	  </div>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/blog/tags/%E5%9B%BE%E8%AE%BA/" rel="tag"># 图论</a>
+              <a href="/blog/tags/%E5%B7%AE%E5%88%86%E7%BA%A6%E6%9D%9F/" rel="tag"># 差分约束</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/2020/03/16/%E5%9B%BE%E8%AE%BA%E3%81%AE%E5%BB%BA%E5%9B%BE%E7%BB%83%E4%B9%A0/" rel="prev" title="图论の建图练习">
+      <i class="fa fa-chevron-left"></i> 图论の建图练习
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/2020/03/20/%E6%AC%A7%E6%8B%89%E5%9B%9E%E8%B7%AF/" rel="next" title="欧拉回路">
+      欧拉回路 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+  
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#差分约束系统"><span class="nav-number">1.</span> <span class="nav-text">差分约束系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#引例"><span class="nav-number">1.1.</span> <span class="nav-text">引例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#与最短路的联系"><span class="nav-number">1.2.</span> <span class="nav-text">与最短路的联系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#特殊情况的讨论"><span class="nav-number">1.3.</span> <span class="nav-text">特殊情况的讨论</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-存在负环"><span class="nav-number">1.3.1.</span> <span class="nav-text">1. 存在负环</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-终点不可达"><span class="nav-number">1.3.2.</span> <span class="nav-text">2. 终点不可达</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-不等式组转化"><span class="nav-number">1.3.3.</span> <span class="nav-text">3. 不等式组转化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-其他问法-amp-应用"><span class="nav-number">1.3.4.</span> <span class="nav-text">4. 其他问法&amp;应用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#习题"><span class="nav-number">1.4.</span> <span class="nav-text">习题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#POJ-3159-Candies"><span class="nav-number">1.4.1.</span> <span class="nav-text">POJ 3159 Candies</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#POJ-3169-Layout"><span class="nav-number">1.4.2.</span> <span class="nav-text">POJ 3169 Layout</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#POJ-1716-Integer-Intervals"><span class="nav-number">1.4.3.</span> <span class="nav-text">POJ 1716 Integer Intervals</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#HDU-3666-THE-MATRIX-PROBLEM"><span class="nav-number">1.4.4.</span> <span class="nav-text">HDU 3666 THE MATRIX PROBLEM</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#MARK-新姿势"><span class="nav-number">1.4.4.1.</span> <span class="nav-text">MARK 新姿势</span></a></li></ol></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+	  
+	  
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="琉璃糖"
+      src="/blog/images/boxhead.jpeg">
+  <p class="site-author-name" itemprop="name">琉璃糖</p>
+  <div class="site-description" itemprop="description">探索宇宙の奥秘</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/blog/archives/">
+        
+          <span class="site-state-item-count">99</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/blog/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/blog/tags/">
+          
+        <span class="site-state-item-count">75</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/b4158813" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;b4158813" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://blog.csdn.net/weixin_44042643" title="CSDN → https:&#x2F;&#x2F;blog.csdn.net&#x2F;weixin_44042643" rel="noopener" target="_blank"><i class="fa fa-fw fa-crosshairs"></i>CSDN</a>
+      </span>
+  </div>
+
+
+
+      </div>
+	 
+	</div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">琉璃糖</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">343k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">10:24</span>
+</div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='255,251,240' opacity='0.8' zIndex='-1' count='100' src="/blog/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/blog/lib/anime.min.js"></script>
+  <script src="/blog/lib/velocity/velocity.min.js"></script>
+  <script src="/blog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/blog/js/utils.js"></script>
+
+<script src="/blog/js/motion.js"></script>
+
+
+<script src="/blog/js/schemes/pisces.js"></script>
+
+
+<script src="/blog/js/next-boot.js"></script>
+
+
+  <script defer src="/blog/lib/three/three.min.js"></script>
+
+
+  
+
+
+
+
+  
+<script src="/blog/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('div.pdf').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/pdfobject@2/pdfobject.min.js', () => {
+    document.querySelectorAll('div.pdf').forEach(element => {
+      PDFObject.embed(element.getAttribute('target'), element, {
+        pdfOpenParams: {
+          navpanes: 0,
+          toolbar: 0,
+          statusbar: 0,
+          pagemode: 'thumbs',
+          view: 'FitH'
+        },
+        PDFJS_URL: '/lib/pdf/web/viewer.html',
+        height: element.getAttribute('height') || '500px'
+      });
+    });
+  }, window.PDFObject);
+}
+</script>
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el: '#valine-comments',
+      verify: true,
+      notify: true,
+      appId: '8WpS33YNRGD4IQNVQgVCmHQy-gzGzoHsz',
+      appKey: 'jed4H3219MxS5igBfmfTU81w',
+      placeholder: "Just go go",
+      avatar: 'mm',
+      meta: guest,
+      pageSize: '10' || 10,
+      visitor: false,
+      lang: '' || 'zh-cn',
+      path: location.pathname,
+      recordIP: false,
+      serverURLs: ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+

@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/blog/css/main.css">
+
+
+<link rel="stylesheet" href="/blog/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/blog/lib/pace/pace-theme-minimal.min.css">
+  <script src="/blog/lib/pace/pace.min.js"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://b4158813.gitee.io/blog').hostname,
+    root: '/blog/',
+    scheme: 'Gemini',
+    version: '7.7.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":"mac"},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="【补题系列】2020USST算法竞赛练习场9">
+<meta property="og:type" content="article">
+<meta property="og:title" content="补题-2020USST算法竞赛练习场9">
+<meta property="og:url" content="https://b4158813.gitee.io/blog/2020/03/12/%E8%A1%A5%E9%A2%98-2020USST%E7%AE%97%E6%B3%95%E7%AB%9E%E8%B5%9B%E7%BB%83%E4%B9%A0%E5%9C%BA9/index.html">
+<meta property="og:site_name" content="BlablaWu">
+<meta property="og:description" content="【补题系列】2020USST算法竞赛练习场9">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2020/03/12/Fj5ZYLhfutGsypH.png">
+<meta property="og:image" content="https://i.loli.net/2020/03/12/PbEIcuzFfgLaens.png">
+<meta property="article:published_time" content="2020-03-12T13:43:24.000Z">
+<meta property="article:modified_time" content="2020-03-12T14:26:56.000Z">
+<meta property="article:author" content="琉璃糖">
+<meta property="article:tag" content="刷题">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/03/12/Fj5ZYLhfutGsypH.png">
+
+<link rel="canonical" href="https://b4158813.gitee.io/blog/2020/03/12/%E8%A1%A5%E9%A2%98-2020USST%E7%AE%97%E6%B3%95%E7%AB%9E%E8%B5%9B%E7%BB%83%E4%B9%A0%E5%9C%BA9/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>补题-2020USST算法竞赛练习场9 | BlablaWu</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/blog/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">BlablaWu</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">蒟蒻の家</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/blog/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/blog/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/blog/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签<span class="badge">75</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/blog/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类<span class="badge">10</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/blog/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">99</span></a>
+
+  </li>
+        <li class="menu-item menu-item-tools">
+
+    <a href="/blog/tools/" rel="section"><i class="fa fa-fw fa-heartbeat"></i>工具&网站</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/b4158813" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://b4158813.gitee.io/blog/2020/03/12/%E8%A1%A5%E9%A2%98-2020USST%E7%AE%97%E6%B3%95%E7%AB%9E%E8%B5%9B%E7%BB%83%E4%B9%A0%E5%9C%BA9/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/blog/images/boxhead.jpeg">
+      <meta itemprop="name" content="琉璃糖">
+      <meta itemprop="description" content="探索宇宙の奥秘">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BlablaWu">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          补题-2020USST算法竞赛练习场9
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-03-12 21:43:24 / 修改时间：22:26:56" itemprop="dateCreated datePublished" datetime="2020-03-12T21:43:24+08:00">2020-03-12</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index">
+                    <span itemprop="name">算法</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/blog/2020/03/12/%E8%A1%A5%E9%A2%98-2020USST%E7%AE%97%E6%B3%95%E7%AB%9E%E8%B5%9B%E7%BB%83%E4%B9%A0%E5%9C%BA9/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/blog/2020/03/12/%E8%A1%A5%E9%A2%98-2020USST%E7%AE%97%E6%B3%95%E7%AB%9E%E8%B5%9B%E7%BB%83%E4%B9%A0%E5%9C%BA9/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="【补题系列】2020USST算法竞赛练习场9"><a href="#【补题系列】2020USST算法竞赛练习场9" class="headerlink" title="【补题系列】2020USST算法竞赛练习场9"></a><center>【补题系列】2020USST算法竞赛练习场9</center></h2><a id="more"></a>
+<ul>
+<li>先记录一下两道好题</li>
+</ul>
+<h2 id="Minimun-Spanning-Tree"><a href="#Minimun-Spanning-Tree" class="headerlink" title="Minimun Spanning Tree"></a><a href="https://vjudge.net/problem/Gym-102220E" target="_blank" rel="noopener">Minimun Spanning Tree</a></h2><h3 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h3><p>题意：</p>
+<p>给出有n个节点和n-1条边的无向带权图（树），把边视为节点，节点视为边，构造一个新图，新图的边只存在于构成该边所连的两原图的边存在公共节点，边权为该边所连的原图的两边的边权之和，求这个新图的最小生成树（MST）</p>
+<p>题解：</p>
+<p>首先可以无脑想到，不就是求最小生成树嘛，建图然后prim或者kruskal走起呗<br>但问题是这个图怎么建？<del>想破头皮没想出来于是逐渐开始放弃</del><br>因此我开始返璞归真，从最简单的情况看起，如下图（圆圈为原图）</p>
+<p><img src="https://i.loli.net/2020/03/12/Fj5ZYLhfutGsypH.png" alt="image-20200311163621370.png" style="zoom:50%;"></p>
+<p>我们发现这时新图的MST就是一条单边，而且这两个节点是由原图的2节点的两条出边构成的，因此显然如果原图中一个节点只有一条出边，那么它肯定不能组成新图的一条边</p>
+<p>再稍微复杂一点，看下图</p>
+<p><img src="https://i.loli.net/2020/03/12/PbEIcuzFfgLaens.png" alt="image-20200311163932991.png" style="zoom:50%;"></p>
+<p>我们发现此时，2节点有三条出边，因此它代表了新图中的三条边，这个时候的MST就要取舍了，根据题意，新图的边权是原图对应两边权之和，那么显然我们只需要贪心地把原图该节点的最小出边设置为新图的“主节点”，然后把所有别的出边往主节点上连边就可以了，最后的边权和一定是最小的（因为我们反复往边权和里加的是原图最小的出边的边权）比如上图中如果<code>dis[2][1]=1,dis[2][3]=2,dis[2][4]=3</code>，那么<code>21</code>这条边就是对饮新图的主节点，对应的MST为<code>dis[2][1]+dis[2][3]</code>+<code>dis[2][1]+dis[2][4]</code>，也就是<code>所有出边求和 + (出边个数-2)*最小出边边权</code></p>
+<p>因此，对于原图的每一个度不小于2的节点都重复上述操作就可以啦（不信可以自己建个图验证一下）</p>
+<p>然而，此题还是有坑点（它似乎会卡常），以及请使用<font size="3" color="red">邻接表</font>存图（用别的东西存可能会一直TLE）</p>
+<h3 id="AC代码"><a href="#AC代码" class="headerlink" title="AC代码"></a>AC代码</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">long</span> <span class="keyword">long</span> ll;</span><br><span class="line"><span class="keyword">const</span> ll inf=<span class="number">1l</span>l&lt;&lt;<span class="number">60</span>;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> ll <span class="title">read</span><span class="params">()</span> </span>&#123; <span class="comment">//scanf也可</span></span><br><span class="line">	ll kk=<span class="number">0</span>,f=<span class="number">1</span>; </span><br><span class="line">	<span class="keyword">char</span> cc=getchar(); </span><br><span class="line">	<span class="keyword">while</span>(cc&lt;<span class="string">'0'</span>||cc&gt;<span class="string">'9'</span>)&#123;</span><br><span class="line">		<span class="keyword">if</span>(cc==<span class="string">'-'</span>)f=<span class="number">-1</span>;</span><br><span class="line">		cc=getchar();</span><br><span class="line">	&#125; </span><br><span class="line">	<span class="keyword">while</span>(cc&gt;=<span class="string">'0'</span>&amp;&amp;cc&lt;=<span class="string">'9'</span>)&#123;</span><br><span class="line">		kk=(kk&lt;&lt;<span class="number">1</span>)+(kk&lt;&lt;<span class="number">3</span>)+cc-<span class="string">'0'</span>;</span><br><span class="line">		cc=getchar();</span><br><span class="line">	&#125; </span><br><span class="line">	<span class="keyword">return</span> kk*f; </span><br><span class="line">&#125;</span><br><span class="line">ll n;</span><br><span class="line"><span class="built_in">vector</span>&lt;ll&gt; gg[<span class="number">200005</span>]; <span class="comment">//邻接表</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> t;t=<span class="built_in">read</span>();</span><br><span class="line">	<span class="keyword">while</span>(t--)&#123;</span><br><span class="line">		ll u,v,w;</span><br><span class="line">		n=<span class="built_in">read</span>();</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=n;i++) gg[i].<span class="built_in">clear</span>();</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;n;i++)&#123;</span><br><span class="line">			u=<span class="built_in">read</span>(),v=<span class="built_in">read</span>(),w=<span class="built_in">read</span>();</span><br><span class="line">			gg[u].push_back(w);gg[v].push_back(w);</span><br><span class="line">		&#125;</span><br><span class="line">		ll ans=<span class="number">0</span>;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=n;i++)&#123; <span class="comment">//遍历原图每个顶点</span></span><br><span class="line">			ll temp=<span class="number">0</span>,minh=inf,len=gg[i].<span class="built_in">size</span>();</span><br><span class="line">			<span class="keyword">if</span>(len&lt;<span class="number">2</span>) <span class="keyword">continue</span>; <span class="comment">//出边&lt;2就pass</span></span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;len;j++)&#123;<span class="comment">//遍历出边</span></span><br><span class="line">				temp+=gg[i][j]; <span class="comment">//加权值</span></span><br><span class="line">				minh=<span class="built_in">min</span>(minh,gg[i][j]); <span class="comment">//找到最小的边权</span></span><br><span class="line">			&#125;</span><br><span class="line">			ans+=minh*(len<span class="number">-2</span>)+temp; <span class="comment">//加到MST里</span></span><br><span class="line">		&#125;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"%lld\n"</span>,ans);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Radar-Scanner"><a href="#Radar-Scanner" class="headerlink" title="Radar Scanner"></a><a href="https://vjudge.net/problem/Gym-102220G" target="_blank" rel="noopener">Radar Scanner</a></h2><h3 id="题解-1"><a href="#题解-1" class="headerlink" title="题解"></a>题解</h3><p>题意：</p>
+<p>有若干正方形（以给出左下和右上的单位正方形的坐标形式给出），每次可以使任意一个正方形移动一步（上下左右），求满足使所有正方形都重合到一个单位正方形的最小步数</p>
+<p>题解：</p>
+<p>可以先考虑一维的情况，对于若干线段（左端点命名为<code>l</code>，右端点为<code>r</code>），现在需要找到一个点<code>x</code>，将所有线段平移到这个点上最小总步数就是下式</p>
+<script type="math/tex; mode=display">
+min\left(\sum_{i=1}^nmin(|x-l_i|,|x-r_i|)\right)</script><p>但这么写好像不太好找x，考虑换一种写法如下</p>
+<script type="math/tex; mode=display">
+min\left(\sum_{i=1}^n{\frac{|l_i-x|+|r_i-x|-|r_i-l_i|}{2}}\right)</script><p>去掉常数<code>l-r</code>和分母，在考虑简化一下，把<code>l,r</code>视为一个东西<code>k</code>，方程变为</p>
+<script type="math/tex; mode=display">
+min\left(\sum_{i=1}^n{\left(|k_i-x|\right)}\right)</script><p>也就是下面这个式子</p>
+<script type="math/tex; mode=display">
+min\left(|k_1-x|+|k_2-x|+...+|k_n-x|\right)</script><p>这个<code>x</code>看起来像平均数or中位数，那么一个个试，ok确认过了是中位数</p>
+<h4 id="一个不严谨的证明："><a href="#一个不严谨的证明：" class="headerlink" title="一个不严谨的证明："></a>一个不严谨的证明：</h4><p>我随便想了一个，先对<code>k</code>这个序列排序<code>k1最小,kn最大</code>，那么<code>x</code>理论上应该是处于<code>k1~kn</code>之间的一个数（这个太太太显然了，就不证了）那么</p>
+<script type="math/tex; mode=display">
+一定存在1\leq h<h+1\leq n\\
+使得k_h\leq x且k_{h+1}\geq x\\
+且对于所有i\leq h满足k_i\leq x\\
+对于所有i\geq h 满足k_i\geq x\\
+因此原式=min(x-k_1+x-k_2+...+x-k_h+k_{h+1}-x+...+k_n-x)\\
+对x求导令导数为0即可得出最小值所对应的的x</script><p>此时，直观上来看<code>x</code>为<code>+1</code>和为<code>-1</code>的次数应该相同（此时导数才得0），所以x取<code>k[n/2]</code>的时候是最好的，也就是中位数啦</p>
+<p>因此这题只需要分别对横坐标和纵坐标排个序然后找到中位数所对应的坐标就是这题的<code>x</code>点了，剩下的就是模拟移过去的操作了</p>
+<h3 id="AC代码-1"><a href="#AC代码-1" class="headerlink" title="AC代码"></a>AC代码</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">long</span> <span class="keyword">long</span> ll;</span><br><span class="line"><span class="keyword">const</span> ll inf=<span class="number">1l</span>l&lt;&lt;<span class="number">60</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">node</span>&#123;</span></span><br><span class="line">	ll x1,y1,x2,y2;</span><br><span class="line">&#125;a[<span class="number">2000005</span>];</span><br><span class="line"></span><br><span class="line">ll x[<span class="number">500005</span>],y[<span class="number">500005</span>];</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> t;<span class="built_in">scanf</span>(<span class="string">"%d"</span>,&amp;t);</span><br><span class="line">	<span class="keyword">while</span>(t--)&#123;</span><br><span class="line">		<span class="keyword">int</span> n;<span class="built_in">cin</span>&gt;&gt;n;</span><br><span class="line">		<span class="keyword">int</span> cnt1=<span class="number">0</span>,cnt2=<span class="number">0</span>;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=n;i++)&#123;</span><br><span class="line">			<span class="built_in">scanf</span>(<span class="string">"%lld%lld%lld%lld"</span>,&amp;a[i].x1,&amp;a[i].y1,&amp;a[i].x2,&amp;a[i].y2);</span><br><span class="line">			x[++cnt1]=a[i].x1;</span><br><span class="line">			x[++cnt1]=a[i].x2;</span><br><span class="line">			y[++cnt2]=a[i].y1;</span><br><span class="line">			y[++cnt2]=a[i].y2;</span><br><span class="line">		&#125;</span><br><span class="line">		sort(x+<span class="number">1</span>,x+<span class="number">1</span>+cnt1);</span><br><span class="line">		sort(y+<span class="number">1</span>,y+<span class="number">1</span>+cnt2);</span><br><span class="line">		ll ans=<span class="number">0</span>;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=n;i++)&#123;</span><br><span class="line">			<span class="keyword">if</span>(a[i].x1&gt;x[n]||a[i].x2&lt;x[n])</span><br><span class="line">				ans+=<span class="built_in">min</span>(<span class="built_in">abs</span>(x[n]-a[i].x1),<span class="built_in">abs</span>(a[i].x2-x[n]));</span><br><span class="line">			<span class="keyword">if</span>(a[i].y1&gt;y[n]||a[i].y2&lt;y[n])</span><br><span class="line">				ans+=<span class="built_in">min</span>(<span class="built_in">abs</span>(y[n]-a[i].y1),<span class="built_in">abs</span>(a[i].y2-y[n]));</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"%lld\n"</span>,ans);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<ul>
+<li>下面是补的题</li>
+</ul>
+<h2 id="Eventual-…-Journey"><a href="#Eventual-…-Journey" class="headerlink" title="Eventual … Journey"></a><a href="https://vjudge.net/problem/Gym-102056L" target="_blank" rel="noopener">Eventual … Journey</a></h2><h3 id="题解-2"><a href="#题解-2" class="headerlink" title="题解"></a>题解</h3><p>题意：</p>
+<p>给n个01的点，0之间连通，1之间连通，再给m条10之间连通的路，求从所有点到达每个点所走的最少步数和</p>
+<p>题解：</p>
+<p>分类讨论，总共有4种路线：</p>
+<p>0到0或1到1，1步到位</p>
+<p>0到1或1到0有公共路线，1步到位</p>
+<p>0到1或1到0没有公共路线，但可以通过2步（先到有公共路线的地方，再走公共路线）到位；</p>
+<p>0到1或1到0没有公共路线，只能通过3步（先到有公共路线的地方，再走公共路线，再走内部路线）</p>
+<h3 id="AC代码-2"><a href="#AC代码-2" class="headerlink" title="AC代码"></a>AC代码</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">long</span> <span class="keyword">long</span> ll;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> ll <span class="title">read</span><span class="params">()</span> </span>&#123; </span><br><span class="line">	ll kk=<span class="number">0</span>,f=<span class="number">1</span>; </span><br><span class="line">	<span class="keyword">char</span> cc=getchar(); </span><br><span class="line">	<span class="keyword">while</span>(cc&lt;<span class="string">'0'</span>||cc&gt;<span class="string">'9'</span>)&#123;<span class="keyword">if</span>(cc==<span class="string">'-'</span>)f=<span class="number">-1</span>;cc=getchar();&#125; </span><br><span class="line">	<span class="keyword">while</span>(cc&gt;=<span class="string">'0'</span>&amp;&amp;cc&lt;=<span class="string">'9'</span>)&#123;kk=(kk&lt;&lt;<span class="number">1</span>)+(kk&lt;&lt;<span class="number">3</span>)+cc-<span class="string">'0'</span>;cc=getchar();&#125; </span><br><span class="line">	<span class="keyword">return</span> kk*f; </span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">vector</span>&lt;ll&gt; gg[<span class="number">10000005</span>];</span><br><span class="line">ll n,m,a[<span class="number">10000005</span>];</span><br><span class="line">ll zero,one,cnmd;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	n=<span class="built_in">read</span>();</span><br><span class="line">	m=<span class="built_in">read</span>();</span><br><span class="line">	<span class="keyword">for</span>(ll i=<span class="number">1</span>;i&lt;=n;i++)&#123;</span><br><span class="line">		a[i]=<span class="built_in">read</span>();</span><br><span class="line">		<span class="keyword">if</span>(a[i]==<span class="number">0</span>) zero++;</span><br><span class="line">		<span class="keyword">else</span> one++;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span>(ll i=<span class="number">1</span>;i&lt;=m;i++)&#123;</span><br><span class="line">		ll aa,bb;</span><br><span class="line">		aa=<span class="built_in">read</span>();bb=<span class="built_in">read</span>();</span><br><span class="line">		<span class="keyword">if</span>(a[aa]!=a[bb])&#123;</span><br><span class="line">			gg[aa].push_back(bb);</span><br><span class="line">			gg[bb].push_back(aa);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	ll og=<span class="number">0</span>,zg=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span>(ll i=<span class="number">1</span>;i&lt;=n;i++)&#123;</span><br><span class="line">		<span class="keyword">if</span>(gg[i].<span class="built_in">size</span>()==<span class="number">0</span>&amp;&amp;a[i]==<span class="number">0</span>) zg++;</span><br><span class="line">		<span class="keyword">if</span>(gg[i].<span class="built_in">size</span>()==<span class="number">0</span>&amp;&amp;a[i]==<span class="number">1</span>) og++; </span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span>(ll i=<span class="number">1</span>;i&lt;=n;i++)&#123;</span><br><span class="line">		ll ans=<span class="number">0</span>;</span><br><span class="line">		<span class="keyword">if</span>(a[i]==<span class="number">0</span>)&#123;</span><br><span class="line">			ans+=zero<span class="number">-1</span>+gg[i].<span class="built_in">size</span>()+(n-zero-gg[i].<span class="built_in">size</span>())*<span class="number">2</span>;</span><br><span class="line">		&#125;<span class="keyword">else</span> <span class="keyword">if</span>(a[i]==<span class="number">1</span>)&#123;</span><br><span class="line">			ans+=one<span class="number">-1</span>+gg[i].<span class="built_in">size</span>()+(n-one-gg[i].<span class="built_in">size</span>())*<span class="number">2</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span>(gg[i].<span class="built_in">size</span>()==<span class="number">0</span>&amp;&amp;a[i]==<span class="number">0</span>) ans+=og;</span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">if</span>(gg[i].<span class="built_in">size</span>()==<span class="number">0</span>&amp;&amp;a[i]==<span class="number">1</span>) ans+=zg;</span><br><span class="line">		<span class="keyword">if</span>(i==<span class="number">1</span>) <span class="built_in">printf</span>(<span class="string">"%lld"</span>,ans);</span><br><span class="line">		<span class="keyword">else</span> <span class="built_in">printf</span>(<span class="string">" %lld"</span>,ans);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Line-line-Intersection"><a href="#Line-line-Intersection" class="headerlink" title="Line-line Intersection"></a><a href="https://vjudge.net/problem/Gym-102220C" target="_blank" rel="noopener">Line-line Intersection</a></h2><h3 id="题解-3"><a href="#题解-3" class="headerlink" title="题解"></a>题解</h3><p>题意：</p>
+<p>求n条直线中有多少对直线至少有一个交点（重合也算有交点）</p>
+<p>题解：</p>
+<p>每条直线最多可以和前<code>i-1</code>条直线相交，然后减去斜率相同的直线个数，再加上斜率相同截距也相同的直线个数即可</p>
+<h5 id="Mark一下（第一道计算几何题）"><a href="#Mark一下（第一道计算几何题）" class="headerlink" title="Mark一下（第一道计算几何题）"></a>Mark一下（第一道计算几何题）</h5><ul>
+<li>此题为了避免精度问题，存的是斜率和截距的最简分数的形式</li>
+</ul>
+<h3 id="AC代码-3"><a href="#AC代码-3" class="headerlink" title="AC代码"></a>AC代码</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">long</span> <span class="keyword">long</span> ll;</span><br><span class="line"><span class="keyword">const</span> ll inf=<span class="number">0x3f3f3f3f</span>;</span><br><span class="line"><span class="keyword">typedef</span> pair&lt;ll,ll&gt; pa;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> ll <span class="title">read</span><span class="params">()</span> </span>&#123; </span><br><span class="line">	ll kk=<span class="number">0</span>,f=<span class="number">1</span>; </span><br><span class="line">	<span class="keyword">char</span> cc=getchar(); </span><br><span class="line">	<span class="keyword">while</span>(cc&lt;<span class="string">'0'</span>||cc&gt;<span class="string">'9'</span>)&#123;<span class="keyword">if</span>(cc==<span class="string">'-'</span>)f=<span class="number">-1</span>;cc=getchar();&#125; </span><br><span class="line">	<span class="keyword">while</span>(cc&gt;=<span class="string">'0'</span>&amp;&amp;cc&lt;=<span class="string">'9'</span>)&#123;kk=(kk&lt;&lt;<span class="number">1</span>)+(kk&lt;&lt;<span class="number">3</span>)+cc-<span class="string">'0'</span>;cc=getchar();&#125; </span><br><span class="line">	<span class="keyword">return</span> kk*f; </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">map</span>&lt;pair&lt;pa,pa&gt;,<span class="keyword">int</span>&gt; M;</span><br><span class="line"><span class="built_in">map</span>&lt;pa,<span class="keyword">int</span>&gt; Mk;</span><br><span class="line">ll n,t;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	ios::sync_with_stdio(<span class="literal">false</span>);</span><br><span class="line">	t=<span class="built_in">read</span>();</span><br><span class="line">	<span class="keyword">while</span>(t--)&#123;</span><br><span class="line">		M.<span class="built_in">clear</span>();</span><br><span class="line">		Mk.<span class="built_in">clear</span>();</span><br><span class="line">		n=<span class="built_in">read</span>();</span><br><span class="line">		ll i;</span><br><span class="line">		ll ans=<span class="number">0</span>;</span><br><span class="line">		<span class="keyword">for</span>(i=<span class="number">1</span>;i&lt;=n;i++)&#123;</span><br><span class="line">			ll x1,y1,x2,y2;</span><br><span class="line">			x1=<span class="built_in">read</span>(),y1=<span class="built_in">read</span>(),x2=<span class="built_in">read</span>(),y2=<span class="built_in">read</span>();</span><br><span class="line">			ll ka=y1-y2,kb=x1-x2;</span><br><span class="line">			ll ba=x2*y1-x1*y2,bb=x2-x1;</span><br><span class="line">			ll gcdk=__gcd(<span class="built_in">abs</span>(ka),<span class="built_in">abs</span>(kb));</span><br><span class="line">			ll gcdb=__gcd(<span class="built_in">abs</span>(ba),<span class="built_in">abs</span>(bb));</span><br><span class="line">			pa k;</span><br><span class="line">			<span class="keyword">if</span>(ka==<span class="number">0</span>) </span><br><span class="line">			k=make_pair(<span class="number">0</span>,<span class="number">0</span>);</span><br><span class="line">			<span class="keyword">else</span> <span class="keyword">if</span>(kb==<span class="number">0</span>) </span><br><span class="line">			k=make_pair(inf,inf);</span><br><span class="line">			<span class="keyword">else</span>&#123;</span><br><span class="line">				ka/=gcdk,kb/=gcdk;</span><br><span class="line">				<span class="keyword">if</span>(ka*kb&gt;<span class="number">0</span>) </span><br><span class="line">				k=make_pair(<span class="built_in">abs</span>(ka),<span class="built_in">abs</span>(kb));</span><br><span class="line">				<span class="keyword">else</span> </span><br><span class="line">				k=make_pair(-<span class="built_in">abs</span>(ka),<span class="built_in">abs</span>(kb));</span><br><span class="line">			&#125;</span><br><span class="line">			pa b;</span><br><span class="line">			<span class="keyword">if</span>(ba==<span class="number">0</span>) </span><br><span class="line">			b=make_pair(<span class="number">0</span>,<span class="number">0</span>);</span><br><span class="line">			<span class="keyword">else</span> <span class="keyword">if</span>(bb==<span class="number">0</span>) </span><br><span class="line">			b=make_pair(x1,x1);</span><br><span class="line">			<span class="keyword">else</span>&#123;</span><br><span class="line">				ba/=gcdb,bb/=gcdb;</span><br><span class="line">				<span class="keyword">if</span>(ba*bb&gt;<span class="number">0</span>) </span><br><span class="line">				b=make_pair(<span class="built_in">abs</span>(ba),<span class="built_in">abs</span>(bb));</span><br><span class="line">				<span class="keyword">else</span> </span><br><span class="line">				b=make_pair(-<span class="built_in">abs</span>(ba),<span class="built_in">abs</span>(bb));</span><br><span class="line">			&#125;</span><br><span class="line">			ans+=(i<span class="number">-1</span>-Mk[k]+M[make_pair(k,b)]);</span><br><span class="line">			Mk[k]++;</span><br><span class="line">			M[make_pair(k,b)]++;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="built_in">cout</span>&lt;&lt;ans&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Balanced-Diet"><a href="#Balanced-Diet" class="headerlink" title="Balanced Diet"></a><a href="https://vjudge.net/problem/Gym-102220B" target="_blank" rel="noopener">Balanced Diet</a></h2><h3 id="题解-4"><a href="#题解-4" class="headerlink" title="题解"></a>题解</h3><p>题意：</p>
+<p>有m个种类的糖果共n颗，每颗对应一个价值k，每种糖起购件数c（要么不买，要买就至少c个）求下式</p>
+<script type="math/tex; mode=display">
+max(\frac{所有买的糖果的\sum k_i}{max(单件购买个数)})</script><p>题解：</p>
+<p>本蒟蒻不太会，题解也看不太懂，先搁着</p>
+<h3 id="AC代码-4"><a href="#AC代码-4" class="headerlink" title="AC代码"></a>AC代码</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">long</span> <span class="keyword">long</span> ll;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> ll <span class="title">read</span><span class="params">()</span> </span>&#123; </span><br><span class="line">	ll kk=<span class="number">0</span>,f=<span class="number">1</span>; </span><br><span class="line">	<span class="keyword">char</span> cc=getchar(); </span><br><span class="line">	<span class="keyword">while</span>(cc&lt;<span class="string">'0'</span>||cc&gt;<span class="string">'9'</span>)&#123;<span class="keyword">if</span>(cc==<span class="string">'-'</span>)f=<span class="number">-1</span>;cc=getchar();&#125; </span><br><span class="line">	<span class="keyword">while</span>(cc&gt;=<span class="string">'0'</span>&amp;&amp;cc&lt;=<span class="string">'9'</span>)&#123;kk=(kk&lt;&lt;<span class="number">1</span>)+(kk&lt;&lt;<span class="number">3</span>)+cc-<span class="string">'0'</span>;cc=getchar();&#125; </span><br><span class="line">	<span class="keyword">return</span> kk*f; </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">cmp</span><span class="params">(ll x,ll y)</span></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> x&gt;y;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">vector</span>&lt;ll&gt; cnmd[<span class="number">1000005</span>],xbzz[<span class="number">1000005</span>];</span><br><span class="line">ll n,m,a[<span class="number">1000005</span>];</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> t=<span class="built_in">read</span>();</span><br><span class="line">	<span class="keyword">while</span>(t--)&#123;</span><br><span class="line">		<span class="built_in">memset</span>(a,<span class="number">0</span>,<span class="keyword">sizeof</span>(a));</span><br><span class="line">		n=<span class="built_in">read</span>(),m=<span class="built_in">read</span>();</span><br><span class="line">		<span class="keyword">for</span>(ll i=<span class="number">1</span>;i&lt;=m;i++) a[i]=<span class="built_in">read</span>();</span><br><span class="line">		<span class="keyword">for</span>(ll i=<span class="number">0</span>;i&lt;n;i++)&#123;</span><br><span class="line">			ll x,y;</span><br><span class="line">			x=<span class="built_in">read</span>(),y=<span class="built_in">read</span>();</span><br><span class="line">			cnmd[y].push_back(x);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">for</span>(ll i=<span class="number">1</span>;i&lt;=m;i++)&#123;</span><br><span class="line">			sort(cnmd[i].<span class="built_in">begin</span>(),cnmd[i].<span class="built_in">end</span>(),cmp);</span><br><span class="line">			<span class="keyword">for</span>(ll j=<span class="number">0</span>;j&lt;cnmd[i].<span class="built_in">size</span>();j++)&#123;</span><br><span class="line">				xbzz[<span class="built_in">max</span>(j+<span class="number">1</span>,a[i])].push_back(cnmd[i][j]);</span><br><span class="line">			&#125;</span><br><span class="line">			cnmd[i].<span class="built_in">clear</span>();</span><br><span class="line">		&#125;</span><br><span class="line">		ll giao=<span class="number">0</span>,giaogiao=<span class="number">1</span>,giaogiaogiao=<span class="number">0</span>,giaogiaogiaogiao=<span class="number">0</span>;</span><br><span class="line">		<span class="keyword">for</span>(ll i=<span class="number">1</span>;i&lt;=n;i++)&#123;</span><br><span class="line">			giaogiaogiaogiao=i;</span><br><span class="line">			<span class="keyword">for</span>(ll j=<span class="number">0</span>;j&lt;xbzz[i].<span class="built_in">size</span>();j++)&#123;</span><br><span class="line">				giaogiaogiao+=xbzz[i][j];</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span>(giaogiao*giaogiaogiao&gt;giao*giaogiaogiaogiao)</span><br><span class="line">				giaogiao=giaogiaogiaogiao,giao=giaogiaogiao;</span><br><span class="line">			xbzz[i].<span class="built_in">clear</span>();</span><br><span class="line">		&#125;</span><br><span class="line">		ll huohua=__gcd(giaogiao,giao);</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"%lld/%lld\n"</span>,giao/huohua,giaogiao/huohua);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+	  <div>
+      
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束啦<i class="fa fa-paw"></i>感谢您的阅读~-------------</div>
+    
+</div>
+
+      
+	  </div>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/blog/tags/%E5%88%B7%E9%A2%98/" rel="tag"># 刷题</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/2020/03/10/%E7%8A%B6%E5%8E%8BDP%E6%B5%85%E6%9E%90/" rel="prev" title="状压DP浅析">
+      <i class="fa fa-chevron-left"></i> 状压DP浅析
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/2020/03/14/Sublime-Text-3-%E9%85%8D%E7%BD%AEC-11/" rel="next" title="Sublime Text 3 我的配置">
+      Sublime Text 3 我的配置 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+  
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#【补题系列】2020USST算法竞赛练习场9"><span class="nav-number">1.</span> <span class="nav-text">【补题系列】2020USST算法竞赛练习场9</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Minimun-Spanning-Tree"><span class="nav-number">2.</span> <span class="nav-text">Minimun Spanning Tree</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#题解"><span class="nav-number">2.1.</span> <span class="nav-text">题解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AC代码"><span class="nav-number">2.2.</span> <span class="nav-text">AC代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Radar-Scanner"><span class="nav-number">3.</span> <span class="nav-text">Radar Scanner</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#题解-1"><span class="nav-number">3.1.</span> <span class="nav-text">题解</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#一个不严谨的证明："><span class="nav-number">3.1.1.</span> <span class="nav-text">一个不严谨的证明：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AC代码-1"><span class="nav-number">3.2.</span> <span class="nav-text">AC代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Eventual-…-Journey"><span class="nav-number">4.</span> <span class="nav-text">Eventual … Journey</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#题解-2"><span class="nav-number">4.1.</span> <span class="nav-text">题解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AC代码-2"><span class="nav-number">4.2.</span> <span class="nav-text">AC代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Line-line-Intersection"><span class="nav-number">5.</span> <span class="nav-text">Line-line Intersection</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#题解-3"><span class="nav-number">5.1.</span> <span class="nav-text">题解</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Mark一下（第一道计算几何题）"><span class="nav-number">5.1.0.1.</span> <span class="nav-text">Mark一下（第一道计算几何题）</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AC代码-3"><span class="nav-number">5.2.</span> <span class="nav-text">AC代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Balanced-Diet"><span class="nav-number">6.</span> <span class="nav-text">Balanced Diet</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#题解-4"><span class="nav-number">6.1.</span> <span class="nav-text">题解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AC代码-4"><span class="nav-number">6.2.</span> <span class="nav-text">AC代码</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+	  
+	  
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="琉璃糖"
+      src="/blog/images/boxhead.jpeg">
+  <p class="site-author-name" itemprop="name">琉璃糖</p>
+  <div class="site-description" itemprop="description">探索宇宙の奥秘</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/blog/archives/">
+        
+          <span class="site-state-item-count">99</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/blog/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/blog/tags/">
+          
+        <span class="site-state-item-count">75</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/b4158813" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;b4158813" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://blog.csdn.net/weixin_44042643" title="CSDN → https:&#x2F;&#x2F;blog.csdn.net&#x2F;weixin_44042643" rel="noopener" target="_blank"><i class="fa fa-fw fa-crosshairs"></i>CSDN</a>
+      </span>
+  </div>
+
+
+
+      </div>
+	 
+	</div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">琉璃糖</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">343k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">10:24</span>
+</div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='255,251,240' opacity='0.8' zIndex='-1' count='100' src="/blog/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/blog/lib/anime.min.js"></script>
+  <script src="/blog/lib/velocity/velocity.min.js"></script>
+  <script src="/blog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/blog/js/utils.js"></script>
+
+<script src="/blog/js/motion.js"></script>
+
+
+<script src="/blog/js/schemes/pisces.js"></script>
+
+
+<script src="/blog/js/next-boot.js"></script>
+
+
+  <script defer src="/blog/lib/three/three.min.js"></script>
+
+
+  
+
+
+
+
+  
+<script src="/blog/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('div.pdf').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/pdfobject@2/pdfobject.min.js', () => {
+    document.querySelectorAll('div.pdf').forEach(element => {
+      PDFObject.embed(element.getAttribute('target'), element, {
+        pdfOpenParams: {
+          navpanes: 0,
+          toolbar: 0,
+          statusbar: 0,
+          pagemode: 'thumbs',
+          view: 'FitH'
+        },
+        PDFJS_URL: '/lib/pdf/web/viewer.html',
+        height: element.getAttribute('height') || '500px'
+      });
+    });
+  }, window.PDFObject);
+}
+</script>
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el: '#valine-comments',
+      verify: true,
+      notify: true,
+      appId: '8WpS33YNRGD4IQNVQgVCmHQy-gzGzoHsz',
+      appKey: 'jed4H3219MxS5igBfmfTU81w',
+      placeholder: "Just go go",
+      avatar: 'mm',
+      meta: guest,
+      pageSize: '10' || 10,
+      visitor: false,
+      lang: '' || 'zh-cn',
+      path: location.pathname,
+      recordIP: false,
+      serverURLs: ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+
