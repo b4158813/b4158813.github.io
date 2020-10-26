@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/blog/css/main.css">
+
+
+<link rel="stylesheet" href="/blog/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/blog/lib/pace/pace-theme-minimal.min.css">
+  <script src="/blog/lib/pace/pace.min.js"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://b4158813.gitee.io/blog').hostname,
+    root: '/blog/',
+    scheme: 'Gemini',
+    version: '7.7.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":"mac"},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="今天打完了蓝桥杯，估摸了一下大概80分吧，不知道能不能省一，先水一发比赛记录。 2020.10.26 更新： 今天出结果了，省一，嘻嘻嘻，不过因为疫情原因，不能去北京一日游了，很烦">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第十一届蓝桥杯省赛B组第二场（比赛记录）">
+<meta property="og:url" content="https://b4158813.gitee.io/blog/2020/10/17/%E7%AC%AC%E5%8D%81%E4%B8%80%E5%B1%8A%E8%93%9D%E6%A1%A5%E6%9D%AF%E7%9C%81%E8%B5%9BB%E7%BB%84%E7%AC%AC%E4%BA%8C%E5%9C%BA%EF%BC%88%E6%AF%94%E8%B5%9B%E8%AE%B0%E5%BD%95%EF%BC%89/index.html">
+<meta property="og:site_name" content="BlablaWu">
+<meta property="og:description" content="今天打完了蓝桥杯，估摸了一下大概80分吧，不知道能不能省一，先水一发比赛记录。 2020.10.26 更新： 今天出结果了，省一，嘻嘻嘻，不过因为疫情原因，不能去北京一日游了，很烦">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-10-17T12:16:36.000Z">
+<meta property="article:modified_time" content="2020-10-26T10:19:04.337Z">
+<meta property="article:author" content="琉璃糖">
+<meta property="article:tag" content="比赛记录">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://b4158813.gitee.io/blog/2020/10/17/%E7%AC%AC%E5%8D%81%E4%B8%80%E5%B1%8A%E8%93%9D%E6%A1%A5%E6%9D%AF%E7%9C%81%E8%B5%9BB%E7%BB%84%E7%AC%AC%E4%BA%8C%E5%9C%BA%EF%BC%88%E6%AF%94%E8%B5%9B%E8%AE%B0%E5%BD%95%EF%BC%89/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>第十一届蓝桥杯省赛B组第二场（比赛记录） | BlablaWu</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/blog/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">BlablaWu</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">蒟蒻の家</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/blog/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/blog/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/blog/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签<span class="badge">76</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/blog/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类<span class="badge">9</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/blog/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">101</span></a>
+
+  </li>
+        <li class="menu-item menu-item-tools">
+
+    <a href="/blog/tools/" rel="section"><i class="fa fa-fw fa-heartbeat"></i>工具&网站</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/b4158813" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://b4158813.gitee.io/blog/2020/10/17/%E7%AC%AC%E5%8D%81%E4%B8%80%E5%B1%8A%E8%93%9D%E6%A1%A5%E6%9D%AF%E7%9C%81%E8%B5%9BB%E7%BB%84%E7%AC%AC%E4%BA%8C%E5%9C%BA%EF%BC%88%E6%AF%94%E8%B5%9B%E8%AE%B0%E5%BD%95%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/blog/images/boxhead.jpeg">
+      <meta itemprop="name" content="琉璃糖">
+      <meta itemprop="description" content="探索宇宙の奥秘">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BlablaWu">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          第十一届蓝桥杯省赛B组第二场（比赛记录）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-10-17 20:16:36" itemprop="dateCreated datePublished" datetime="2020-10-17T20:16:36+08:00">2020-10-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-10-26 18:19:04" itemprop="dateModified" datetime="2020-10-26T18:19:04+08:00">2020-10-26</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index">
+                    <span itemprop="name">算法</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/blog/2020/10/17/%E7%AC%AC%E5%8D%81%E4%B8%80%E5%B1%8A%E8%93%9D%E6%A1%A5%E6%9D%AF%E7%9C%81%E8%B5%9BB%E7%BB%84%E7%AC%AC%E4%BA%8C%E5%9C%BA%EF%BC%88%E6%AF%94%E8%B5%9B%E8%AE%B0%E5%BD%95%EF%BC%89/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/blog/2020/10/17/%E7%AC%AC%E5%8D%81%E4%B8%80%E5%B1%8A%E8%93%9D%E6%A1%A5%E6%9D%AF%E7%9C%81%E8%B5%9BB%E7%BB%84%E7%AC%AC%E4%BA%8C%E5%9C%BA%EF%BC%88%E6%AF%94%E8%B5%9B%E8%AE%B0%E5%BD%95%EF%BC%89/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.6k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>5 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>今天打完了蓝桥杯，估摸了一下大概80分吧，不知道能不能省一，先水一发比赛记录。</p>
+<p>2020.10.26 更新： 今天出结果了，省一，嘻嘻嘻，不过因为疫情原因，不能去北京一日游了，很烦</p>
+<a id="more"></a>
+<h2 id="填空题"><a href="#填空题" class="headerlink" title="填空题"></a>填空题</h2><h3 id="A-门牌制作"><a href="#A-门牌制作" class="headerlink" title="A. 门牌制作"></a>A. 门牌制作</h3><blockquote>
+<p>小蓝要为一条街的住户制作门牌号。 这条街一共有 2020 位住户，门牌号从 1 到 2020 编号。 小蓝制作门牌的方法是先制作 0 到 9 这几个数字字符，最后根据需要将字 符粘贴到门牌上，例如门牌 1017 需要依次粘贴字符 1、0、1、7，即需要 1 个 字符 0，2 个字符 1，1 个字符 7。 请问要制作所有的 1 到 2020 号门牌，总共需要多少个字符 2？</p>
+</blockquote>
+<p>傻逼题，算有多少个2，大概1分钟不到写完</p>
+<h3 id="B-既约分数"><a href="#B-既约分数" class="headerlink" title="B. 既约分数"></a>B. 既约分数</h3><blockquote>
+<p>如果一个分数的分子和分母的最大公约数是 1，这个分数称为既约分数。 例如，34 , 52 , 18 , 71 都是既约分数。 请问，有多少个既约分数，分子和分母都是 1 到 2020 之间的整数（包括 1 和 2020）？</p>
+</blockquote>
+<p>傻逼题，<code>__gcd()</code>搞完（我tm考试时居然脑抽手写了个gcd），大概1分钟不到写完</p>
+<p>（看了一眼时间，大概过去了两分钟）</p>
+<h3 id="C-蛇形填数"><a href="#C-蛇形填数" class="headerlink" title="C. 蛇形填数"></a>C. 蛇形填数</h3><blockquote>
+<p>如下图所示，小明用从 1 开始的正整数“蛇形”填充无限大的矩阵。 </p>
+<p>1 2 6 7 15 … </p>
+<p>3 5 8 14 … </p>
+<p>4 9 13 … </p>
+<p>10 12 … </p>
+<p>11 … … </p>
+<p>(1) </p>
+<p>容易看出矩阵第二行第二列中的数是 5。请你计算矩阵中第 20 行第 20 列 的数是多少？</p>
+</blockquote>
+<p>傻逼题，草稿纸上写写，就是+4、+8、+12，写个程序算一下就行</p>
+<h3 id="D-跑步锻炼"><a href="#D-跑步锻炼" class="headerlink" title="D. 跑步锻炼"></a>D. 跑步锻炼</h3><blockquote>
+<p>小蓝每天都锻炼身体。 正常情况下，小蓝每天跑 1 千米。如果某天是周一或者月初（1 日），为了 激励自己，小蓝要跑 2 千米。如果同时是周一或月初，小蓝也是跑 2 千米。 小蓝跑步已经坚持了很长时间，从 2000 年 1 月 1 日周六（含）到 2020 年 10 月 1 日周四（含）。请问这段时间小蓝总共跑步多少千米？</p>
+</blockquote>
+<p>艹了，日期处理啥的我最不会了，打开cmd输入<code>python</code>发现可以用，漂亮！先手算一共多少月，python算了一波一共多少天，然后excel算了一波有多少周一，然后右下角日历数了一下有多少周一和月初重合的，容斥一下解决（就这么简单一题我还整这么多花里胡哨的2333）</p>
+<h3 id="E-七段码"><a href="#E-七段码" class="headerlink" title="E. 七段码"></a>E. 七段码</h3><blockquote>
+<p>小蓝要用七段码数码管来表示一种特殊的文字。 上图给出了七段码数码管的一个图示，数码管中一共有 7 段可以发光的二 极管，分别标记为 a, b, c, d, e, f, g。 小蓝要选择一部分二极管（至少要有一个）发光来表达字符。在设计字符 的表达时，要求所有发光的二极管是连成一片的。 例如：b 发光，其他二极管不发光可以用来表达一种字符。 例如：c 发光，其他二极管不发光可以用来表达一种字符。这种方案与上 一行的方案可以用来表示不同的字符，尽管看上去比较相似。 例如：a, b, c, d, e 发光，f, g 不发光可以用来表达一种字符。 例如：b, f 发光，其他二极管不发光则不能用来表达一种字符，因为发光 的二极管没有连成一片。 请问，小蓝可以用七段码数码管表达多少种不同的字符？</p>
+</blockquote>
+<p>题意：大概就是一个 “日” 字形的灯管，可以点亮连续的一根或几根灯管，问可以形成多少种不同的图形？</p>
+<p>看到题目第一反应：这题肯定要建图啊，然后dfs啥的，然而dfs不熟练，怕写错，果断手算，用了一页草稿纸写了自认为的所有情况，最后还检查了两遍，艹，还是漏了8个。。。这题没了</p>
+<h2 id="编程题"><a href="#编程题" class="headerlink" title="编程题"></a>编程题</h2><h3 id="F-成绩统计"><a href="#F-成绩统计" class="headerlink" title="F. 成绩统计"></a>F. 成绩统计</h3><blockquote>
+<p>小蓝给学生们组织了一场考试，卷面总分为 100 分，每个学生的得分都是 一个 0 到 100 的整数。 如果得分至少是 60 分，则称为及格。如果得分至少为 85 分，则称为优秀。 请计算及格率和优秀率，用百分数表示，百分号前的部分四舍五入保留整 数。</p>
+</blockquote>
+<p>傻逼题，四舍五入我+0.5取整处理的</p>
+<h3 id="G-回文日期"><a href="#G-回文日期" class="headerlink" title="G. 回文日期"></a>G. 回文日期</h3><blockquote>
+<p>2020 年春节期间，有一个特殊的日期引起了大家的注意：2020 年 2 月 2 日。因为如果将这个日期按 “yyyymmdd” 的格式写成一个 8 位数是 20200202， 恰好是一个回文数。我们称这样的日期是回文日期。 有人表示 20200202 是 “千年一遇” 的特殊日子。对此小明很不认同，因为 不到 2 年之后就是下一个回文日期：20211202 即 2021 年 12 月 2 日。 也有人表示 20200202 并不仅仅是一个回文日期，还是一个 ABABBABA 型的回文日期。对此小明也不认同，因为大约 100 年后就能遇到下一个 ABABBABA 型的回文日期：21211212 即 2121 年 12 月 12 日。算不上 “千 年一遇”，顶多算 “千年两遇”。 给定一个 8 位数的日期，请你计算该日期之后下一个回文日期和下一个 ABABBABA 型的回文日期各是哪一天。</p>
+</blockquote>
+<p>看到这种模拟题有点想吐，先看看下一题，好了，还是这题简单23333，总体思路就是枚举，需要判一下日期是否合法（闰年啥的）、日期是否回文、日期是否是ABABBABA回文，总体还是很简单的</p>
+<h3 id="H-子串分值和"><a href="#H-子串分值和" class="headerlink" title="H. 子串分值和"></a>H. 子串分值和</h3><blockquote>
+<p>对于一个字符串S ，我们定义S 的分值f (S) 为S 中出现的不同的字符个数。</p>
+<p>例如f (”aba”) = 2, f (”abc”) = 3,  f (”aaa”) = 1。</p>
+<p>现在给定一个字符串<script type="math/tex">S [0...n-1]</script>（长度为n），请你计算对于所有S 的非空子串$S[i…j] (0 \leq i\leq j &lt; n)$， $f (S [i…j])$ 的和是多少</p>
+</blockquote>
+<p>无脑先写个暴力骗50%再说，最后想倒数第二题用时过多，时间不够了555</p>
+<h3 id="I-直线相交"><a href="#I-直线相交" class="headerlink" title="I. 直线相交"></a>I. 直线相交</h3><blockquote>
+<p>计算n条直线将平面分成了几个部分</p>
+</blockquote>
+<p>无脑写了n&lt;=3的分类讨论，n&lt;=1000的，在草稿纸上手玩了几个样例，找了找规律，发现确实有规律，与每条直线和先前直线的交点数目有关，然而有点复杂，想了很久没想明白，再见吧，计算几何，一窍不通</p>
+<h3 id="J-冒泡排序"><a href="#J-冒泡排序" class="headerlink" title="J. 冒泡排序"></a>J. 冒泡排序</h3><blockquote>
+<p>小蓝最近学习了一些排序算法，其中冒泡排序让他印象深刻。在冒泡排序中，每次只能交换相邻的两个元素。小蓝发现，如果对一个字符串中的字符排序，只允许交换相邻的两个字符，则在所有可能的排序方案中，冒泡排序的总交换次数是最少的。</p>
+<p>例如，对于字符串lan 排序，只需要1 次交换。对于字符串qiao 排序，总共需要4 次交换。小蓝的幸运数字是V，他想找到一个只包含小写英文字母的字符串，对这个串中的字符进行冒泡排序，正好需要V 次交换。请帮助小蓝找一个这样的字符串。如果可能找到多个，请告诉小蓝最短的那个。如果最短的仍然有多个，请告诉小蓝字典序最小的那个。请注意字符串中可以包含相同的字符。</p>
+</blockquote>
+<p>草稿纸上手模了几个案例，发现有点迷，但却是是有规律，然并卵，赛后听大佬讨论，说是从右往左，先填两个的，再填一个的，想想好像确实如此，但考场上就一步之遥，哎，还是太蒻了。。。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>思维混乱，只会模拟，不能满分，只能偏分</p>
+
+    </div>
+
+    
+    
+    
+	  <div>
+      
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束啦<i class="fa fa-paw"></i>感谢您的阅读~-------------</div>
+    
+</div>
+
+      
+	  </div>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/blog/tags/%E6%AF%94%E8%B5%9B%E8%AE%B0%E5%BD%95/" rel="tag"># 比赛记录</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/2020/08/07/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E3%81%AE%E5%90%84%E7%A7%8D%E6%BB%A4%E6%B3%A2%E6%96%B9%E6%B3%95/" rel="prev" title="图像处理の各种滤波方法">
+      <i class="fa fa-chevron-left"></i> 图像处理の各种滤波方法
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/2020/10/25/Hello%20there/" rel="next" title="<font color=brown size=50>Hello there</font>">
+      <font color=brown size=50>Hello there</font> <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+  
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#填空题"><span class="nav-number">1.</span> <span class="nav-text">填空题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#A-门牌制作"><span class="nav-number">1.1.</span> <span class="nav-text">A. 门牌制作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#B-既约分数"><span class="nav-number">1.2.</span> <span class="nav-text">B. 既约分数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#C-蛇形填数"><span class="nav-number">1.3.</span> <span class="nav-text">C. 蛇形填数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#D-跑步锻炼"><span class="nav-number">1.4.</span> <span class="nav-text">D. 跑步锻炼</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#E-七段码"><span class="nav-number">1.5.</span> <span class="nav-text">E. 七段码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编程题"><span class="nav-number">2.</span> <span class="nav-text">编程题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#F-成绩统计"><span class="nav-number">2.1.</span> <span class="nav-text">F. 成绩统计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#G-回文日期"><span class="nav-number">2.2.</span> <span class="nav-text">G. 回文日期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#H-子串分值和"><span class="nav-number">2.3.</span> <span class="nav-text">H. 子串分值和</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#I-直线相交"><span class="nav-number">2.4.</span> <span class="nav-text">I. 直线相交</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#J-冒泡排序"><span class="nav-number">2.5.</span> <span class="nav-text">J. 冒泡排序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">2.6.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+	  
+	  
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="琉璃糖"
+      src="/blog/images/boxhead.jpeg">
+  <p class="site-author-name" itemprop="name">琉璃糖</p>
+  <div class="site-description" itemprop="description">探索宇宙の奥秘</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/blog/archives/">
+        
+          <span class="site-state-item-count">101</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/blog/categories/">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/blog/tags/">
+          
+        <span class="site-state-item-count">76</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/b4158813" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;b4158813" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://blog.csdn.net/weixin_44042643" title="CSDN → https:&#x2F;&#x2F;blog.csdn.net&#x2F;weixin_44042643" rel="noopener" target="_blank"><i class="fa fa-fw fa-crosshairs"></i>CSDN</a>
+      </span>
+  </div>
+
+
+
+      </div>
+	 
+	</div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">琉璃糖</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">354k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">10:43</span>
+</div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='255,251,240' opacity='0.8' zIndex='-1' count='100' src="/blog/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/blog/lib/anime.min.js"></script>
+  <script src="/blog/lib/velocity/velocity.min.js"></script>
+  <script src="/blog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/blog/js/utils.js"></script>
+
+<script src="/blog/js/motion.js"></script>
+
+
+<script src="/blog/js/schemes/pisces.js"></script>
+
+
+<script src="/blog/js/next-boot.js"></script>
+
+
+  <script defer src="/blog/lib/three/three.min.js"></script>
+
+
+  
+
+
+
+
+  
+<script src="/blog/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('div.pdf').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/pdfobject@2/pdfobject.min.js', () => {
+    document.querySelectorAll('div.pdf').forEach(element => {
+      PDFObject.embed(element.getAttribute('target'), element, {
+        pdfOpenParams: {
+          navpanes: 0,
+          toolbar: 0,
+          statusbar: 0,
+          pagemode: 'thumbs',
+          view: 'FitH'
+        },
+        PDFJS_URL: '/lib/pdf/web/viewer.html',
+        height: element.getAttribute('height') || '500px'
+      });
+    });
+  }, window.PDFObject);
+}
+</script>
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el: '#valine-comments',
+      verify: true,
+      notify: true,
+      appId: '8WpS33YNRGD4IQNVQgVCmHQy-gzGzoHsz',
+      appKey: 'jed4H3219MxS5igBfmfTU81w',
+      placeholder: "Just go go",
+      avatar: 'mm',
+      meta: guest,
+      pageSize: '10' || 10,
+      visitor: false,
+      lang: '' || 'zh-cn',
+      path: location.pathname,
+      recordIP: false,
+      serverURLs: ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+
