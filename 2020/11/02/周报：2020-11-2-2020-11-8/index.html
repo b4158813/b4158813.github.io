@@ -63,7 +63,7 @@
 <meta property="og:image" content="https://gitee.com/b4158813/b4158813_images/raw/master/imag/image-20201110104106778.png">
 <meta property="og:image" content="https://gitee.com/b4158813/b4158813_images/raw/master/imag/image-20201110104804715.png">
 <meta property="article:published_time" content="2020-11-02T12:06:05.000Z">
-<meta property="article:modified_time" content="2020-11-10T02:53:50.824Z">
+<meta property="article:modified_time" content="2020-11-30T14:20:27.698Z">
 <meta property="article:author" content="琉璃糖">
 <meta property="article:tag" content="周报">
 <meta name="twitter:card" content="summary">
@@ -167,7 +167,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/blog/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">103</span></a>
+    <a href="/blog/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">105</span></a>
 
   </li>
         <li class="menu-item menu-item-tools">
@@ -258,7 +258,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-11-10 10:53:50" itemprop="dateModified" datetime="2020-11-10T10:53:50+08:00">2020-11-10</time>
+                <time title="修改时间：2020-11-30 22:20:27" itemprop="dateModified" datetime="2020-11-30T22:20:27+08:00">2020-11-30</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -299,7 +299,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>909</span>
+              <span>914</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -322,19 +322,19 @@
 <a id="more"></a>
 <h2 id="Paper1"><a href="#Paper1" class="headerlink" title="Paper1"></a>Paper1</h2><h3 id="Title"><a href="#Title" class="headerlink" title="Title"></a>Title</h3><p>《基于滤光片光谱仪的目标光谱估计》</p>
 <p><strong>[1] Chang Cheng-Chun,Lee Heung-No. On the estimation of target spectrum for filter-array based spectrometers.[J]. Optics express,2008,16(2).</strong></p>
-<h3 id="Content"><a href="#Content" class="headerlink" title="Content"></a>Content</h3><p>采用性能较差但成本较低的滤光片（宽谱），利用NNLS（非负最小二乘）算法实现了光谱重建工作</p>
-<h4 id="Model"><a href="#Model" class="headerlink" title="Model"></a>Model</h4><p>基本数学模型如下图所示：其中向量$r$为观测光谱，$s$为光源原本的光谱值</p>
+<h3 id="Contents"><a href="#Contents" class="headerlink" title="Contents"></a>Contents</h3><p>采用性能较差但成本较低的滤光片（宽谱），利用NNLS（非负最小二乘）算法实现了光谱重建工作</p>
+<h4 id="Models"><a href="#Models" class="headerlink" title="Models"></a>Models</h4><p>基本数学模型如下图所示：其中向量$r$为观测光谱，$s$为光源原本的光谱值</p>
 <p><img src="https://gitee.com/b4158813/b4158813_images/raw/master/imag/1.png" alt="1" style="zoom:50%;"></p>
 <p><img src="https://gitee.com/b4158813/b4158813_images/raw/master/imag/image-20201110102316251.png" alt="image-20201110102316251" style="zoom:50%;"></p>
-<h4 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h4><p>把$s$看作模型参数，$r$是我们已经可以观测到的事件，目的就是需要估计这个模型参数值，也就是一个<strong>似然</strong>的过程，可以考虑<strong>最大后验概率估计MAP</strong>，但由于我们没有对模型参数$s$的先验知识，所以这个估计退化为<strong>极大似然估计MLE</strong><img src="https://gitee.com/b4158813/b4158813_images/raw/master/imag/image-20201110102832221.png" alt="image-20201110102832221" style="zoom: 67%;"></p>
+<h4 id="Solutions"><a href="#Solutions" class="headerlink" title="Solutions"></a>Solutions</h4><p>把$s$看作模型参数，$r$是我们已经可以观测到的事件，目的就是需要估计这个模型参数值，也就是一个<strong>似然</strong>的过程，可以考虑<strong>最大后验概率估计MAP</strong>，但由于我们没有对模型参数$s$的先验知识，所以这个估计退化为<strong>极大似然估计MLE</strong><img src="https://gitee.com/b4158813/b4158813_images/raw/master/imag/image-20201110102832221.png" alt="image-20201110102832221" style="zoom: 67%;"></p>
 <p>把$r$式代入，显然这个问题取决于噪声的分布情况，考虑将噪声设置为<strong>多元高斯分布</strong>，那么这个似然函数就变为了高斯函数<img src="https://gitee.com/b4158813/b4158813_images/raw/master/imag/image-20201110102959281.png" alt="image-20201110102959281" style="zoom:50%;"></p>
 <p>显然，这个函数取得最大值，等价于指数部分取得最小值，经过对指数部分的求导化简，得到解：<img src="https://gitee.com/b4158813/b4158813_images/raw/master/imag/image-20201110103144113.png" alt="image-20201110103144113" style="zoom:50%;">，考虑将噪声函数设置为标准高斯分布，以及H矩阵设置为方正，就可以将解进一步化简为<img src="https://gitee.com/b4158813/b4158813_images/raw/master/imag/image-20201110103302247.png" alt="image-20201110103302247" style="zoom:50%;"></p>
 <p>同时，文献说明了在噪声高斯分布的均值为0的情况下，这些估计都是对于光源光谱的无偏估计</p>
 <p>这里需要注意的点是：<strong>滤光片数量N和取样的波长数量M的关系</strong>，由于需要求解$(H^TH)^{-1}$，因此这个$M*M$的矩阵需要满秩，因此必须有$N\ge M$（否则这个矩阵的秩就是N了，不可能满秩了），也就是说滤光片数量需要足够多。同时，文献也简单证明了使用广义逆的有偏问题。</p>
 <p>最后，文献介绍了两个算法：SVD（奇异值分解）和NNLS（非负最小二乘），前者就是利用SVD将H矩阵特征提取出来，设置一个Threshold来确定$s$；后者归结为求解下式<img src="https://gitee.com/b4158813/b4158813_images/raw/master/imag/image-20201110104617132.png" alt="image-20201110104617132" style="zoom:50%;">，采用不断迭代的方法，最终总是可以收敛的。</p>
-<h4 id="Experiment"><a href="#Experiment" class="headerlink" title="Experiment"></a>Experiment</h4><p>实验设备如下：数字相机（获取光源数据）+计算机（实现算法，绘出图像）+DSP板（数字信号处理）</p>
+<h4 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h4><p>实验设备如下：数字相机（获取光源数据）+计算机（实现算法，绘出图像）+DSP板（数字信号处理）</p>
 <p><img src="https://gitee.com/b4158813/b4158813_images/raw/master/imag/image-20201110104106778.png" alt="image-20201110104106778" style="zoom:67%;"></p>
-<h4 id="Result"><a href="#Result" class="headerlink" title="Result"></a>Result</h4><p>Fig. 3为采用的宽谱滤光片情况，Fig. 4为实验结果，可以看出，NNLS能够很好地还原$s$，而SVD表现很差</p>
+<h4 id="Results"><a href="#Results" class="headerlink" title="Results"></a>Results</h4><p>Fig. 3为采用的宽谱滤光片情况，Fig. 4为实验结果，可以看出，NNLS能够很好地还原$s$，而SVD表现很差</p>
 <p><img src="https://gitee.com/b4158813/b4158813_images/raw/master/imag/image-20201110104804715.png" alt="image-20201110104804715" style="zoom:67%;"></p>
 
     </div>
@@ -433,7 +433,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Paper1"><span class="nav-number">1.</span> <span class="nav-text">Paper1</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Title"><span class="nav-number">1.1.</span> <span class="nav-text">Title</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Content"><span class="nav-number">1.2.</span> <span class="nav-text">Content</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Model"><span class="nav-number">1.2.1.</span> <span class="nav-text">Model</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Solution"><span class="nav-number">1.2.2.</span> <span class="nav-text">Solution</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Experiment"><span class="nav-number">1.2.3.</span> <span class="nav-text">Experiment</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Result"><span class="nav-number">1.2.4.</span> <span class="nav-text">Result</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Paper1"><span class="nav-number">1.</span> <span class="nav-text">Paper1</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Title"><span class="nav-number">1.1.</span> <span class="nav-text">Title</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Contents"><span class="nav-number">1.2.</span> <span class="nav-text">Contents</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Models"><span class="nav-number">1.2.1.</span> <span class="nav-text">Models</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Solutions"><span class="nav-number">1.2.2.</span> <span class="nav-text">Solutions</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Experiments"><span class="nav-number">1.2.3.</span> <span class="nav-text">Experiments</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Results"><span class="nav-number">1.2.4.</span> <span class="nav-text">Results</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 	  
@@ -450,7 +450,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/blog/archives/">
         
-          <span class="site-state-item-count">103</span>
+          <span class="site-state-item-count">105</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -506,13 +506,13 @@
       <i class="fa fa-area-chart"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">365k</span>
+    <span title="站点总字数">368k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">11:04</span>
+    <span title="站点阅读时长">11:09</span>
 </div>
 
 
