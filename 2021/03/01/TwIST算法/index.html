@@ -54,7 +54,7 @@
 <meta property="og:site_name" content="BlablaWu&#39;s Blog">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-03-01T06:26:34.000Z">
-<meta property="article:modified_time" content="2021-03-08T06:24:11.453Z">
+<meta property="article:modified_time" content="2021-03-09T03:44:27.077Z">
 <meta property="article:author" content="琉璃糖">
 <meta property="article:tag" content="TwIST">
 <meta property="article:tag" content="IST">
@@ -250,7 +250,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-03-08 14:24:11" itemprop="dateModified" datetime="2021-03-08T14:24:11+08:00">2021-03-08</time>
+                <time title="修改时间：2021-03-09 11:44:27" itemprop="dateModified" datetime="2021-03-09T11:44:27+08:00">2021-03-09</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -344,8 +344,9 @@ soft(x,T) = sgn(x)\max\{0,|x|-T\}</script><p>对于优化问题：</p>
 <p>其中，由 $|\Phi|_2&lt;1$，得到: $u(x,z)\ge f(x),u(z,z) = f(z)$</p>
 <p>化简该函数，可以得到：</p>
 <script type="math/tex; mode=display">
-u(x,z) = \frac 1 2 \|x- [z+\Phi^T(y-\Phi z)]\|_2^2 + \lambda \|x\|_1 + K</script><p>其中，K与x无关，于是原问题等价于优化：$u^<em>(x,x^</em>) = \frac 1 2 |x-x^*|_2^2+\lambda|x|_1$</p>
-<p>其中，$x^* = z+\Phi^T(y-\Phi z)$</p>
+u(x,z) = \frac 1 2 \|x- [z+\Phi^T(y-\Phi z)]\|_2^2 + \lambda \|x\|_1 + K</script><p>其中，K与x无关，于是原问题等价于优化：</p>
+<script type="math/tex; mode=display">
+u^*(x,x^*) = \frac 1 2 \|x-x^*\|_2^2+\lambda\|x\|_1</script><p>其中，$x^* = z+\Phi^T(y-\Phi z)$</p>
 <p>显然，这个问题的解就是软阈值函数 $soft(x^*,\lambda)$</p>
 
     </div>
