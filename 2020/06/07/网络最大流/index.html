@@ -1,0 +1,602 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="琉璃糖">
+  <meta name="keywords" content="">
+  
+    <meta property="og:type" content="article">
+<meta property="og:title" content="网络流专题浅析">
+<meta property="og:url" content="http://example.com/2020/06/07/%E7%BD%91%E7%BB%9C%E6%9C%80%E5%A4%A7%E6%B5%81/index.html">
+<meta property="og:site_name" content="BlablaWu&#39;s Blog">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/imag/u=940719274,3110727478&fm=26&gp=0.jpg">
+<meta property="article:published_time" content="2020-06-07T12:07:09.000Z">
+<meta property="article:modified_time" content="2022-05-17T11:41:48.000Z">
+<meta property="article:author" content="琉璃糖">
+<meta property="article:tag" content="网络流">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/imag/u=940719274,3110727478&fm=26&gp=0.jpg">
+  
+  
+  <title>网络流专题浅析 - BlablaWu&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":50,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>BlablaWu の Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/index_bg.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="网络流专题浅析">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2020-06-07 20:07" pubdate>
+        2020年6月7日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      3.9k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      33 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">网络流专题浅析</h1>
+            
+            <div class="markdown-body">
+              <hr>
+<span id="more"></span>
+<h2 id="网络最大流"><a href="#网络最大流" class="headerlink" title="网络最大流"></a>网络最大流</h2><p>参考blog：</p>
+<ul>
+<li><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/linzhengmin/p/9313216.html">[算法]网络最大流Dinic</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/122375531">Pecco 算法学习笔记(28): 网络流</a></p>
+</li>
+</ul>
+<p>关于具体的概念知识点，上面两篇博客已经写得十分清楚了，这里主要写一下$Ford-Fulkerson(FF)$算法、$Edmonds-Karp(EK)$算法、$Dinic$算法 这三种算法的代码实现和注意事项以及重难点</p>
+<p><a target="_blank" rel="noopener" href="https://loj.ac/problem/101">LOJ模板题 最大流</a>（需要开<code>long long</code>）</p>
+<p><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P3376">洛谷P3376 【模板】网络最大流</a>（<code>int</code>即可）</p>
+<h3 id="FF算法"><a href="#FF算法" class="headerlink" title="FF算法"></a>FF算法</h3><p>核心思想：FF算法就是通过<strong>DFS的方式不断从源点出发寻找到达汇点的增广路</strong>，图中需要取整条路径上的容量的<strong>最小值</strong>作为这条链（增广路）实际的流量，只要找到了一条到达汇点的增广路，就将这条增广路经过的所有的<strong>前向弧减去实际流量值</strong>，再将<strong>反向弧加上实际流量值</strong>，最后返回这条增广路的实际流量即可，如果找不到增广路了，就返回-1（即找不到能加流量了，最大流已经求完）。</p>
+<p>时间复杂度上界：$O(mf)$，$f$为最大流，真实情况复杂度 $O(玄学)$</p>
+<p>注意事项：</p>
+<ul>
+<li>每次DFS需要重置标记数组<code>vis[]=0</code></li>
+<li>边从0开始计数，则若正向边为<code>i</code>，反向边即为<code>i^1</code></li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-type">int</span> n,m,s,t;<br><span class="hljs-type">bool</span> vis[maxn];<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">ff</span><span class="hljs-params">(<span class="hljs-type">int</span> u=s,<span class="hljs-type">int</span> flow=inf)</span></span>&#123;<br>	<span class="hljs-keyword">if</span>(u==t) <span class="hljs-keyword">return</span> flow;<span class="hljs-comment">// 到达汇点，返回流量</span><br>	vis[u]=<span class="hljs-number">1</span>;<span class="hljs-comment">// 标记到达该点</span><br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=head[u];~i;i=e[i].next)&#123;<br>		<span class="hljs-type">int</span> v=e[i].v,w=e[i].w,c;<br>        <span class="hljs-comment">// 递归寻找下一点的流量</span><br>		<span class="hljs-keyword">if</span>(!vis[v]&amp;&amp;w&gt;<span class="hljs-number">0</span>&amp;&amp;(c=<span class="hljs-built_in">ff</span>(v,<span class="hljs-built_in">min</span>(flow,w)))!=<span class="hljs-number">-1</span>)&#123;<br>			e[i].w-=c;<span class="hljs-comment">// 前向弧 -</span><br>			e[i^<span class="hljs-number">1</span>].w+=c; <span class="hljs-comment">// 反向弧 +</span><br>			<span class="hljs-keyword">return</span> c;<span class="hljs-comment">// 返回流量</span><br>		&#125;<br>	&#125;<br>	<span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<span class="hljs-comment">// 到不了汇点</span><br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">inline</span> ll <span class="hljs-title">FF</span><span class="hljs-params">()</span></span>&#123;<br>	ll c,maxflow=<span class="hljs-number">0</span>;<br>	<span class="hljs-keyword">while</span>((c=<span class="hljs-built_in">ff</span>())!=<span class="hljs-number">-1</span>)&#123;<br>		<span class="hljs-built_in">memset</span>(vis,<span class="hljs-number">0</span>,<span class="hljs-built_in">sizeof</span>(vis));<br>		maxflow+=(ll)c;<br>	&#125;<br>	<span class="hljs-keyword">return</span> maxflow;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+<h3 id="EK算法"><a href="#EK算法" class="headerlink" title="EK算法"></a>EK算法</h3><p>核心思想：EK算法其实就是用BFS实现的FF算法，但通常会比FF算法更优，因为BFS本身就是一个寻找最短路的算法，能够保证每次找到的增广路是最短路，而FF本身是DFS，可能会出现“绕远路”的情况</p>
+<p>注意事项：</p>
+<ul>
+<li><code>flow[]</code>数组保存到达每个点的流量值</li>
+<li><code>last[]</code>数组保存每次寻找增广路时，到达该点的边的序号，如果为<code>-1</code>则未到达该点</li>
+<li>每次找到增广路后，借助<code>last[]</code>数组从汇点倒推到源点，过程中执行前向弧减，反向弧加的操作</li>
+</ul>
+<p>时间复杂度上界：$O(nm^2)$</p>
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-type">int</span> n,m,s,t,flow[maxn],last[maxn];<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">ek</span><span class="hljs-params">()</span></span>&#123;<br>	<span class="hljs-built_in">memset</span>(last,<span class="hljs-number">-1</span>,<span class="hljs-built_in">sizeof</span>(last));<span class="hljs-comment">// 每次需要重置last[]</span><br>	queue&lt;<span class="hljs-type">int</span>&gt; q;<br>	q.<span class="hljs-built_in">push</span>(s);<br>	flow[s]=inf;<span class="hljs-comment">// 源点流量无限大</span><br>	<span class="hljs-keyword">while</span>(!q.<span class="hljs-built_in">empty</span>())&#123;<br>		<span class="hljs-type">int</span> u=q.<span class="hljs-built_in">front</span>();<br>		q.<span class="hljs-built_in">pop</span>();<br>		<span class="hljs-keyword">if</span>(u==t) <span class="hljs-keyword">break</span>;<span class="hljs-comment">// 如果到达了汇点，退出循环</span><br>		<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=head[u];~i;i=e[i].next)&#123;<br>			<span class="hljs-type">int</span> v=e[i].v,w=e[i].w;<br>			<span class="hljs-keyword">if</span>(w&gt;<span class="hljs-number">0</span>&amp;&amp;last[v]==<span class="hljs-number">-1</span>)&#123;<br>				last[v]=i;<span class="hljs-comment">// 记录到达v点的边</span><br>				flow[v]=<span class="hljs-built_in">min</span>(flow[u],w);<span class="hljs-comment">// 取增广路最小流量</span><br>				q.<span class="hljs-built_in">push</span>(v);<br>			&#125;<br>		&#125;<br>	&#125;<br>	<span class="hljs-keyword">return</span> last[t]!=<span class="hljs-number">-1</span>;<span class="hljs-comment">// 如果last[t]为-1，则未到达汇点，gg</span><br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">inline</span> ll <span class="hljs-title">EK</span><span class="hljs-params">()</span></span>&#123;<br>	ll maxflow=<span class="hljs-number">0</span>;<br>	<span class="hljs-keyword">while</span>(<span class="hljs-built_in">ek</span>())&#123;<br>		maxflow+=(ll)flow[t];<br>		<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=t;i!=s;i=e[last[i]^<span class="hljs-number">1</span>].v)&#123;<span class="hljs-comment">// 倒推增广路上的边</span><br>			e[last[i]].w-=flow[t];<br>			e[last[i]^<span class="hljs-number">1</span>].w+=flow[t];<br>		&#125;<br>	&#125;<br>	<span class="hljs-keyword">return</span> maxflow;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+<h3 id="Dinic算法"><a href="#Dinic算法" class="headerlink" title="Dinic算法"></a>Dinic算法</h3><p>算法核心：其实是FF和EK算法两者的结合 + 一些骚操作，具体过程是，首先使用BFS对网络图进行<strong>分层</strong>（其实就是预处理出从源点到达每个其他点的深度，这样可以保证在DFS求增广路时不绕圈、不走回头路），然后通过DFS进行增广，增广过程中只往深度更深的地方增广，此外，还有两个优化过程</p>
+<ol>
+<li><strong>多路增广</strong>：在DFS找到一条增广路后，如果还有剩下的流量，就尝试在该点继续DFS找更多的增广路，即：<strong>可以达到一遍DFS找到多条增广路的效果</strong></li>
+<li><strong>当前弧优化</strong>（这个我理解了老半天才搞懂它的作用）：就是在DFS增广时，对于一个节点，它如果有多条出边，则处理完这些边后，在后续的DFS过程中如果再次经过了这一个节点（如下图中，4点就有可能经过2次）则直接跳过增广过的边（一条边在一次增广过程中只会增广一次），具体实现为：每次增广时，复制一份<code>head[]</code>数组（命名为<code>cur[]</code>），利用<code>cur[]</code>数组进行图的遍历操作，并不断更新每个点对应的增广的起点</li>
+</ol>
+<p><img src="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/imag/image-20200607223852198.png" srcset="/img/loading.gif" lazyload alt="image-20200607223852198" style="zoom:50%;" /></p>
+<p>时间复杂度上界：$O(n^2m)$</p>
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-type">int</span> n,m,s,t,deep[maxn],cur[maxn];<br><br><span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">bfs</span><span class="hljs-params">(<span class="hljs-type">int</span> s,<span class="hljs-type">int</span> t)</span></span>&#123;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++)<br>		cur[i]=head[i],deep[i]=<span class="hljs-number">0</span>;<br>	deep[s]=<span class="hljs-number">1</span>;<br>	queue&lt;<span class="hljs-type">int</span>&gt; q;<br>	q.<span class="hljs-built_in">push</span>(s);<br>	<span class="hljs-keyword">while</span>(!q.<span class="hljs-built_in">empty</span>())&#123;<br>		<span class="hljs-type">int</span> u=q.<span class="hljs-built_in">front</span>();<br>		q.<span class="hljs-built_in">pop</span>();<br>		<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=head[u];~i;i=e[i].next)&#123;<br>			<span class="hljs-type">int</span> v=e[i].v,w=e[i].w;<br>			<span class="hljs-keyword">if</span>(w&gt;<span class="hljs-number">0</span>&amp;&amp;!deep[v])&#123;<br>				deep[v]=deep[u]+<span class="hljs-number">1</span>;<br>				q.<span class="hljs-built_in">push</span>(v);<br>			&#125;<br>		&#125;<br>	&#125;<br>	<span class="hljs-keyword">return</span> deep[t];<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">dfs</span><span class="hljs-params">(<span class="hljs-type">int</span> u,<span class="hljs-type">int</span> t,<span class="hljs-type">int</span> flow)</span></span>&#123;<span class="hljs-comment">// s点流量无穷大</span><br>	<span class="hljs-keyword">if</span>(u==t) <span class="hljs-keyword">return</span> flow;<span class="hljs-comment">// 到达源点，返回流量</span><br>	<span class="hljs-type">int</span> left=flow;<br>    <span class="hljs-comment">// 使用引用，保证cur随着i改变而改变</span><br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> &amp;i=cur[u];~i;i=e[i].next)&#123;<br>		<span class="hljs-type">int</span> v=e[i].v,w=e[i].w;<br>		<span class="hljs-keyword">if</span>(w&gt;<span class="hljs-number">0</span>&amp;&amp;deep[v]==deep[u]+<span class="hljs-number">1</span>)&#123;<span class="hljs-comment">// 只往深了增广</span><br>			<span class="hljs-type">int</span> c=<span class="hljs-built_in">dfs</span>(v,t,<span class="hljs-built_in">min</span>(w,left));<span class="hljs-comment">// c = 从v这个点流出多少流量</span><br>			left-=c,e[i].w-=c,e[i^<span class="hljs-number">1</span>].w+=c;<br>			<span class="hljs-keyword">if</span>(!left) <span class="hljs-keyword">break</span>;<span class="hljs-comment">// 如果剩余流量为0，退出循环</span><br>		&#125;<br>	&#125;<br>	<span class="hljs-keyword">return</span> flow-left;<span class="hljs-comment">// 返回从该点流出多少流量</span><br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">inline</span> ll <span class="hljs-title">Dinic</span><span class="hljs-params">()</span></span>&#123;<br>	ll maxflow=<span class="hljs-number">0</span>;<br>	<span class="hljs-keyword">while</span>(<span class="hljs-built_in">bfs</span>(s,t))&#123;<br>		maxflow+=(ll)<span class="hljs-built_in">dfs</span>(s,t,inf);<br>	&#125;<br>	<span class="hljs-keyword">return</span> maxflow;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+<h3 id="二分图最大匹配的网络流算法"><a href="#二分图最大匹配的网络流算法" class="headerlink" title="二分图最大匹配的网络流算法"></a>二分图最大匹配的网络流算法</h3><p>核心思想：构建出一个虚拟源点和虚拟汇点，从源点向二分图的左部所有点连边，容量为1，从二分图右部所有点向汇点连边，容量为1，对于二分图两部之间的连边，左部连向右部，容量为1，上述连边的同时都需要加一条反向弧，容量为0，最后跑 从源点到汇点的$Dinic$算法即可</p>
+<p>证明：略 </p>
+<p>时间复杂度上界：$O(n\sqrt m)$，优于匈牙利算法的$O(nm)$</p>
+<p><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P3386">模板题</a>代码：</p>
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-keyword">inline</span> ll <span class="hljs-title">Dinic</span><span class="hljs-params">()</span></span>&#123;<br>	ll maxflow=<span class="hljs-number">0</span>;<br>	<span class="hljs-keyword">while</span>(<span class="hljs-built_in">bfs</span>(<span class="hljs-number">1</span>,n+m+<span class="hljs-number">2</span>))&#123;<br>		maxflow+=(ll)<span class="hljs-built_in">dfs</span>(<span class="hljs-number">1</span>,n+m+<span class="hljs-number">2</span>,inf);<br>		<span class="hljs-comment">// cout&lt;&lt;&quot;head&quot;&lt;&lt;endl;</span><br>	&#125;<br>	<span class="hljs-keyword">return</span> maxflow;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-built_in">read</span>(n),<span class="hljs-built_in">read</span>(m),<span class="hljs-built_in">read</span>(ee);<br>	<span class="hljs-built_in">init_graph</span>();<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>,u,v;i&lt;=ee;i++)&#123;<br>		<span class="hljs-built_in">read</span>(u),<span class="hljs-built_in">read</span>(v);<br>		<span class="hljs-built_in">addedge</span>(u+<span class="hljs-number">1</span>,n+v+<span class="hljs-number">1</span>,<span class="hljs-number">1</span>),<br>		<span class="hljs-built_in">addedge</span>(n+v+<span class="hljs-number">1</span>,u+<span class="hljs-number">1</span>,<span class="hljs-number">0</span>);<br>	&#125;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">2</span>;i&lt;=n+<span class="hljs-number">1</span>;i++) <span class="hljs-built_in">addedge</span>(<span class="hljs-number">1</span>,i,<span class="hljs-number">1</span>),<span class="hljs-built_in">addedge</span>(i,<span class="hljs-number">1</span>,<span class="hljs-number">0</span>);<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">2</span>;i&lt;=m+<span class="hljs-number">1</span>;i++) <span class="hljs-built_in">addedge</span>(n+i,n+m+<span class="hljs-number">2</span>,<span class="hljs-number">1</span>),<span class="hljs-built_in">addedge</span>(n+m+<span class="hljs-number">2</span>,n+i,<span class="hljs-number">0</span>);<br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%lld\n&quot;</span>,<span class="hljs-built_in">Dinic</span>());<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+<h2 id="最小费用最大流"><a href="#最小费用最大流" class="headerlink" title="最小费用最大流"></a>最小费用最大流</h2>
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E7%BD%91%E7%BB%9C%E6%B5%81/">网络流</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/06/09/USST%E7%BB%83%E4%B9%A0%E8%B5%9B10%E8%A1%A5%E9%A2%98/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">USST练习赛10补题</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/06/01/Atcoder-Beginner-Contest-169/">
+                        <span class="hidden-mobile">Atcoder Beginner Contest 169 题解</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://fastly.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"8WpS33YNRGD4IQNVQgVCmHQy-gzGzoHsz","appKey":"jed4H3219MxS5igBfmfTU81w","path":"window.location.pathname","placeholder":"write something here","avatar":"retro","meta":["nick","mail","link"],"requiredFields":["nick"],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":true},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://fastly.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://fastly.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://fastly.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://fastly.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://fastly.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://fastly.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://fastly.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://fastly.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- MathJax -->
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']]
+        },
+        loader: {
+          load: ['ui/lazy']
+        },
+        options: {
+          renderActions: {
+            findScript: [10, doc => {
+              document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = { node: text, delim: '', n: 0 };
+                math.end = { node: text, delim: '', n: 0 };
+                doc.math.push(math);
+              });
+            }, '', false],
+            insertedScript: [200, () => {
+              document.querySelectorAll('mjx-container').forEach(node => {
+                let target = node.parentNode;
+                if (target.nodeName.toLowerCase() === 'li') {
+                  target.parentNode.classList.add('has-jax');
+                }
+              });
+            }, '', false]
+          }
+        }
+      };
+    </script>
+
+    <script async src="https://fastly.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" ></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+</body>
+</html>

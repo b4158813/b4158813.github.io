@@ -1,0 +1,669 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="琉璃糖">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="博弈论のNim游戏&amp;SG函数入门">
+<meta property="og:type" content="article">
+<meta property="og:title" content="博弈论入门:Nim游戏&amp;SG函数">
+<meta property="og:url" content="http://example.com/2020/05/02/%E5%8D%9A%E5%BC%88%E8%AE%BA%E5%85%A5%E9%97%A8-Nim%E6%B8%B8%E6%88%8F-SG%E5%87%BD%E6%95%B0/index.html">
+<meta property="og:site_name" content="BlablaWu&#39;s Blog">
+<meta property="og:description" content="博弈论のNim游戏&amp;SG函数入门">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/imag/tim2222g.jpg">
+<meta property="article:published_time" content="2020-05-02T05:38:11.000Z">
+<meta property="article:modified_time" content="2022-05-17T11:38:10.000Z">
+<meta property="article:author" content="琉璃糖">
+<meta property="article:tag" content="博弈论">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/imag/tim2222g.jpg">
+  
+  
+  <title>博弈论入门:Nim游戏&amp;SG函数 - BlablaWu&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":50,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>BlablaWu の Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/index_bg.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="博弈论入门:Nim游戏&amp;SG函数">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2020-05-02 13:38" pubdate>
+        2020年5月2日 下午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      3.1k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      26 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">博弈论入门:Nim游戏&amp;SG函数</h1>
+            
+            <div class="markdown-body">
+              <h2 id="博弈论のNim游戏-SG函数入门"><a href="#博弈论のNim游戏-SG函数入门" class="headerlink" title="博弈论のNim游戏&SG函数入门"></a><center>博弈论のNim游戏&SG函数入门</center></h2><span id="more"></span>
+<p>参考blog：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/A_Comme_Amour/article/details/79347291">[学习笔记] （博弈论）Nim游戏和SG函数</a></li>
+</ul>
+<h2 id="Nim游戏-amp-博弈游戏基本概念"><a href="#Nim游戏-amp-博弈游戏基本概念" class="headerlink" title="Nim游戏&amp;博弈游戏基本概念"></a>Nim游戏&amp;博弈游戏基本概念</h2><p><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P2197">P2197 【模板】nim游戏</a></p>
+<p>十分经典的博弈游戏，大致规则如下：有两名选手$Alice和Bob$，以及$N$堆石子，第$i$堆中有$A_i$个石子，两个人轮流从任意一堆中取出任意数量的石子（至少取1颗，至多取光这一堆所有石子），当一方无法行动时，另一方获胜，规定$Alice$先手，请你判断在两者足够聪明的情况下，谁会获得胜利？</p>
+<p>这是一个典型的ICG游戏（公平组合游戏），对于ICG的定义如下：</p>
+<ul>
+<li>两名选手，轮流行动，每次行动可以在有限合法操作集合中选择一个</li>
+<li>对于游戏的任何一种可能局面（Position），合法操作集合只取决于这个局面本身，与选手、以前的操作或其他任何因素无关，局面的改变称为“移动”</li>
+<li>如果轮到某名移动，且当前局面的合法移动集合为空（无法移动），则该选手判负</li>
+</ul>
+<p>对于局面，在博弈论中，有更进一步的定义：</p>
+<ul>
+<li>P-Position：先手必败 局面</li>
+<li>N-Position：先手必胜 局面</li>
+</ul>
+<p>他们有如下的性质：</p>
+<ul>
+<li>合法操作集合为空的局面是P局面</li>
+<li>可以移动到P局面的局面是N局面</li>
+<li>所有移动都只能到N局面的局面是P局面</li>
+</ul>
+<p>对于<strong>Nim游戏</strong>来说，它有一个神奇的结论：<strong>如果$N$堆石子的个数的异或和为$0$（即${xor}_{i=1}^nA_i=0$）则先手必败，否则先手必胜</strong></p>
+<p>证明如下：</p>
+<p><img src="https://i.loli.net/2020/05/02/xj3hVwQaZJ5Atyq.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>简单来说就是：如果当前异或和为0，则下一步操作一定会让异或和变为非零，再下一步操作有至少一种方案能使得异或和为0，如此循环下去，因此如果某一方开局异或和就为0，那么最后某一方的异或和肯定还是为0（即所有石子数量都为0，这是必败的）</p>
+<h2 id="SG函数"><a href="#SG函数" class="headerlink" title="SG函数"></a>SG函数</h2><p>对于类似于Nim游戏这类ICG来说，都可以通过把局面看成点，每个局面和它的子局面连一条有向边从而抽象成为在一个DAG（有向无环图）上进行的游戏，为了解决通常情况下的ICG游戏问题，便有了定义在DAG上的SG函数</p>
+<h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>先介绍一下$mex$运算：最小的不属于这个集合的非负整数，例如：$mex{0,1,2,4}=3、mex{2,3,5}=0$</p>
+<p>对于一个给定的有向无环图，定义关于图的每个顶点的SG函数如下：</p>
+<p>$SG(x)=mex{SG(y)|y是x的后继}$，即 <strong>一个点的SG函数为在它所有后继的SG函数未出现过的最小值</strong></p>
+<h3 id="性质"><a href="#性质" class="headerlink" title="性质"></a>性质</h3><ul>
+<li>对于无后继的点$x$，它的$SG(x)=0$</li>
+<li><p>对于一个$SG(x)=0$的点，如果他有后继，则它的所有后继都满足$SG(y)\neq 0$</p>
+</li>
+<li><p>对于一个$SG(x)\neq 0$的点，必定存在一个后继$y$满足$SG(y)=0$</p>
+</li>
+</ul>
+<p>发现没有，该性质和ICG游戏的N、P局面是一一对应的，因此，可以理解为：顶点$x$所代表的局面是P局面（先手必败）当且仅当$SG(x)=0$</p>
+<h3 id="SG定理"><a href="#SG定理" class="headerlink" title="SG定理"></a>SG定理</h3><script type="math/tex; mode=display">
+\begin{aligned}
+&对于任意游戏x的所有子游戏:x=x_1+x_2+x_3+...+x_n\\
+&有:SG(x)=SG(x_1)xorSG(x_2)xorSG(x_3)...SG(x_n)\\
+\end{aligned}</script><p>有了这个定理，其实也就就可以解释Nim游戏的P局面为什么是异或和为0先手必败了</p>
+<h3 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h3><p>例题：取石子问题，有1堆n个的石子，每次只能取${1,3,6}$个石子，先取完石子者胜利，则种局面的SG值为多少？</p>
+<p>$x=0,SG(0)=0$</p>
+<p>$x=1,可以取走1个石子，SG(1)=mex{SG(1-1)}=mex{SG(0)}=1$</p>
+<p>$x=2,可以取走1个石子，SG(2)=mex{SG(2-1)}=mex{SG(1)}=0$</p>
+<p>$x=3,可以取走1、3个石子，SG(3)=mex{SG(3-1),SG(3-3)}=mex{SG(2),SG(0)}=1$</p>
+<p>$x=4,可以取走1、3个石子，SG(4)=mex{SG(4-1),SG(4-3)}=mex{SG(3),SG(1)}=0$</p>
+<p>$x=5,可以取走1、3个石子，SG(5)=mex{SG(5-1),SG(5-3)}=mex{SG(4),SG(2)}=1$</p>
+<p>$x=6,可以取走1、3、6个石子，SG(6)=mex{SG(6-1),SG(6-3),SG(6-6)}=mex{SG(5),SG(3),SG(0)}=2$</p>
+<p>……</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">x</th>
+<th style="text-align:center">0</th>
+<th style="text-align:center">1</th>
+<th style="text-align:center">2</th>
+<th style="text-align:center">3</th>
+<th style="text-align:center">4</th>
+<th style="text-align:center">5</th>
+<th style="text-align:center">6</th>
+<th style="text-align:center">7</th>
+<th>8</th>
+<th>…</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">SG(x)</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">1</td>
+<td>2</td>
+<td>…</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>因此，如果有好几堆石子，则根据SG定理，整个游戏的SG函数值就是所有子游戏的SG函数值的异或和，这样便得出了Nim游戏的答案</p>
+<h3 id="SG值计算方法"><a href="#SG值计算方法" class="headerlink" title="SG值计算方法"></a>SG值计算方法</h3><ol>
+<li><p>可选步数为$[1,m]$的连续整数：直接取模即可，$SG(x)=x\ mod\ (m+1)$</p>
+</li>
+<li><p>可选步数为任意步：$SG(x)=x$</p>
+</li>
+<li>可选步数为一系列不连续的数（如例题）：用模板计算</li>
+</ol>
+<h3 id="模板"><a href="#模板" class="headerlink" title="模板"></a>模板</h3><figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">get_sg</span><span class="hljs-params">(<span class="hljs-type">int</span> n)</span></span>&#123;<span class="hljs-comment">//一堆有n个石子</span><br>    <span class="hljs-comment">//f是取法集合,功m种取法</span><br>    <span class="hljs-built_in">sort</span>(f+<span class="hljs-number">1</span>,f+<span class="hljs-number">1</span>+m);<span class="hljs-comment">//坑点，需要先排序，保证每种取法都循环到</span><br>    <span class="hljs-built_in">memset</span>(sg,<span class="hljs-number">0</span>,<span class="hljs-built_in">sizeof</span>(sg));<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++)&#123;<br>        <span class="hljs-built_in">memset</span>(vis,<span class="hljs-number">0</span>,<span class="hljs-built_in">sizeof</span>(vis));<span class="hljs-comment">//标记sg函数值有没有出现过</span><br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j=<span class="hljs-number">1</span>;f[j]&lt;=i&amp;&amp;j&lt;=m;j++)<br>            vis[sg[i-f[j]]]=<span class="hljs-number">1</span>;<span class="hljs-comment">//</span><br>       	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j=<span class="hljs-number">0</span>;j&lt;=n;j++)<br>            <span class="hljs-keyword">if</span>(vis[j]==<span class="hljs-number">0</span>)&#123;<br>                sg[i]=j;<br>                <span class="hljs-keyword">break</span>;<br>            &#125;<br>    &#125;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+<h2 id="阶梯Nim"><a href="#阶梯Nim" class="headerlink" title="阶梯Nim"></a>阶梯Nim</h2><p>Nim游戏的变式：有一个$n$层的阶梯，层阶梯上放着不同数量的石子（如图所示），两个人轮流操作，每次可以从任意阶梯取走任意数量的石子放到下一级阶梯中，当一方无法操作时（所有石子都到达地面），另一方获胜</p>
+<p><img src="https://i.loli.net/2020/05/02/Ja5hW23EHQUrNTb.png" srcset="/img/loading.gif" lazyload alt="_5D228F52-337F-8BB8-8E41-FC55B110B0DE_.png" style="zoom:50%;" /></p>
+<p>这个问题可以将它巧妙地转变成为奇数阶梯层的Nim游戏，为什么呢？</p>
+<p>因为：如果对方将一些石子从奇数层放到了下一层（偶数层），那我们就按照Nim游戏一样从奇数层取石子；如果对方将石子从偶数层放到了下一层（奇数层），我们完全可以把对方放置的这一些石子在原封不动地放置到下一层（偶数层），这样一来，奇数层的石子没有发生变化，因此整个问题就转换为了奇数层的Nim游戏，将石子数求异或和判断是否为0即可</p>
+<p>练习题：<a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P2575">P2575 高手过招</a>（转化阶梯Nim+SG定理）</p>
+<details>
+<summary>code</summary>
+
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-type">int</span> _,n,pan[<span class="hljs-number">21</span>];<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>,&amp;_);_;_--)&#123;<br>		<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>,&amp;n);<br>		<span class="hljs-type">int</span> x,k;<br>		<span class="hljs-type">int</span> ans2=<span class="hljs-number">0</span>;<br>		<span class="hljs-built_in">rep</span>(i,<span class="hljs-number">1</span>,n)&#123;<br>			<span class="hljs-built_in">memset</span>(pan,<span class="hljs-number">0</span>,<span class="hljs-built_in">sizeof</span>(pan));<br>			<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>,&amp;x);<br>			<span class="hljs-built_in">rep</span>(j,<span class="hljs-number">1</span>,x)&#123;<br>				<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>,&amp;k);<br>				pan[k]=<span class="hljs-number">1</span>;<br>			&#125;<br>			<span class="hljs-type">int</span> tp=<span class="hljs-number">0</span>,cnt=<span class="hljs-number">0</span>,ans1=<span class="hljs-number">0</span>;<br>			<span class="hljs-type">int</span> j=<span class="hljs-number">20</span>;<br>			<span class="hljs-keyword">while</span>(pan[j]) j--;<br>			j--;<br>			<span class="hljs-keyword">for</span>(;j&gt;=<span class="hljs-number">0</span>;j--)&#123;<br>				<span class="hljs-keyword">if</span>(!pan[j])&#123;<br>					++cnt;<br>					<span class="hljs-keyword">if</span>(cnt&amp;<span class="hljs-number">1</span>) ans1^=tp;<br>					tp=<span class="hljs-number">0</span>;<br>				&#125;<span class="hljs-keyword">else</span> tp++;<br>			&#125;<br>			ans2^=ans1;<br>		&#125;<br>		ans2?<span class="hljs-built_in">puts</span>(<span class="hljs-string">&quot;YES&quot;</span>):<span class="hljs-built_in">puts</span>(<span class="hljs-string">&quot;NO&quot;</span>);<br>	&#125;<br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+
+</details>
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E5%8D%9A%E5%BC%88%E8%AE%BA/">博弈论</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/05/04/%E6%A6%82%E7%8E%87DP-%E6%9C%9F%E6%9C%9BDP/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">概率DP(期望DP)</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/05/01/%E7%8F%82%E6%9C%B5%E8%8E%89%E6%A0%91ODT-%E6%B5%85%E6%9E%90/">
+                        <span class="hidden-mobile">珂朵莉树ODT 浅析</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://fastly.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"8WpS33YNRGD4IQNVQgVCmHQy-gzGzoHsz","appKey":"jed4H3219MxS5igBfmfTU81w","path":"window.location.pathname","placeholder":"write something here","avatar":"retro","meta":["nick","mail","link"],"requiredFields":["nick"],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":true},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://fastly.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://fastly.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://fastly.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://fastly.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://fastly.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://fastly.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://fastly.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://fastly.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- MathJax -->
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']]
+        },
+        loader: {
+          load: ['ui/lazy']
+        },
+        options: {
+          renderActions: {
+            findScript: [10, doc => {
+              document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = { node: text, delim: '', n: 0 };
+                math.end = { node: text, delim: '', n: 0 };
+                doc.math.push(math);
+              });
+            }, '', false],
+            insertedScript: [200, () => {
+              document.querySelectorAll('mjx-container').forEach(node => {
+                let target = node.parentNode;
+                if (target.nodeName.toLowerCase() === 'li') {
+                  target.parentNode.classList.add('has-jax');
+                }
+              });
+            }, '', false]
+          }
+        }
+      };
+    </script>
+
+    <script async src="https://fastly.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" ></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+</body>
+</html>

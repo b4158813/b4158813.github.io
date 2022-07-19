@@ -1,0 +1,606 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="琉璃糖">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="最近用Dev-Cpp快用腻了，来配置一波SublimeC++ 配置 Tools —&gt; Build System —&gt; New Build System… Ctrl+A全部删除，输入下面的代码  123456789101112131415&amp;#123;    &quot;encoding&quot;: &quot;utf-8&quot;,    &quot;working_dir&amp;quot">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Sublime Text 3 我的配置">
+<meta property="og:url" content="http://example.com/2020/03/14/Sublime-Text-3-%E9%85%8D%E7%BD%AEC-11/index.html">
+<meta property="og:site_name" content="BlablaWu&#39;s Blog">
+<meta property="og:description" content="最近用Dev-Cpp快用腻了，来配置一波SublimeC++ 配置 Tools —&gt; Build System —&gt; New Build System… Ctrl+A全部删除，输入下面的代码  123456789101112131415&amp;#123;    &quot;encoding&quot;: &quot;utf-8&quot;,    &quot;working_dir&amp;quot">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/imag/xjS4EoDIhY9JrvL.png">
+<meta property="og:image" content="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/imag/image-20200529141927647.png">
+<meta property="og:image" content="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/imag/image-20200615093633821.png">
+<meta property="article:published_time" content="2020-03-14T07:12:36.000Z">
+<meta property="article:modified_time" content="2022-05-17T10:58:42.000Z">
+<meta property="article:author" content="琉璃糖">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/imag/xjS4EoDIhY9JrvL.png">
+  
+  
+  <title>Sublime Text 3 我的配置 - BlablaWu&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":50,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>BlablaWu の Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/index_bg.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Sublime Text 3 我的配置">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2020-03-14 15:12" pubdate>
+        2020年3月14日 下午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      5.5k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      46 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Sublime Text 3 我的配置</h1>
+            
+            <div class="markdown-body">
+              <h2 id="最近用Dev-Cpp快用腻了，来配置一波Sublime"><a href="#最近用Dev-Cpp快用腻了，来配置一波Sublime" class="headerlink" title="最近用Dev-Cpp快用腻了，来配置一波Sublime"></a>最近用Dev-Cpp快用腻了，来配置一波Sublime</h2><h3 id="C-配置"><a href="#C-配置" class="headerlink" title="C++ 配置"></a>C++ 配置</h3><ol>
+<li>Tools —&gt; Build System —&gt; New Build System…</li>
+<li><code>Ctrl+A</code>全部删除，输入下面的代码</li>
+</ol>
+<figure class="highlight json"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;encoding&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;utf-8&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;working_dir&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;$file_path&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;shell_cmd&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;g++ -Wall -std=c++11 \&quot;$file_name\&quot; -o \&quot;$file_base_name\&quot;&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;-fexec-charset=gbk&quot;</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;file_regex&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;^(..[^:]*):([0-9]+):?([0-9]+)?:? (.*)$&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;selector&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;source.c++&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;encoding&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;cp936&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;variants&quot;</span><span class="hljs-punctuation">:</span> <br>    <span class="hljs-punctuation">[</span><br>        <span class="hljs-punctuation">&#123;</span>   <br>        <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Run&quot;</span><span class="hljs-punctuation">,</span><br>            <span class="hljs-attr">&quot;shell_cmd&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;g++ -Wall -std=c++11 \&quot;$file\&quot; -o \&quot;$file_base_name\&quot; &amp;&amp; start cmd /c \&quot;\&quot;$&#123;file_path&#125;/$&#123;file_base_name&#125;\&quot; &amp; pause\&quot;&quot;</span><br>        <span class="hljs-punctuation">&#125;</span><br>    <span class="hljs-punctuation">]</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></div></td></tr></table></figure>
+<p>其中我们注意几个地方：</p>
+<ul>
+<li><code>&quot;g++&quot;</code>：编译器</li>
+<li><code>&quot;-std=c++11&quot;</code>：依据C++11标准来编译（否则一些新特性会被判失效）</li>
+<li><code>-Wall</code>：开启-wall提示（竞赛党的福音）</li>
+<li><code>&quot;-fexec-charset=gbk&quot;</code>：GBK编码格式，默认带中文的</li>
+</ul>
+<ol>
+<li>保存即可（路径就是他的默认路径不要改，后缀也不能改，名字随便起，如<code>cpp_11</code>）</li>
+</ol>
+<p>最后就可以愉快的<code>Ctrl+B</code>手动Debug啦~~</p>
+<p><strong>2020.5.29 更新</strong></p>
+<p>考虑到上面那样配置显示不出程序运行时间，现在配置一波能够显示程序运行时间的操作</p>
+<p>首先新建New Build System，然后复制如下代码进去并替换，保存为另一个名字（如 <code>C++11_time</code>）并退出</p>
+<figure class="highlight json"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>	<span class="hljs-attr">&quot;shell_cmd&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;g++ \&quot;$&#123;file&#125;\&quot; -o \&quot;$&#123;file_path&#125;/$&#123;file_base_name&#125;\&quot;&quot;</span><span class="hljs-punctuation">,</span><br>	<span class="hljs-attr">&quot;file_regex&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;^(..[^:]*):([0-9]+):?([0-9]+)?:? (.*)$&quot;</span><span class="hljs-punctuation">,</span><br>	<span class="hljs-attr">&quot;working_dir&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;$&#123;file_path&#125;&quot;</span><span class="hljs-punctuation">,</span><br>	<span class="hljs-attr">&quot;selector&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;source.c, source.c++&quot;</span><span class="hljs-punctuation">,</span><br>	<span class="hljs-attr">&quot;variants&quot;</span><span class="hljs-punctuation">:</span><br>	<span class="hljs-punctuation">[</span><br>		<span class="hljs-punctuation">&#123;</span><br>			<span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Run&quot;</span><span class="hljs-punctuation">,</span><br>			<span class="hljs-attr">&quot;shell_cmd&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;g++ -Wall -std=c++11 \&quot;$&#123;file&#125;\&quot; -o \&quot;$&#123;file_path&#125;/$&#123;file_base_name&#125;\&quot; &amp;&amp; timer \&quot;$&#123;file_path&#125;/$&#123;file_base_name&#125;\&quot; &lt; test.in &gt; test.out&quot;</span><br>		<span class="hljs-punctuation">&#125;</span><br>	<span class="hljs-punctuation">]</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></div></td></tr></table></figure>
+<p>在程序运行的文件夹下，创建一个<code>timer.cpp</code>文件，将如下代码复制进去，并保存运行</p>
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;cstdio&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;cstdlib&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;ctime&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;windows.h&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br> <br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span>** argv)</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-type">clock_t</span> begin = <span class="hljs-built_in">clock</span>();<br>	<span class="hljs-built_in">system</span>(argv[<span class="hljs-number">1</span>]);<br>	<span class="hljs-type">double</span> used = <span class="hljs-number">1000.0</span> * <span class="hljs-built_in">double</span>(<span class="hljs-built_in">clock</span>() - begin) / CLOCKS_PER_SEC - <span class="hljs-number">200.0</span>;<br>	<span class="hljs-keyword">if</span> (used &lt; <span class="hljs-number">0</span>) used = <span class="hljs-number">0.0</span>;<br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;------------------------------\n&quot;</span>);<br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Time used: %.2lf ms.\n&quot;</span>, used);<br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+<p>最后，需要在程序运行的文件夹下，创建<code>test.in</code>和<code>test.out</code>文件，最终，你的文件夹目录结构如下图所示：</p>
+<p><img src="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/imag/xjS4EoDIhY9JrvL.png" srcset="/img/loading.gif" lazyload alt="image-2020052914134487"></p>
+<p>最后只需要在View里面设置一下Layout和Groups，就可以呈现出如下的样式</p>
+<p><img src="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/imag/image-20200529141927647.png" srcset="/img/loading.gif" lazyload alt="image-20200529141927647"></p>
+<p>愉快地享用吧！</p>
+<p><strong>2020.6.15 更新</strong></p>
+<p>但实际上上面那个方法不太好用，还不如自己手写<code>#ifdef...#endif</code>来得灵活，与是还是用第一版的C++配置代码（尝试过删除掉最后的<code>&amp;pause</code>，但处理死循环问题就变得比较麻烦，还得打开任务管理器关闭进程），再在main函数内加入如下代码，就可以实现方案二一样的功能（记得需要在目录下创建一个<code>test.in</code>和<code>test.out</code>文件）</p>
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">define</span> LOCAL</span><br><span class="hljs-meta">#<span class="hljs-keyword">ifdef</span> LOCAL</span><br><span class="hljs-built_in">freopen</span>(<span class="hljs-string">&quot;test.in&quot;</span>,<span class="hljs-string">&quot;r&quot;</span>,stdin);<br><span class="hljs-built_in">freopen</span>(<span class="hljs-string">&quot;test.out&quot;</span>,<span class="hljs-string">&quot;w&quot;</span>,stdout);<br><span class="hljs-type">clock_t</span> _begin = <span class="hljs-built_in">clock</span>();<br><span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br><br>......<br><br><span class="hljs-meta">#<span class="hljs-keyword">ifdef</span> LOCAL</span><br><span class="hljs-type">double</span> _used = <span class="hljs-number">1000.0</span> * <span class="hljs-built_in">double</span>(<span class="hljs-built_in">clock</span>() - _begin) / CLOCKS_PER_SEC - <span class="hljs-number">200.0</span>;<br><span class="hljs-keyword">if</span> (_used &lt; <span class="hljs-number">0</span>) _used = <span class="hljs-number">0.0</span>;<br><span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;------------------------------\n&quot;</span>);<br><span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Time used: %.2lf ms.\n&quot;</span>, _used);<br><span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br></code></pre></div></td></tr></table></figure>
+<h3 id="Python-配置"><a href="#Python-配置" class="headerlink" title="Python 配置"></a>Python 配置</h3><p>（Python的Sublime交互式配置我快哭了，REPL安装好了之后Tools里居然没有？果断放弃，采用原始的<code>Save+cmd+python xxx.py</code>的形式搞）</p>
+<p><strong>2020.4.24 更新</strong></p>
+<p>ohhhhhh！电脑突然开窍了，配置好啦！现在奉上步骤</p>
+<ol>
+<li><p>Ctrl + Shift + P 唤出Package栏并输入<code>IP</code> (Install Package)，回车等候（左下角有滚动的小条子）</p>
+</li>
+<li><p>等加载出来一个新的Package栏后，输入<code>SublimeREPL</code>（要安装的就是这个插件），然后回车等他安装</p>
+</li>
+</ol>
+<p>然后就好了，可以通过 Tools —&gt; SublimeREPL —&gt; Python —&gt; Python - RUN current file来唤起控制台（在第二个标签页出现），这个时候就可以像Pycharm、Spyder一样在控制台控制输入了</p>
+<p>为了方便，推荐 <strong>Shift + Alt + 8 唤起横向双栏的模式</strong>，然后<strong>F5</strong>调试（调试前记得保存代码），十分快乐</p>
+<h3 id="Sublime-主题-amp-外观配置"><a href="#Sublime-主题-amp-外观配置" class="headerlink" title="Sublime 主题&amp;外观配置"></a>Sublime 主题&amp;外观配置</h3><p>主题用的是<strong>Sublime自带的Adaptive</strong>，它能自动适应我的Color主题</p>
+<p>Color选用的是<strong>Tomorrow的Night（晚上用）</strong>，以及<strong>Breakers（白天用）</strong></p>
+<p>字体选用<code>Inconsolata-g</code>，可以说是十分舒爽了</p>
+<p>附上用户配置：</p>
+<figure class="highlight json"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>	<span class="hljs-attr">&quot;color_scheme&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Packages/Tomorrow Color Schemes/Tomorrow Night.sublime-color-scheme&quot;</span><span class="hljs-punctuation">,</span><br>	<span class="hljs-attr">&quot;font_face&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Inconsolata-g&quot;</span><span class="hljs-punctuation">,</span><br>	<span class="hljs-attr">&quot;font_size&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">11</span><span class="hljs-punctuation">,</span><br>	<span class="hljs-attr">&quot;ignored_packages&quot;</span><span class="hljs-punctuation">:</span><br>	<span class="hljs-punctuation">[</span><br>	<span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>	<span class="hljs-attr">&quot;theme&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Adaptive.sublime-theme&quot;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></div></td></tr></table></figure>
+<h3 id="Sublime-Snippet-设置"><a href="#Sublime-Snippet-设置" class="headerlink" title="Sublime Snippet 设置"></a>Sublime Snippet 设置</h3><p><strong>UPD 2020.6.15</strong></p>
+<p>一直以为Sublime无法设置像Dev-C++一样的缺省源，然而昨天查到了，在Sublime里面叫做<code>Snippet(代码段)</code>，非常的方便</p>
+<p>打开工具栏中的 <code>Tools -&gt; Developer -&gt; New Snippet...</code>，看到如下界面</p>
+<p><img src="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/imag/image-20200615093633821.png" srcset="/img/loading.gif" lazyload alt="image-20200615093633821"></p>
+<p>第3行中的内容就是代码段内容，可以自己添加更改，其中<code>$&#123;1:this&#125;</code>为按下TAB建自动跳转的内容，冒号后面的文字为提示内容</p>
+<p>第6行为代码段的名称，可以在写代码时输入该名称导入代码段</p>
+<p>第8行为可使用该代码段的源代码文件类型，其类型的语法见下方官方文旦内容</p>
+<details>
+
+<figure class="highlight stylus"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs stylus">ActionScript: source<span class="hljs-selector-class">.actionscript</span>.<span class="hljs-number">2</span><br>AppleScript: source<span class="hljs-selector-class">.applescript</span><br>ASP: source<span class="hljs-selector-class">.asp</span><br>Batch FIle: source<span class="hljs-selector-class">.dosbatch</span><br>C#: source<span class="hljs-selector-class">.cs</span><br>C++: source.c++<br>Clojure: source<span class="hljs-selector-class">.clojure</span><br>CoffeeScript: source<span class="hljs-selector-class">.coffee</span><br>CSS: source<span class="hljs-selector-class">.css</span><br>D: source<span class="hljs-selector-class">.d</span><br>Diff: source<span class="hljs-selector-class">.diff</span><br>Erlang: source<span class="hljs-selector-class">.erlang</span><br>Go: source<span class="hljs-selector-class">.go</span><br>GraphViz: source<span class="hljs-selector-class">.dot</span><br>Groovy: source<span class="hljs-selector-class">.groovy</span><br>Haskell: source<span class="hljs-selector-class">.haskell</span><br>HTML: text<span class="hljs-selector-class">.html</span>(.basic)<br>JSP: text<span class="hljs-selector-class">.html</span><span class="hljs-selector-class">.jsp</span><br>Java: source<span class="hljs-selector-class">.java</span><br>Java Properties: source<span class="hljs-selector-class">.java-props</span><br>Java Doc: text<span class="hljs-selector-class">.html</span><span class="hljs-selector-class">.javadoc</span><br>JSON: source<span class="hljs-selector-class">.json</span><br>Javascript: source<span class="hljs-selector-class">.js</span><br>BibTex: source<span class="hljs-selector-class">.bibtex</span><br>Latex Log: text<span class="hljs-selector-class">.log</span><span class="hljs-selector-class">.latex</span><br>Latex Memoir: text<span class="hljs-selector-class">.tex</span><span class="hljs-selector-class">.latex</span><span class="hljs-selector-class">.memoir</span><br>Latex: text<span class="hljs-selector-class">.tex</span><span class="hljs-selector-class">.latex</span><br>LESS: source<span class="hljs-selector-class">.css</span><span class="hljs-selector-class">.less</span><br>TeX: text<span class="hljs-selector-class">.tex</span><br>Lisp: source<span class="hljs-selector-class">.lisp</span><br>Lua: source<span class="hljs-selector-class">.lua</span><br>MakeFile: source<span class="hljs-selector-class">.makefile</span><br>Markdown: text<span class="hljs-selector-class">.html</span><span class="hljs-selector-class">.markdown</span><br>Multi Markdown: text<span class="hljs-selector-class">.html</span><span class="hljs-selector-class">.markdown</span><span class="hljs-selector-class">.multimarkdown</span><br>Matlab: source<span class="hljs-selector-class">.matlab</span><br>Objective-C: source<span class="hljs-selector-class">.objc</span><br>Objective-C++: source.objc++<br>OCaml campl4: source<span class="hljs-selector-class">.camlp4</span><span class="hljs-selector-class">.ocaml</span><br>OCaml: source<span class="hljs-selector-class">.ocaml</span><br>OCamllex: source<span class="hljs-selector-class">.ocamllex</span><br>Perl: source<span class="hljs-selector-class">.perl</span><br>PHP: source<span class="hljs-selector-class">.php</span><br>Regular <span class="hljs-built_in">Expression</span>(python): source<span class="hljs-selector-class">.regexp</span><span class="hljs-selector-class">.python</span><br>Python: source<span class="hljs-selector-class">.python</span><br>R Console: source<span class="hljs-selector-class">.r-console</span><br>R: source<span class="hljs-selector-class">.r</span><br>Ruby on Rails: source<span class="hljs-selector-class">.ruby</span><span class="hljs-selector-class">.rails</span><br>Ruby HAML: text<span class="hljs-selector-class">.haml</span><br><span class="hljs-function"><span class="hljs-title">SQL</span><span class="hljs-params">(Ruby)</span></span>: source<span class="hljs-selector-class">.sql</span><span class="hljs-selector-class">.ruby</span><br>Regular Expression: source<span class="hljs-selector-class">.regexp</span><br>RestructuredText: text<span class="hljs-selector-class">.restructuredtext</span><br>Ruby: source<span class="hljs-selector-class">.ruby</span><br>SASS: source<span class="hljs-selector-class">.sass</span><br>Scala: source<span class="hljs-selector-class">.scala</span><br>Shell Script: source<span class="hljs-selector-class">.shell</span><br>SQL: source<span class="hljs-selector-class">.sql</span><br>Stylus: source<span class="hljs-selector-class">.stylus</span><br>TCL: source<span class="hljs-selector-class">.tcl</span><br><span class="hljs-function"><span class="hljs-title">HTML</span><span class="hljs-params">(TCL)</span></span>: text<span class="hljs-selector-class">.html</span><span class="hljs-selector-class">.tcl</span><br>Plain text: text<span class="hljs-selector-class">.plain</span><br>Textile: text<span class="hljs-selector-class">.html</span><span class="hljs-selector-class">.textile</span><br>XML: text<span class="hljs-selector-class">.xml</span><br>XSL: text<span class="hljs-selector-class">.xml</span><span class="hljs-selector-class">.xsl</span><br>YAML: source.yaml<br></code></pre></div></td></tr></table></figure>
+
+</details>
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/03/15/%E9%A2%98%E8%A7%A3-2020USST%E7%AE%97%E6%B3%95%E7%AB%9E%E8%B5%9B%E7%BB%83%E4%B9%A0%E5%9C%BA11-IJK/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">题解-2020USST算法竞赛练习场11-IJK</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/03/12/%E8%A1%A5%E9%A2%98-2020USST%E7%AE%97%E6%B3%95%E7%AB%9E%E8%B5%9B%E7%BB%83%E4%B9%A0%E5%9C%BA9/">
+                        <span class="hidden-mobile">补题-2020USST算法竞赛练习场9</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://fastly.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"8WpS33YNRGD4IQNVQgVCmHQy-gzGzoHsz","appKey":"jed4H3219MxS5igBfmfTU81w","path":"window.location.pathname","placeholder":"write something here","avatar":"retro","meta":["nick","mail","link"],"requiredFields":["nick"],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":true},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://fastly.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://fastly.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://fastly.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://fastly.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://fastly.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://fastly.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://fastly.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://fastly.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- MathJax -->
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']]
+        },
+        loader: {
+          load: ['ui/lazy']
+        },
+        options: {
+          renderActions: {
+            findScript: [10, doc => {
+              document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = { node: text, delim: '', n: 0 };
+                math.end = { node: text, delim: '', n: 0 };
+                doc.math.push(math);
+              });
+            }, '', false],
+            insertedScript: [200, () => {
+              document.querySelectorAll('mjx-container').forEach(node => {
+                let target = node.parentNode;
+                if (target.nodeName.toLowerCase() === 'li') {
+                  target.parentNode.classList.add('has-jax');
+                }
+              });
+            }, '', false]
+          }
+        }
+      };
+    </script>
+
+    <script async src="https://fastly.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" ></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+</body>
+</html>

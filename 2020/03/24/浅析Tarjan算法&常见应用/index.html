@@ -1,0 +1,691 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="琉璃糖">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="强连通分量(Strongly Connected Components)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="浅析Tarjan算法&amp;常见应用">
+<meta property="og:url" content="http://example.com/2020/03/24/%E6%B5%85%E6%9E%90Tarjan%E7%AE%97%E6%B3%95&%E5%B8%B8%E8%A7%81%E5%BA%94%E7%94%A8/index.html">
+<meta property="og:site_name" content="BlablaWu&#39;s Blog">
+<meta property="og:description" content="强连通分量(Strongly Connected Components)">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-03-24T07:43:28.000Z">
+<meta property="article:modified_time" content="2020-03-26T03:11:58.000Z">
+<meta property="article:author" content="琉璃糖">
+<meta property="article:tag" content="图论">
+<meta property="article:tag" content="数据结构">
+<meta property="article:tag" content="割点">
+<meta property="article:tag" content="SCC">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  <title>浅析Tarjan算法&amp;常见应用 - BlablaWu&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":50,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>BlablaWu の Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/index_bg.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="浅析Tarjan算法&amp;常见应用">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2020-03-24 15:43" pubdate>
+        2020年3月24日 下午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      11k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      92 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">浅析Tarjan算法&amp;常见应用</h1>
+            
+            <div class="markdown-body">
+              <center>强连通分量(Strongly Connected Components)</center>
+
+<span id="more"></span>
+<h2 id="有向图-强连通分量（SCC）"><a href="#有向图-强连通分量（SCC）" class="headerlink" title="有向图 强连通分量（SCC）"></a><center>有向图 强连通分量（SCC）</center></h2><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><ul>
+<li><p>官方行话版：在有向图$G$中，如果两个顶点$v_i,v_j$间$（v_i&gt;v_j）$有一条从$v_i$到$v_j$的有向路径，同时还有一条从$v_j$到$v_i$的有向路径，则称两个顶点<strong>强连通(strongly connected)</strong>，如果有向图$G$的每两个顶点都强连通，称$G$是一个<strong>强连通图</strong>，有向图的极大强连通子图，称为<strong>强连通分量(strongly connected components)</strong></p>
+</li>
+<li><p>浅显易懂版：指有向图中一个最大的子图，满足<strong>这个子图中任何两个点都能互相到达</strong></p>
+</li>
+</ul>
+<p>参考blog：</p>
+<ul>
+<li><p><a target="_blank" rel="noopener" href="https://www.byvoid.com/zhs/blog/scc-tarjan">有向图强连通分量的Tarjan算法</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/five20/p/7594239.html">浅析强连通分量(Tarjan和kosaraju)</a></p>
+</li>
+<li><p><a href="https://link.zhihu.com/?target=https%3A//www.cnblogs.com/stxy-ferryman/p/7779347.html">tarjan求强连通分量+缩点+割点/割桥（点双/边双）以及一些证明 - Styx-ferryman - 博客园</a></p>
+</li>
+</ul>
+<p>上面三个$blog$写得异常清晰易懂，让我受益匪浅，本来不想再废话了的，但还是想写几个<strong>注意事项和易混淆的地方</strong>，下面先呈上$Tarjan$的板子（由于$Kosaraju$算法没$Tarjan$好用，我就不放板子了），向发明该算法的<strong>$Robert Tarjan（美国计算机科学家）$</strong>致敬</p>
+<h3 id="Tarjan-SCC模板"><a href="#Tarjan-SCC模板" class="headerlink" title="Tarjan SCC模板"></a>Tarjan SCC模板</h3><p><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P2863">模板题</a></p>
+<p>注意事项：</p>
+<ul>
+<li><p>Tarjan求SCC需要开栈记录元素，再开一个<code>vis</code>数组标记元素是否在栈中</p>
+</li>
+<li><p>其中<code>color</code>数组标记每个点属于第几个SCC</p>
+</li>
+<li><p>与求割点不同的地方：</p>
+<p><code>low[u]=min(low[u],dfn[v])</code>需要<code>v</code>在栈中才执行</p>
+<p>不需要记录父亲节点</p>
+</li>
+<li><p>与求割点相同的地方：</p>
+<p>都需要（务必）遍历每个点，因为图不一定连通</p>
+<p>新找到一个点都必须执行<code>low[u]=min(low[u],low[v])</code></p>
+<p><code>dfn和low</code>数组都是必须要有的，这是算法的核心</p>
+</li>
+</ul>
+<details>
+<summary>code</summary>
+
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">tarjan</span><span class="hljs-params">(<span class="hljs-type">int</span> u)</span></span>&#123;<br>    vis[sta[++top]=u]=<span class="hljs-number">1</span>; <span class="hljs-comment">//初始标记入栈</span><br>    low[u]=dfn[u]=++deep; <span class="hljs-comment">//记录dfn和low的序号</span><br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=head[u];~i;i=e[i].next)&#123; <span class="hljs-comment">//遍历所有出边</span><br>        <span class="hljs-type">int</span> v=e[i].v;<br>        <span class="hljs-keyword">if</span>(!dfn[v])&#123; <span class="hljs-comment">//如果没遍历过这个点</span><br>            <span class="hljs-built_in">tarjan</span>(v); <span class="hljs-comment">//就递归遍历下去</span><br>            low[u]=<span class="hljs-built_in">min</span>(low[u],low[v]); <span class="hljs-comment">//low取u和他儿子的较小值</span><br>        <span class="hljs-comment">//如果遍历过且在栈中，low[u]取low[u]和dfn[v]的较小值</span><br>        &#125;<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(vis[v]) low[u]=<span class="hljs-built_in">min</span>(low[u],dfn[v]);<br>    &#125;<br>    <span class="hljs-keyword">if</span>(dfn[u]==low[u])&#123; <span class="hljs-comment">//如果dfn和low一样了，说明产生了一个SCC</span><br>        vis[u]=<span class="hljs-number">0</span>; <span class="hljs-comment">//u标记不在栈中</span><br>        color[u]=++num; <span class="hljs-comment">//标记u属于第num个SCC</span><br>        <span class="hljs-keyword">while</span>(sta[top]!=u)&#123; <span class="hljs-comment">//弹栈顶元素直到弹到u</span><br>            color[sta[top]]=num; <span class="hljs-comment">//所有弹出元素都属于u所在的SCC内</span><br>            vis[sta[top--]]=<span class="hljs-number">0</span>; <span class="hljs-comment">//所有弹出元素都标记不在栈中</span><br>        &#125;<br>        top--; <span class="hljs-comment">//最后需要把u弹出</span><br>    &#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++)&#123;<br>        <span class="hljs-keyword">if</span>(!dfn[i]) <span class="hljs-comment">//遍历到所有点（有可能不是连通图）</span><br>            <span class="hljs-built_in">tarjan</span>(i);<br>	&#125;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+
+</details>
+
+<h3 id="有向图-Tarjan缩点"><a href="#有向图-Tarjan缩点" class="headerlink" title="有向图 Tarjan缩点"></a>有向图 Tarjan缩点</h3><p><strong>思想就是因为强连通分量中的每两个点都是强连通的，可以将一个强连通分量当做一个超级点，而点权按题意来定</strong></p>
+<h4 id="例题1-受欢迎的牛（Tarjan缩点记录SCC内节点个数）"><a href="#例题1-受欢迎的牛（Tarjan缩点记录SCC内节点个数）" class="headerlink" title="例题1. 受欢迎的牛（Tarjan缩点记录SCC内节点个数）"></a>例题1. <a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P2341">受欢迎的牛</a>（Tarjan缩点记录SCC内节点个数）</h4><details>
+<summary>code</summary>
+
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;cstdio&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;cmath&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;cstring&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Edge</span>&#123;<br>	<span class="hljs-type">int</span> v,next;<br>&#125;e[<span class="hljs-number">50005</span>];<br><span class="hljs-type">int</span> cnt,head[<span class="hljs-number">10005</span>];<br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">addedge</span><span class="hljs-params">(<span class="hljs-type">int</span> u,<span class="hljs-type">int</span> v)</span></span>&#123;<br>	e[cnt]=Edge&#123;v,head[u]&#125;;<br>	head[u]=cnt++; <br>&#125;<br><span class="hljs-type">int</span> n,m,num,deep,top,sta[<span class="hljs-number">10005</span>],low[<span class="hljs-number">10005</span>],dfn[<span class="hljs-number">10005</span>],vis[<span class="hljs-number">10005</span>],color[<span class="hljs-number">10005</span>];<br><span class="hljs-type">int</span> Size[<span class="hljs-number">10005</span>],chu[<span class="hljs-number">50005</span>],ccnt,ans;<br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">tarjan</span><span class="hljs-params">(<span class="hljs-type">int</span> u)</span></span>&#123;<br>	vis[sta[++top]=u]=<span class="hljs-number">1</span>;<br>	low[u]=dfn[u]=++deep;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=head[u];~i;i=e[i].next)&#123;<br>		<span class="hljs-type">int</span> v=e[i].v;<br>		<span class="hljs-keyword">if</span>(!dfn[v]) <span class="hljs-built_in">tarjan</span>(v),low[u]=<span class="hljs-built_in">min</span>(low[u],low[v]);<br>		<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(vis[v]) low[u]=<span class="hljs-built_in">min</span>(low[u],dfn[v]);<br>	&#125;<br>	<span class="hljs-keyword">if</span>(dfn[u]==low[u])&#123;<br>		vis[u]=<span class="hljs-number">0</span>;<br>		color[u]=++num;<br>		<span class="hljs-keyword">while</span>(sta[top]!=u)&#123;<br>			vis[sta[top]]=<span class="hljs-number">0</span>;<br>			color[sta[top--]]=num;<br>		&#125;<br>		top--;<br>	&#125;<br>&#125;<br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>,&amp;n,&amp;m);<br>	<span class="hljs-built_in">memset</span>(head,<span class="hljs-number">-1</span>,<span class="hljs-built_in">sizeof</span>(head));<br>	<span class="hljs-type">int</span> u,v;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=m;++i)&#123;<br>		<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>,&amp;u,&amp;v);<br>		<span class="hljs-built_in">addedge</span>(u,v);<br>	&#125;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++)&#123;<br>		<span class="hljs-keyword">if</span>(!dfn[i]) <span class="hljs-built_in">tarjan</span>(i);<br>	&#125;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++)&#123;<br>		Size[color[i]]++;<br>		<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j=head[i];~j;j=e[j].next)&#123;<br>			<span class="hljs-type">int</span> v=e[j].v;<br>			<span class="hljs-keyword">if</span>(color[v]!=color[i]) chu[color[i]]++;<br>		&#125;<br>	&#125;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=num;i++)&#123;<br>		<span class="hljs-keyword">if</span>(chu[i]==<span class="hljs-number">0</span>) ccnt++,ans=Size[i];<br>	&#125;<br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>,ccnt==<span class="hljs-number">1</span>?ans:<span class="hljs-number">0</span>);<br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+
+</details>
+
+
+<h4 id="例题2-【模板】缩点（Tarjan缩点-拓扑排序-记忆化搜索dp）"><a href="#例题2-【模板】缩点（Tarjan缩点-拓扑排序-记忆化搜索dp）" class="headerlink" title="例题2. 【模板】缩点（Tarjan缩点+拓扑排序+记忆化搜索dp）"></a>例题2. <a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P3387">【模板】缩点</a>（Tarjan缩点+拓扑排序+记忆化搜索dp）</h4><details>
+<summary>code</summary>
+
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;cstdio&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;cmath&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;queue&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;cstring&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Edge</span>&#123;<br>	<span class="hljs-type">int</span> v,next;<br>&#125;e[<span class="hljs-number">100005</span>],ee[<span class="hljs-number">100005</span>];<br><br><span class="hljs-type">int</span> cnt,ccnt,hhead[<span class="hljs-number">10005</span>],head[<span class="hljs-number">10005</span>];<br><br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">addedge</span><span class="hljs-params">(<span class="hljs-type">int</span> u,<span class="hljs-type">int</span> v)</span></span>&#123;<br>	e[cnt]=Edge&#123;v,head[u]&#125;;<br>	head[u]=cnt++; <br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">aaddedge</span><span class="hljs-params">(<span class="hljs-type">int</span> u,<span class="hljs-type">int</span> v)</span></span>&#123;<br>	ee[ccnt]=Edge&#123;v,hhead[u]&#125;;<br>	hhead[u]=ccnt++;<br>&#125;<br><span class="hljs-type">int</span> n,m,num,deep,top,sta[<span class="hljs-number">10005</span>],low[<span class="hljs-number">10005</span>],dfn[<span class="hljs-number">10005</span>],vis[<span class="hljs-number">10005</span>],color[<span class="hljs-number">10005</span>];<br><span class="hljs-type">int</span> val[<span class="hljs-number">10005</span>],vval[<span class="hljs-number">10005</span>];<br><br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">tarjan</span><span class="hljs-params">(<span class="hljs-type">int</span> u)</span></span>&#123;<br>	vis[sta[++top]=u]=<span class="hljs-number">1</span>;<br>	low[u]=dfn[u]=++deep;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=head[u];~i;i=e[i].next)&#123;<br>		<span class="hljs-type">int</span> v=e[i].v;<br>		<span class="hljs-keyword">if</span>(!dfn[v]) <span class="hljs-built_in">tarjan</span>(v),low[u]=<span class="hljs-built_in">min</span>(low[u],low[v]);<br>		<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(vis[v]) low[u]=<span class="hljs-built_in">min</span>(low[u],dfn[v]);<br>	&#125;<br>	<span class="hljs-keyword">if</span>(dfn[u]==low[u])&#123;<br>		vis[u]=<span class="hljs-number">0</span>;<br>		color[u]=++num;<br>		vval[num]+=val[u];<br>		<span class="hljs-keyword">while</span>(sta[top]!=u)&#123;<br>			vis[sta[top]]=<span class="hljs-number">0</span>;<br>			vval[num]+=val[sta[top]];<br>			color[sta[top--]]=num;<br>		&#125;<br>		top--;<br>	&#125;<br>&#125;<br><br><span class="hljs-type">int</span> indeg[<span class="hljs-number">10005</span>],tpx[<span class="hljs-number">10005</span>],tp;<br><br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">toposort</span><span class="hljs-params">()</span></span>&#123;<br>	queue&lt;<span class="hljs-type">int</span>&gt; q;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++)&#123;<br>		<span class="hljs-keyword">if</span>(indeg[i]==<span class="hljs-number">0</span>)&#123;<br>			q.<span class="hljs-built_in">push</span>(i);<br>		&#125;<br>	&#125;<br>	<span class="hljs-keyword">while</span>(!q.<span class="hljs-built_in">empty</span>())&#123;<br>		<span class="hljs-type">int</span> u=q.<span class="hljs-built_in">front</span>();<br>		q.<span class="hljs-built_in">pop</span>();<br>		tpx[++tp]=u;<br>		<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=hhead[u];~i;i=ee[i].next)&#123;<br>			<span class="hljs-type">int</span> v=ee[i].v;<br>			<span class="hljs-keyword">if</span>(indeg[v])&#123;<br>				indeg[v]--;<br>				<span class="hljs-keyword">if</span>(indeg[v]==<span class="hljs-number">0</span>)&#123;<br>					q.<span class="hljs-built_in">push</span>(v);<br>				&#125;<br>			&#125;<br>		&#125;<br>	&#125;<br>&#125;<br><br><span class="hljs-type">int</span> dp[<span class="hljs-number">10005</span>],ans;<br><span class="hljs-type">bool</span> vvis[<span class="hljs-number">10005</span>];<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">dfs</span><span class="hljs-params">(<span class="hljs-type">int</span> x)</span></span>&#123;<br>	dp[x]=vval[x];<br>	<span class="hljs-type">int</span> temp=<span class="hljs-number">0</span>;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=hhead[x];~i;i=ee[i].next)&#123;<br>		<span class="hljs-type">int</span> v=ee[i].v;<br>		<span class="hljs-keyword">if</span>(!vvis[v]) vvis[v]=<span class="hljs-number">1</span>,<span class="hljs-built_in">dfs</span>(v);<br>		temp=<span class="hljs-built_in">max</span>(temp,dp[v]);<br>	&#125;<br>	dp[x]+=temp;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>,&amp;n,&amp;m);<br>	<span class="hljs-built_in">memset</span>(head,<span class="hljs-number">-1</span>,<span class="hljs-built_in">sizeof</span>(head));<br>	<span class="hljs-built_in">memset</span>(hhead,<span class="hljs-number">-1</span>,<span class="hljs-built_in">sizeof</span>(hhead));<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;++i) <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>,&amp;val[i]);<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=m;++i)&#123;<br>		<span class="hljs-type">int</span> u,v;<br>		<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>,&amp;u,&amp;v);<br>		<span class="hljs-built_in">addedge</span>(u,v);<br>	&#125;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++) <span class="hljs-keyword">if</span>(!dfn[i]) <span class="hljs-built_in">tarjan</span>(i);<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> u=<span class="hljs-number">1</span>;u&lt;=n;++u)&#123;<br>		<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=head[u];~i;i=e[i].next)&#123;<br>			<span class="hljs-type">int</span> v=e[i].v;<br>			<span class="hljs-keyword">if</span>(color[u]!=color[v])&#123;<br>				<span class="hljs-built_in">aaddedge</span>(color[u],color[v]);<br>				indeg[color[v]]++;<br>			&#125;<br>		&#125;<br>	&#125;<br>	<span class="hljs-built_in">toposort</span>();<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=num;++i)&#123;<br>		<span class="hljs-type">int</span> now=tpx[i];<br>		<span class="hljs-keyword">if</span>(!vvis[now])&#123;<br>			<span class="hljs-built_in">dfs</span>(now);<br>			ans=<span class="hljs-built_in">max</span>(ans,dp[now]);<br>		&#125;<br>	&#125;<br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>,ans);<br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+
+</details>
+
+<h2 id="无向图-割点（割顶）与-点双连通分量（V-DCC）"><a href="#无向图-割点（割顶）与-点双连通分量（V-DCC）" class="headerlink" title="无向图 割点（割顶）与 点双连通分量（V-DCC）"></a><center>无向图 割点（割顶）与 点双连通分量（V-DCC）</center></h2><p>参考blog：</p>
+<ul>
+<li><p><a href="https://link.zhihu.com/?target=https%3A//www.cnblogs.com/stxy-ferryman/p/7779347.html">tarjan求强连通分量+缩点+割点/割桥（点双/边双）以及一些证明 - Styx-ferryman - 博客园</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/huzujun/article/details/81086496">双连通分量总结及例题</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/wjh2622075127/article/details/82701608">割点-割边（桥）模板</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/forever_dreams/article/details/81783697?depth_1-utm_source=distribute.pc_relevant.none-task&amp;utm_source=distribute.pc_relevant.none-task">割点、割边（桥）</a></p>
+</li>
+</ul>
+<h3 id="定义-1"><a href="#定义-1" class="headerlink" title="定义"></a>定义</h3><p><strong>割点</strong>：</p>
+<p>官方行话版（已经足够易懂了）：在一个无向图中，如果有一个顶点集合，删除这个顶点集合以及这个集合中所有顶点相关联的边以后，图的连通分量增多，就称这个点集为割点集合</p>
+<p>易懂人话版：这个点维持着双连通的继续，去掉这个点，这个连通分量就无法再维持下去，分成好几个连通分量</p>
+<p><strong>点双连通分量</strong>：一个极大子图，删掉其中任意一个点，图仍连通</p>
+<h3 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h3><p>讲一下核心部分吧，还是Tarjan算法的架构，我们可以把回溯过程遇到的点分为两类</p>
+<ol>
+<li>回溯到的点就是当前父节点：此时只需要判断自己有多少棵子树，如果超过1棵那么这个点就一定是割点（至少一定能把子树分成两半）</li>
+<li>回溯到的点不是父节点：稍微麻烦一点，需要判一下是否有<code>low[v]&gt;=dfv[u]</code>，如果成立的话说明<code>v</code>没办法与他父亲<code>u</code>之前的点连成SCC，那么<code>u</code>就肯定是个割点（至少能把<code>v</code>作父亲的这棵子树给断开）</li>
+</ol>
+<p>除此之外，每次从一个节点产生一棵搜索树都需要先开一个<code>child</code>记录这个节点能有多少棵子树</p>
+<p>至于<strong>点双</strong>，最简单的做法：只需要求出<strong>割点</strong>之后，遍历去掉每一个割点的情况，找连通分量就行了，看题目要求啦</p>
+<h3 id="Tarjan-割点模板"><a href="#Tarjan-割点模板" class="headerlink" title="Tarjan 割点模板"></a>Tarjan 割点模板</h3><details>
+<summary>code</summary>
+
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">tarjan</span><span class="hljs-params">(<span class="hljs-type">int</span> u,<span class="hljs-type">int</span> fa)</span></span>&#123;<br>    low[u]=dfn[u]=++deep;<br>    <span class="hljs-type">int</span> child=<span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=head[u];~i;i=e[i].next)&#123;<br>        <span class="hljs-type">int</span> v=e[i].v;<br>        <span class="hljs-keyword">if</span>(!dfn[v])&#123;<br>            <span class="hljs-built_in">tarjan</span>(v,fa);<span class="hljs-comment">//注意永远都是fa</span><br>            low[u]=<span class="hljs-built_in">min</span>(low[u],low[v]);<br>            <span class="hljs-keyword">if</span>(u!=fa&amp;&amp;low[v]&gt;=dfn[u])<span class="hljs-comment">//判不是父节点的节点属于割点</span><br>                cut[u]=<span class="hljs-number">1</span>;<br>           	<span class="hljs-keyword">if</span>(u==fa)<span class="hljs-comment">//如果连到了父亲说明多了一个儿子</span><br>                child++;<br>        &#125;<br>        low[u]=<span class="hljs-built_in">min</span>(low[u],dfn[v]);<span class="hljs-comment">//务必别忘了这一步</span><br>    &#125;<br>   	<span class="hljs-keyword">if</span>(u==fa&amp;&amp;child&gt;=<span class="hljs-number">2</span>)<span class="hljs-comment">//如果回到父亲了且儿子数多于1就是割点</span><br>        cut[u]=<span class="hljs-number">1</span>;<br>&#125;<br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++) <span class="hljs-keyword">if</span>(!dfn[i]) <span class="hljs-built_in">tarjan</span>(i,i)<br>&#125;<br><br></code></pre></div></td></tr></table></figure>
+
+</details>
+
+<h3 id="例题-POJ-1523-SPF（求每个割点把图分成的点双数量）"><a href="#例题-POJ-1523-SPF（求每个割点把图分成的点双数量）" class="headerlink" title="例题 POJ 1523 SPF（求每个割点把图分成的点双数量）"></a>例题 <a target="_blank" rel="noopener" href="https://vjudge.net/problem/POJ-1523">POJ 1523 SPF</a>（求每个割点把图分成的点双数量）</h3><details>
+<summary>code</summary>
+
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;cstring&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;cstdio&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;cstring&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Edge</span>&#123;<br>	<span class="hljs-type">int</span> v,next;<br>&#125;e[<span class="hljs-number">50005</span>];<br><br><span class="hljs-type">int</span> cnt,head[<span class="hljs-number">2005</span>];<br><br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">addedge</span><span class="hljs-params">(<span class="hljs-type">int</span> u,<span class="hljs-type">int</span> v)</span></span>&#123;<br>	e[cnt]=Edge&#123;v,head[u]&#125;;<br>	head[u]=cnt++;<br>&#125;<br><br><span class="hljs-type">int</span> dfn[<span class="hljs-number">2005</span>],low[<span class="hljs-number">2005</span>],cut[<span class="hljs-number">2005</span>],deep;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">tarjan</span><span class="hljs-params">(<span class="hljs-type">int</span> u,<span class="hljs-type">int</span> fa)</span></span>&#123;<br>	low[u]=dfn[u]=++deep;<br>	<span class="hljs-type">int</span> child=<span class="hljs-number">0</span>;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=head[u];~i;i=e[i].next)&#123;<br>		<span class="hljs-type">int</span> v=e[i].v;<br>		<span class="hljs-keyword">if</span>(!dfn[v])&#123;<br>			<span class="hljs-built_in">tarjan</span>(v,fa);<br>			low[u]=<span class="hljs-built_in">min</span>(low[u],low[v]);<br>			<span class="hljs-keyword">if</span>(u!=fa&amp;&amp;low[v]&gt;=dfn[u]) cut[u]=<span class="hljs-number">1</span>;<br>			<span class="hljs-keyword">if</span>(u==fa) child++;<br>		&#125;<br>		low[u]=<span class="hljs-built_in">min</span>(low[u],dfn[v]);<br>	&#125;<br>	<span class="hljs-keyword">if</span>(u==fa&amp;&amp;child&gt;<span class="hljs-number">1</span>) cut[u]=<span class="hljs-number">1</span>;<br>&#125;<br><br><span class="hljs-type">int</span> n,u,v,Cnt,ge[<span class="hljs-number">2005</span>],color[<span class="hljs-number">2005</span>];<br><br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">init</span><span class="hljs-params">()</span></span>&#123;<br>	n=Cnt=cnt=deep=<span class="hljs-number">0</span>;<br>	<span class="hljs-built_in">memset</span>(head,<span class="hljs-number">-1</span>,<span class="hljs-built_in">sizeof</span>(head));<br>	<span class="hljs-built_in">memset</span>(dfn,<span class="hljs-number">0</span>,<span class="hljs-built_in">sizeof</span>(dfn));<br>	<span class="hljs-built_in">memset</span>(low,<span class="hljs-number">0</span>,<span class="hljs-built_in">sizeof</span>(low));<br>	<span class="hljs-built_in">memset</span>(cut,<span class="hljs-number">0</span>,<span class="hljs-built_in">sizeof</span>(cut));<br>	<span class="hljs-built_in">memset</span>(ge,<span class="hljs-number">0</span>,<span class="hljs-built_in">sizeof</span>(ge));<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">dfs</span><span class="hljs-params">(<span class="hljs-type">int</span> x,<span class="hljs-type">int</span> gg,<span class="hljs-type">int</span> ID)</span></span>&#123;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=head[x];~i;i=e[i].next)&#123;<br>		<span class="hljs-type">int</span> v=e[i].v;<br>		<span class="hljs-keyword">if</span>(v!=gg&amp;&amp;color[v]==<span class="hljs-number">-1</span>)&#123;<br>			color[v]=ID;<br>			<span class="hljs-built_in">dfs</span>(v,gg,ID);<br>		&#125;<br>	&#125;<br>&#125;<br><br><br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	ios::<span class="hljs-built_in">sync_with_stdio</span>(<span class="hljs-literal">false</span>);<br>	<span class="hljs-built_in">init</span>();<br>	<span class="hljs-type">int</span> t=<span class="hljs-number">0</span>;<br>	<span class="hljs-type">bool</span> f=<span class="hljs-literal">false</span>;<br>	<span class="hljs-keyword">while</span>(cin&gt;&gt;u)&#123;<br>		<span class="hljs-keyword">if</span>(u==<span class="hljs-number">0</span>&amp;&amp;f==<span class="hljs-literal">false</span>) <span class="hljs-keyword">break</span>;<br>		f=<span class="hljs-literal">true</span>;<br>		<span class="hljs-keyword">if</span>(u==<span class="hljs-number">0</span>)&#123;<br>			++t;<br>			<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++) <span class="hljs-keyword">if</span>(!dfn[i]) <span class="hljs-built_in">tarjan</span>(i,i);<br>			Cnt=<span class="hljs-number">0</span>;<br>			<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++)&#123;<br>				<span class="hljs-keyword">if</span>(cut[i]) ge[++Cnt]=i;<br>			&#125;<br>			<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Network #%d\n&quot;</span>,t);<br>			<span class="hljs-keyword">if</span>(Cnt==<span class="hljs-number">0</span>) <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;  No SPF nodes\n\n&quot;</span>);<br>			<span class="hljs-keyword">else</span>&#123;<br>				<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> g=<span class="hljs-number">1</span>;g&lt;=Cnt;g++)&#123;<br>					<span class="hljs-built_in">memset</span>(color,<span class="hljs-number">-1</span>,<span class="hljs-built_in">sizeof</span>(color));<br>					<span class="hljs-type">int</span> CNT=<span class="hljs-number">0</span>;<br>					<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++)&#123;<br>						<span class="hljs-keyword">if</span>(i!=ge[g]&amp;&amp;color[i]==<span class="hljs-number">-1</span>)&#123;<br>							++CNT;<br>							color[i]=CNT;<br>							<span class="hljs-built_in">dfs</span>(i,ge[g],CNT);<br>						&#125;<br>					&#125;<br>					<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;  SPF node %d leaves %d subnets\n&quot;</span>,ge[g],CNT);<br>				&#125;<br>				<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;\n&quot;</span>);<br>			&#125;<br>			<span class="hljs-built_in">init</span>();<br>			f=<span class="hljs-literal">false</span>;<br>			<span class="hljs-keyword">continue</span>;<br>		&#125;<br>		cin&gt;&gt;v;<br>		<span class="hljs-built_in">addedge</span>(u,v);<br>		<span class="hljs-built_in">addedge</span>(v,u);<br>		n=<span class="hljs-built_in">max</span>(n,<span class="hljs-built_in">max</span>(u,v));<br>	&#125;<br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+
+</details>
+
+<h2 id="无向图-割边（桥）与-边双连通分量（E-DCC）"><a href="#无向图-割边（桥）与-边双连通分量（E-DCC）" class="headerlink" title="无向图 割边（桥）与 边双连通分量（E-DCC）"></a><center>无向图 割边（桥）与 边双连通分量（E-DCC）</center></h2><h3 id="定义-2"><a href="#定义-2" class="headerlink" title="定义"></a>定义</h3><p><strong>割边</strong>：边版本的割点，即去掉这条边，该图就无法维持连通</p>
+<p><strong>边双连通分量</strong>：一个极大子图，删掉图中任意一条边之后，图仍连通</p>
+<h3 id="算法-1"><a href="#算法-1" class="headerlink" title="算法"></a>算法</h3><ol>
+<li><p>还是Tarjan，而且算法一模一样，可以直接利用有向图的SCC算法给无向图跑一遍（<strong>只需要注意判双向边，用异或运算解决即可</strong>），然后就知道了每个点属于哪一个边双连通分量，最后只需要遍历节点找<strong>割边</strong>就行了（<strong>割边的两节点属于不同的双连通分量中</strong>）</p>
+</li>
+<li><p>还有一种方法可以<strong>记录哪一条边是桥</strong>：只需要在Tarjan过程中判一下是否有<code>low[v]&gt;dfn[u]</code>，如果存在，则<code>(u,v)</code>这条边是桥（存双向边，要标记两条，异或搞定），除此之外，还需要另外判一下<code>v</code>是不是当前DFS树的根（如果要判重边，则记录一下儿子个数即可，儿子至多为1个才没有重边），如果是，就要跳过（即这条边不是桥）</p>
+</li>
+</ol>
+<h3 id="Tarjan-无向图割边模板（求出边双同时标记割边）"><a href="#Tarjan-无向图割边模板（求出边双同时标记割边）" class="headerlink" title="Tarjan 无向图割边模板（求出边双同时标记割边）"></a>Tarjan 无向图割边模板（求出边双同时标记割边）</h3><details>
+<summary>code</summary>
+
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">tarjan</span><span class="hljs-params">(<span class="hljs-type">int</span> u,<span class="hljs-type">int</span> fa)</span></span>&#123; <span class="hljs-comment">//这是传入的还是父节点</span><br>    vis[sta[++top]=u]=<span class="hljs-number">1</span>;<br>    low[u]=dfn[u]=++deep;<br>    <span class="hljs-type">int</span> precnt=<span class="hljs-number">0</span>; <span class="hljs-comment">//记录一下父节点的儿子个数，用来判重边</span><br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=head[u];~i;i=e[i].next)&#123;<br>        <span class="hljs-type">int</span> v=e[i].v;<br>        <span class="hljs-keyword">if</span>(v==fa&amp;&amp;precnt==<span class="hljs-number">0</span>)&#123;<span class="hljs-comment">//理论上只需要v!=fa即可判双向边</span><br>            precnt++;<span class="hljs-comment">//但如果判重边就需要这个</span><br>            <span class="hljs-keyword">continue</span>;<br>        &#125;<br>        <span class="hljs-keyword">if</span>(!dfn[v])&#123;<br>            <span class="hljs-built_in">tarjan</span>(v,u);<br>            low[u]=<span class="hljs-built_in">min</span>(low[u],low[v]);<br>            <span class="hljs-comment">//下面这段标记割边（可不写）</span><br>            <span class="hljs-keyword">if</span>(low[v]&gt;dfn[u])&#123; <span class="hljs-comment">//判是否是桥</span><br>                e[i].cut=<span class="hljs-number">1</span>;<br>                e[i^<span class="hljs-number">1</span>].cut=<span class="hljs-number">1</span>; <span class="hljs-comment">//双向边</span><br>            &#125;<br>        &#125;<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(vis[v]) low[u]=<span class="hljs-built_in">min</span>(low[u],dfn[v]);<br>    &#125;<br>    <span class="hljs-keyword">if</span>(dfn[u]==low[u])&#123; <span class="hljs-comment">//记录每个点属于的边双</span><br>        vis[u]=<span class="hljs-number">0</span>;<br>        color[u]=++num;<br>        <span class="hljs-keyword">while</span>(sta[top]!=u)&#123;<br>            vis[sta[top]]=<span class="hljs-number">0</span>;<br>            color[sta[top--]]=num;<br>        &#125;<br>        top--;<br>    &#125;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+
+</details>
+
+<h3 id="例题-POJ-3177-Redundant-Path（边双-缩点）"><a href="#例题-POJ-3177-Redundant-Path（边双-缩点）" class="headerlink" title="例题 POJ 3177 Redundant Path（边双+缩点）"></a>例题 <a target="_blank" rel="noopener" href="https://vjudge.net/problem/POJ-3177">POJ 3177 Redundant Path</a>（边双+缩点）</h3><details>
+<summary>code</summary>
+
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;cstdio&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;cmath&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;cstring&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Edge</span>&#123;<br>	<span class="hljs-type">int</span> v,next;<br>&#125;e[<span class="hljs-number">500005</span>];<br><br><span class="hljs-type">int</span> cnt,head[<span class="hljs-number">100005</span>];<br><br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">addedge</span><span class="hljs-params">(<span class="hljs-type">int</span> u,<span class="hljs-type">int</span> v)</span></span>&#123;<br>	e[cnt]=Edge&#123;v,head[u]&#125;;<br>	head[u]=cnt++; <br>&#125;<br><br><span class="hljs-type">int</span> n,m,num,deep,top,sta[<span class="hljs-number">100005</span>],low[<span class="hljs-number">100005</span>],dfn[<span class="hljs-number">100005</span>],vis[<span class="hljs-number">100005</span>],color[<span class="hljs-number">100005</span>];<br><br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">tarjan</span><span class="hljs-params">(<span class="hljs-type">int</span> u,<span class="hljs-type">int</span> fa)</span></span>&#123;<br>	vis[sta[++top]=u]=<span class="hljs-number">1</span>;<br>	low[u]=dfn[u]=++deep;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=head[u];~i;i=e[i].next)&#123;<br>		<span class="hljs-type">int</span> v=e[i].v;<br>		<span class="hljs-keyword">if</span>(i==(fa^<span class="hljs-number">1</span>)) <span class="hljs-keyword">continue</span>;<br>		<span class="hljs-keyword">if</span>(!dfn[v]) <span class="hljs-built_in">tarjan</span>(v,i),low[u]=<span class="hljs-built_in">min</span>(low[u],low[v]);<br>		<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(vis[v]) low[u]=<span class="hljs-built_in">min</span>(low[u],dfn[v]);<br>	&#125;<br>	<span class="hljs-keyword">if</span>(dfn[u]==low[u])&#123;<br>		vis[u]=<span class="hljs-number">0</span>;<br>		color[u]=++num;<br>		<span class="hljs-keyword">while</span>(sta[top]!=u)&#123;<br>			vis[sta[top]]=<span class="hljs-number">0</span>;<br>			color[sta[top--]]=num;<br>		&#125;<br>		top--;<br>	&#125;<br>&#125;<br><br><span class="hljs-type">int</span> indeg[<span class="hljs-number">100005</span>],ans;<br><br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">init</span><span class="hljs-params">()</span></span>&#123;<br>	cnt=ans=deep=num=top=<span class="hljs-number">0</span>;<br>	<span class="hljs-built_in">memset</span>(dfn,<span class="hljs-number">0</span>,<span class="hljs-built_in">sizeof</span>(dfn));<br>	<span class="hljs-built_in">memset</span>(low,<span class="hljs-number">0</span>,<span class="hljs-built_in">sizeof</span>(low));<br>	<span class="hljs-built_in">memset</span>(head,<span class="hljs-number">-1</span>,<span class="hljs-built_in">sizeof</span>(head));<br>	<span class="hljs-built_in">memset</span>(indeg,<span class="hljs-number">0</span>,<span class="hljs-built_in">sizeof</span>(indeg));<br>	<span class="hljs-built_in">memset</span>(sta,<span class="hljs-number">0</span>,<span class="hljs-built_in">sizeof</span>(sta));<br>	<span class="hljs-built_in">memset</span>(vis,<span class="hljs-number">0</span>,<span class="hljs-built_in">sizeof</span>(vis));<br>	<span class="hljs-built_in">memset</span>(color,<span class="hljs-number">0</span>,<span class="hljs-built_in">sizeof</span>(color));<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	<span class="hljs-keyword">while</span>(~<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>,&amp;n,&amp;m))&#123;<br>		<span class="hljs-built_in">init</span>();<br>		<span class="hljs-type">int</span> u,v;<br>		<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=m;++i)&#123;<br>			<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>,&amp;u,&amp;v);<br>			<span class="hljs-built_in">addedge</span>(u,v);<br>			<span class="hljs-built_in">addedge</span>(v,u);<br>		&#125;<br>		<span class="hljs-built_in">tarjan</span>(<span class="hljs-number">1</span>,<span class="hljs-number">-1</span>);<br>		<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++)&#123;<br>			<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j=head[i];~j;j=e[j].next)&#123;<br>				<span class="hljs-type">int</span> v=e[j].v;<br>				<span class="hljs-keyword">if</span>(color[i]!=color[v])&#123;<br>					indeg[color[v]]++;<br>				&#125;<br>			&#125;<br>		&#125;<br>		<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=num;i++)<br>			<span class="hljs-keyword">if</span>(indeg[i]==<span class="hljs-number">1</span>)<br>				ans++;<br>		<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>,(ans+<span class="hljs-number">1</span>)/<span class="hljs-number">2</span>); <br>	&#125;<br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+
+</details>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a><center>总结</center></h2><ul>
+<li><strong>有向图的的Tarjan算法</strong>最为核心</li>
+<li>无向图的<strong>边双连通分量</strong>就是在有向图SCC基础上判一下双向边（满足<code>v!=fa</code>即可），而<strong>割边的标记</strong>需要另外加一句<code>low[v]&gt;dfn[u]</code>的判断</li>
+<li>无向图的<strong>割点</strong>比较特殊，需要判两种回溯点的情况，同时还要记录儿子个数，并且<strong>递归传递的父节点永远不变</strong>，而<strong>点双连通分量</strong>的求取只需要<strong>先求割点再去除割点遍历</strong>就行了，比较灵活</li>
+</ul>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E5%9B%BE%E8%AE%BA/">图论</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E5%89%B2%E7%82%B9/">割点</a>
+                    
+                      <a class="hover-with-bg" href="/tags/SCC/">SCC</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/03/29/%E4%BA%8C%E5%88%86%E5%9B%BE%E5%8C%B9%E9%85%8D/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">二分图匹配</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/03/23/%E6%A0%91%E5%BD%A2DP%E6%B5%85%E6%9E%90/">
+                        <span class="hidden-mobile">树形DP浅析</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://fastly.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"8WpS33YNRGD4IQNVQgVCmHQy-gzGzoHsz","appKey":"jed4H3219MxS5igBfmfTU81w","path":"window.location.pathname","placeholder":"write something here","avatar":"retro","meta":["nick","mail","link"],"requiredFields":["nick"],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":true},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://fastly.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://fastly.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://fastly.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://fastly.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://fastly.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://fastly.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://fastly.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://fastly.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- MathJax -->
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']]
+        },
+        loader: {
+          load: ['ui/lazy']
+        },
+        options: {
+          renderActions: {
+            findScript: [10, doc => {
+              document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = { node: text, delim: '', n: 0 };
+                math.end = { node: text, delim: '', n: 0 };
+                doc.math.push(math);
+              });
+            }, '', false],
+            insertedScript: [200, () => {
+              document.querySelectorAll('mjx-container').forEach(node => {
+                let target = node.parentNode;
+                if (target.nodeName.toLowerCase() === 'li') {
+                  target.parentNode.classList.add('has-jax');
+                }
+              });
+            }, '', false]
+          }
+        }
+      };
+    </script>
+
+    <script async src="https://fastly.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" ></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+</body>
+</html>

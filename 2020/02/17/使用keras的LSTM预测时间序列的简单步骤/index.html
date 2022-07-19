@@ -1,0 +1,607 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="琉璃糖">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="LSTM简单代码案例">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用keras的LSTM模型预测时间序列的简单步骤">
+<meta property="og:url" content="http://example.com/2020/02/17/%E4%BD%BF%E7%94%A8keras%E7%9A%84LSTM%E9%A2%84%E6%B5%8B%E6%97%B6%E9%97%B4%E5%BA%8F%E5%88%97%E7%9A%84%E7%AE%80%E5%8D%95%E6%AD%A5%E9%AA%A4/index.html">
+<meta property="og:site_name" content="BlablaWu&#39;s Blog">
+<meta property="og:description" content="LSTM简单代码案例">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-02-17T08:18:46.000Z">
+<meta property="article:modified_time" content="2020-02-17T09:41:06.000Z">
+<meta property="article:author" content="琉璃糖">
+<meta property="article:tag" content="神经网络">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  <title>使用keras的LSTM模型预测时间序列的简单步骤 - BlablaWu&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":50,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>BlablaWu の Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/index_bg.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="使用keras的LSTM模型预测时间序列的简单步骤">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2020-02-17 16:18" pubdate>
+        2020年2月17日 下午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      4.2k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      35 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">使用keras的LSTM模型预测时间序列的简单步骤</h1>
+            
+            <div class="markdown-body">
+              <h2 id="LSTM简单代码案例"><a href="#LSTM简单代码案例" class="headerlink" title="LSTM简单代码案例"></a><center>LSTM简单代码案例</center></h2><span id="more"></span>
+<h2 id="Record-使用keras的LSTM模型预测时间序列的操作步骤（模板）"><a href="#Record-使用keras的LSTM模型预测时间序列的操作步骤（模板）" class="headerlink" title="[Record] 使用keras的LSTM模型预测时间序列的操作步骤（模板）"></a><strong>[Record]</strong> 使用keras的LSTM模型预测时间序列的操作步骤（模板）</h2><ul>
+<li><p>导入库</p>
+<figure class="highlight python"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs python"><span class="hljs-keyword">import</span> pandas <span class="hljs-keyword">as</span> pd <br><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np <br><span class="hljs-keyword">from</span> keras.models <span class="hljs-keyword">import</span> Sequential<br><span class="hljs-keyword">from</span> keras.layers <span class="hljs-keyword">import</span> Dense,LSTM,Dropout<br><span class="hljs-keyword">import</span> matplotlib.pyplot <span class="hljs-keyword">as</span> plt<br><span class="hljs-keyword">import</span> keras<br>%matplotlib inline<br><span class="hljs-keyword">import</span> glob, os<br><span class="hljs-keyword">import</span> seaborn <span class="hljs-keyword">as</span> sns<br><span class="hljs-keyword">import</span> sys<br><span class="hljs-keyword">from</span> sklearn.preprocessing <span class="hljs-keyword">import</span> MinMaxScaler <span class="hljs-comment"># 归一化</span><br><span class="hljs-keyword">import</span> matplotlib <span class="hljs-keyword">as</span> mpl<br>mpl.rcParams[<span class="hljs-string">&#x27;figure.figsize&#x27;</span>]=<span class="hljs-number">12</span>,<span class="hljs-number">8</span><br></code></pre></div></td></tr></table></figure>
+</li>
+<li><p>导入数据并查看</p>
+<figure class="highlight python"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs python">colomns=[<span class="hljs-string">&#x27;awefew&#x27;</span>,<span class="hljs-string">&#x27;wefwfd&#x27;</span>,...]<br>data = pd.read_csv(file_path, numes=columns) <span class="hljs-comment">#更改列名</span><br>data.head()<br></code></pre></div></td></tr></table></figure>
+</li>
+<li><p>简单可视化数据，便于察觉特征</p>
+<figure class="highlight python"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs python">plt.figure(figsize=(<span class="hljs-number">24</span>,<span class="hljs-number">24</span>))<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(xxx):<br>    plt.subplot(xxx,<span class="hljs-number">1</span>,i+<span class="hljs-number">1</span>)<br>    plt.plot(data.values[:,i]);<br>    plt.title(....)<br>plt.show()<br></code></pre></div></td></tr></table></figure>
+</li>
+<li><p>找到需要预测的数据和可使用的特征，并将时间序列数据转化为监督学习问题数据</p>
+<p>定义如下函数即可：</p>
+<p>原理：sequence to sequence</p>
+<figure class="highlight python"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">series_to_supervised</span>(<span class="hljs-params">data, n_in=<span class="hljs-number">1</span>, n_out=<span class="hljs-number">1</span>, dropna=<span class="hljs-literal">True</span></span>):<br>    <span class="hljs-string">&#x27;&#x27;&#x27;</span><br><span class="hljs-string">    	data: origin data</span><br><span class="hljs-string">    	n_in: </span><br><span class="hljs-string">    &#x27;&#x27;&#x27;</span><br>    n_vars = <span class="hljs-number">1</span> <span class="hljs-keyword">if</span> <span class="hljs-built_in">type</span>(data) <span class="hljs-keyword">is</span> <span class="hljs-built_in">list</span> <span class="hljs-keyword">else</span> data.shape[<span class="hljs-number">1</span>]<br>    df = pd.DataFrame(data)<br>    cols, names = <span class="hljs-built_in">list</span>(),<span class="hljs-built_in">list</span>()<br>    <br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(n_in,<span class="hljs-number">0</span>,-<span class="hljs-number">1</span>):<br>        cols.append(df.shift(i))<br>        names+=[(<span class="hljs-string">&#x27;var%d(t-%d)&#x27;</span>%(j+<span class="hljs-number">1</span>, i)) <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(n_vars)]<br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">0</span>, n_out):<br>        cols.append(df.shift(-i))<br>        <span class="hljs-keyword">if</span> i==<span class="hljs-number">0</span>:<br>            names += [(<span class="hljs-string">&#x27;var%d(t)&#x27;</span>%(j+<span class="hljs-number">1</span>)) <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(n_vars)]<br>        <span class="hljs-keyword">else</span>:<br>            names += [(<span class="hljs-string">&#x27;var%d(t+%d)&#x27;</span>%(j+<span class="hljs-number">1</span>, i)) <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(n_vars)]<br>    agg = pd.concat(cols, axis=<span class="hljs-number">1</span>)<br>    agg.columns = names<br>    <span class="hljs-keyword">if</span> dropna: <span class="hljs-comment"># 是否去除缺失值的行</span><br>        agg.dropna(inplace=<span class="hljs-literal">True</span>)<br>    <span class="hljs-keyword">return</span> agg<br></code></pre></div></td></tr></table></figure>
+</li>
+<li><p>归一化数据到 [0,1] 之间</p>
+<p>比如可以采用sklearn中的MinMaxScaler函数，公式为</p>
+<script type="math/tex; mode=display">
+s_i=\frac{x_i-min}{max-min}</script><figure class="highlight python"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs python">scaler = MinMaxScaler(feature_range=(<span class="hljs-number">0</span>,<span class="hljs-number">1</span>))<br>scaled_data = scaler.fit_transform(data[[<span class="hljs-string">&#x27;afe&#x27;</span>,<span class="hljs-string">&#x27;wef&#x27;</span>,...]].values)<br><br><span class="hljs-comment"># 转化为监督学习问题</span><br>reframed = series_to_supervised(scaled_data,<span class="hljs-number">1</span>,<span class="hljs-number">1</span>)<br><br><span class="hljs-comment"># 处理需要预测的数据，把不需要预测的数据去除</span><br>reframed.drop(reframed.columns[[..,..,...]], axis=<span class="hljs-number">1</span>,inplace=<span class="hljs-literal">True</span>)<br><br>reframed.info()<br>reframed.head()<br></code></pre></div></td></tr></table></figure>
+</li>
+<li><p>设置训练集、验证集、测试集大小，并开始分割</p>
+<figure class="highlight python"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs python">train_days = xxx<br>valid_days = xxx<br>values = reframed.values<br><br>train = values[:train_days, :]<br>valid = values[train_days:train_days+valid_days,:]<br>test = values[train_days+valid_days:, :]<br><span class="hljs-comment">#比如：最后一列是y，前面所有列都是x</span><br>train_x, train_y = train[:, :-<span class="hljs-number">1</span>], train[:,-<span class="hljs-number">1</span>]<br>valid_x, valid_y = valid[:, :-<span class="hljs-number">1</span>], valid[:,-<span class="hljs-number">1</span>]<br>test_x, test_y = test[:, :-<span class="hljs-number">1</span>], test[:-<span class="hljs-number">1</span>]<br></code></pre></div></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>将数据重构为符合keras内LSTM模型要求的数据格式</p>
+<p>即<strong>[样本数，时间步，特征数]</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs python"><span class="hljs-comment"># 以 时间步==1 为例</span><br>train_x = train_x.reshape((train_x.shape[<span class="hljs-number">0</span>], <span class="hljs-number">1</span>, train_x.shape[<span class="hljs-number">1</span>]))<br>valid_x = valid_x.reshape((valid_x.shape[<span class="hljs-number">0</span>], <span class="hljs-number">1</span>, valid_x.shape[<span class="hljs-number">1</span>]))<br>test_x = test_x.shape((test_x.shape[<span class="hljs-number">0</span>], <span class="hljs-number">1</span>, test_x.shape[<span class="hljs-number">1</span>]))<br><br><span class="hljs-built_in">print</span>(train_x.shape,<br>     trian_y.shape,<br>     valid_x.shape,<br>     valid_y.shape,<br>     test_x.shape,<br>     test_y.shape)<br></code></pre></div></td></tr></table></figure>
+</li>
+<li><p>建立模型</p>
+<p><strong>注意keras.layers.LSTM中input_shape的输入格式为（时间步，特征数）</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs python"><span class="hljs-comment"># 搭一个LSTM网络，这里用最简单的三层结构</span><br>model = Sequential([<br>    keras.layers.LSTM(<span class="hljs-number">50</span>, activation=<span class="hljs-string">&#x27;relu&#x27;</span>, input_shape=(train_x.shape[<span class="hljs-number">1</span>],train_x.shape[<span class="hljs-number">2</span>]))<br>    keras.layers.Dense(<span class="hljs-number">1</span>, activarion=<span class="hljs-string">&#x27;linear&#x27;</span>)<br>])<br><br><span class="hljs-comment"># 配置一下</span><br>model.<span class="hljs-built_in">compile</span>(opirmizer=<span class="hljs-string">&#x27;adam&#x27;</span>, <span class="hljs-comment"># 这里采用adam优化算法</span><br>             loss=<span class="hljs-string">&#x27;mean_squared_error&#x27;</span>) <span class="hljs-comment"># 优化的损失函数为mse</span><br><br><span class="hljs-comment"># 看一下结构</span><br>model.summary()<br></code></pre></div></td></tr></table></figure>
+</li>
+<li><p>训练模型</p>
+<figure class="highlight python"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs python">model_history = model.fit(train_x, train_y,<br>                         epochs=<span class="hljs-number">100</span>,<br>                         batch_size=<span class="hljs-number">32</span>,<br>                         validation_data=(valid_x, valid_y),<br>                         verbose=<span class="hljs-number">1</span>,<br>                         shuffle=<span class="hljs-literal">False</span>)<br></code></pre></div></td></tr></table></figure>
+</li>
+<li><p>根据需要，绘出loss对照图，观察收敛情况</p>
+<figure class="highlight python"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs python">plt.figure(figsize=(<span class="hljs-number">8</span>,<span class="hljs-number">6</span>))<br>plt.plot(model_history.epoch, model_history.history[<span class="hljs-string">&#x27;loss&#x27;</span>])<br>plt.plot(model_history.epoch, model_history.history[<span class="hljs-string">&#x27;val_loss&#x27;</span>])<br>plt.legend()<br>plt.show()<br></code></pre></div></td></tr></table></figure>
+</li>
+<li><p>模型预测&amp;评估&amp;可视化</p>
+<figure class="highlight python"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs python"><span class="hljs-comment"># 模型预测</span><br>train_predict = model.predict(train_x)<br>valid_predict = model.predict(valid_x)<br>test_predict = model.predict(test_x)<br><br><span class="hljs-comment"># 模型评估</span><br>evaluation = model.evaluate(test_x, test_y)<br><br><span class="hljs-comment"># 把原始数据、训练、验证、测试 都画在一张图上 便于比较分析</span><br>plt.figure(figsize=(<span class="hljs-number">24</span>,<span class="hljs-number">8</span>))<br>plt.plot(values[:,-<span class="hljs-number">1</span>], c=<span class="hljs-string">&#x27;b&#x27;</span>, label=<span class="hljs-string">&#x27;Whole Data&#x27;</span>)<br>plt.plot([x <span class="hljs-keyword">for</span> x <span class="hljs-keyword">in</span> train_predict], c=<span class="hljs-string">&#x27;g&#x27;</span>, label=<span class="hljs-string">&#x27;Train Predict&#x27;</span>)<br>plt.plot([<span class="hljs-literal">None</span> <span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> train_predict]+[x <span class="hljs-keyword">for</span> x <span class="hljs-keyword">in</span> valid_predict], label=<span class="hljs-string">&#x27;Valid Predict&#x27;</span>)<br>plt.plot([<span class="hljs-literal">None</span> <span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> train_predict]+[<span class="hljs-literal">None</span> <span class="hljs-keyword">for</span> _ <span class="hljs-built_in">int</span> valid_predict]+[x <span class="hljs-keyword">for</span> x <span class="hljs-keyword">in</span> test_predict], label=<span class="hljs-string">&#x27;Test Predict&#x27;</span>)<br>plt.legend(fontsize=<span class="hljs-number">15</span>)<br>plt.show()<br></code></pre></div></td></tr></table></figure>
+</li>
+<li><p>将预测结果<strong>反归一化</strong>并绘图比较分析</p>
+<figure class="highlight python"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs python">origin_data = np.array(data[train_days+valid_days:][<span class="hljs-string">&#x27;DATA_COL&#x27;</span>])<br><span class="hljs-comment"># 由于预测数据是1维的，但之前的scaler是5维的，所以我们用零填充剩余维度</span><br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">4</span>):<br>    test_predict = np.column_stack((test_predict, np.zeros(<span class="hljs-number">27</span>)))<br><span class="hljs-comment"># 反归一化</span><br>inverse_test_predict = scalar.inverse_transform(test_predict)<br><span class="hljs-comment"># 绘图</span><br>plt.figure(figsize=(<span class="hljs-number">8</span>,<span class="hljs-number">6</span>))<br>plt.plot(inverse_test_predict[:,<span class="hljs-number">0</span>], c=<span class="hljs-string">&#x27;r&#x27;</span>, label=<span class="hljs-string">&#x27;predict&#x27;</span>)<br>plt.plot(origin_data, c=<span class="hljs-string">&#x27;g&#x27;</span>, label=<span class="hljs-string">&#x27;origin&#x27;</span>)<br>plt.legend()<br>plt.show()<br></code></pre></div></td></tr></table></figure>
+</li>
+</ul>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/">神经网络</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/02/17/LSTM-Long-Short-Term-Memory-%E6%B5%85%E6%9E%90/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">LSTM(Long Short-Term Memory)浅析</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/02/16/%E9%80%92%E5%BD%92%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9CRNN-Recurrent-Neural-Network/">
+                        <span class="hidden-mobile">递归神经网络RNN(Recurrent Neural Network)</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://fastly.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"8WpS33YNRGD4IQNVQgVCmHQy-gzGzoHsz","appKey":"jed4H3219MxS5igBfmfTU81w","path":"window.location.pathname","placeholder":"write something here","avatar":"retro","meta":["nick","mail","link"],"requiredFields":["nick"],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":true},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://fastly.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://fastly.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://fastly.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://fastly.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://fastly.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://fastly.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://fastly.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://fastly.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- MathJax -->
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']]
+        },
+        loader: {
+          load: ['ui/lazy']
+        },
+        options: {
+          renderActions: {
+            findScript: [10, doc => {
+              document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = { node: text, delim: '', n: 0 };
+                math.end = { node: text, delim: '', n: 0 };
+                doc.math.push(math);
+              });
+            }, '', false],
+            insertedScript: [200, () => {
+              document.querySelectorAll('mjx-container').forEach(node => {
+                let target = node.parentNode;
+                if (target.nodeName.toLowerCase() === 'li') {
+                  target.parentNode.classList.add('has-jax');
+                }
+              });
+            }, '', false]
+          }
+        }
+      };
+    </script>
+
+    <script async src="https://fastly.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" ></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+</body>
+</html>

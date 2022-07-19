@@ -1,0 +1,641 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="琉璃糖">
+  <meta name="keywords" content="">
+  
+    <meta property="og:type" content="article">
+<meta property="og:title" content="差分约束算法">
+<meta property="og:url" content="http://example.com/2020/03/20/%E5%B7%AE%E5%88%86%E7%BA%A6%E6%9D%9F%E7%AE%97%E6%B3%95/index.html">
+<meta property="og:site_name" content="BlablaWu&#39;s Blog">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-03-20T01:06:58.000Z">
+<meta property="article:modified_time" content="2020-03-20T02:18:20.000Z">
+<meta property="article:author" content="琉璃糖">
+<meta property="article:tag" content="图论">
+<meta property="article:tag" content="差分约束">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  <title>差分约束算法 - BlablaWu&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":50,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>BlablaWu の Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/index_bg.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="差分约束算法">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2020-03-20 09:06" pubdate>
+        2020年3月20日 上午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      1.1k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      10 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">差分约束算法</h1>
+            
+            <div class="markdown-body">
+              <hr>
+<span id="more"></span>
+<ul>
+<li>参考博客<a target="_blank" rel="noopener" href="https://www.cnblogs.com/wjhstudy/p/9757046.html">差分约束算法总结</a></li>
+</ul>
+<h2 id="差分约束系统"><a href="#差分约束系统" class="headerlink" title="差分约束系统"></a>差分约束系统</h2><p>如果一个系统由$n$个变量和$m$个约束条件组成，形成$m$个形如$a_i-a_j\leq k$的不等式（$i,j\in [1,n],k为常数$），则称之为<strong>差分约束系统</strong></p>
+<h3 id="引例"><a href="#引例" class="headerlink" title="引例"></a>引例</h3><p>给定$n$个变量和$m$个不等式，不等式形式为$x[i]-x[j]\leq a[k](0\leq i,j \leq n,0\eq k\leq m,a[k]已知)$，求某个$x[i]-x[j]$的最大值</p>
+<p>例如当$n=4,m=5$，给出如下不等式组：</p>
+<script type="math/tex; mode=display">
+x_1-x_0\leq1（1）\\
+x_2-x_0\leq2（2）\\
+x_3-x_0\leq4（3）\\
+x_2-x_1\leq3（4）\\
+x_3-x_2\leq1（5）\\
+求max(x_3-x_0)</script><p>一般的解法是：把这些不等式拼拼凑凑最后得出我们要的式子，然后取一个最小值就行了，比如上例中：</p>
+<script type="math/tex; mode=display">
+(3)\Rightarrow x_3-x_0\leq4\\
+(1)+(4)+(5)\Rightarrow x_3-x_0\leq5\\
+(2)+(5)\Rightarrow x_3-x_0\leq 3\\
+\Rightarrow max(x_3-x_0)=3</script><p>然而，谁能想到求解这个系统的过程却和我们学过的<strong>最短路算法</strong>有着密切的联系？！</p>
+<h3 id="与最短路的联系"><a href="#与最短路的联系" class="headerlink" title="与最短路的联系"></a>与最短路的联系</h3><p>我们对$x[i]-x[j]\leq a[k]$这样一个式子进行移项，得到$x[i]\leq x[j]+a[k]$，令$a[k]=w(j,i),dis[i]=x[i]=x[v],dis[j]=x[j]=x[u]$，原式变为$dis[u]+w(u,v)\geq dis[v]$，这TM不就是求最短路里的<strong>松弛操作</strong>嘛！</p>
+<p>但好像符号反了，实际上并不矛盾，对于$x[i]-x[j]\leq a[k]$这样的不等式，我们考虑建图如下：从$j$往$i$连边，边权为$a[k]$，求$x[n-1]-x[0]$的最大值就是求$0到n-1$的最短路，两者刚好吻合，至此，<strong>差分约束问题被转化为了最短路问题</strong></p>
+<h3 id="特殊情况的讨论"><a href="#特殊情况的讨论" class="headerlink" title="特殊情况的讨论"></a>特殊情况的讨论</h3><h4 id="1-存在负环"><a href="#1-存在负环" class="headerlink" title="1. 存在负环"></a>1. 存在负环</h4><p>负环就是最短路可以无限小，所以就不存在最短路，那么上式就表示为$x[n-1]-x[0]\leq T$中的$T$可以无限小，即不存在这样的最大值</p>
+<h4 id="2-终点不可达"><a href="#2-终点不可达" class="headerlink" title="2. 终点不可达"></a>2. 终点不可达</h4><p>如果出现了$dis[n-1]=inf$的情况，说明终点不可达到，此时对应的不等式意义就是$x[n-1]和x[0]$之间没有约束关系，任意取值都行，即取值有无限多种</p>
+<h4 id="3-不等式组转化"><a href="#3-不等式组转化" class="headerlink" title="3. 不等式组转化"></a>3. 不等式组转化</h4><p>对于不等号不相同的情况，可以考虑转化：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+x[n-1]-x[0]\geq T&\Rightarrow x[0]-x[n-1]\leq -T\\
+x[n-1]-x[0]<T&\Rightarrow x[n-1]-x[0]\leq T-1\\
+x[n-1]-x[0]=T&\Rightarrow x[n-1]-x[0]\leq T\&\&x[n-1]-x[0]\geq T
+\end{aligned}</script><h4 id="4-其他问法-amp-应用"><a href="#4-其他问法-amp-应用" class="headerlink" title="4. 其他问法&amp;应用"></a>4. 其他问法&amp;应用</h4><p>如果是问$x[n-1]-x[0]$的<strong>最小值</strong>呢？那么只需要把不等号全部改为$\geq$，然后泡一下从$0到n-1$的最长路就行啦</p>
+<p>另外会有一些类似于求$max(\frac{x[n-1]}{x[0]})$，此时需要做一些数学变换（比如取对数）就可以将其转换为差分约束系统开始搞了</p>
+<h3 id="习题"><a href="#习题" class="headerlink" title="习题"></a>习题</h3><p>通常这种题的问法都比较绕口。。（导致读题跟阅读理解一样）</p>
+<h4 id="POJ-3159-Candies"><a href="#POJ-3159-Candies" class="headerlink" title="POJ 3159 Candies"></a><a target="_blank" rel="noopener" href="https://vjudge.net/problem/POJ-3159">POJ 3159 Candies</a></h4><p>题意：</p>
+<p>给出若干组 同学B永远不会比同学A多拥有的糖果数量（即最大值），n号同学和1号同学拥有糖果数的最大差异（保证差异有限）</p>
+<p>题解：</p>
+<p>把题目翻译成数学语言就是给了一堆$x_B-x_A\leq W$的式子，求$max(x_n-x_1)$，差分约束走起，由于题目给了一定存在，因此不需要再判是否存在</p>
+<p>注：此题会卡时间，请用堆优化Dijkstra</p>
+<p>AC代码：</p>
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;cstdio&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;queue&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><span class="hljs-keyword">typedef</span> <span class="hljs-type">long</span> <span class="hljs-type">long</span> ll;<br><span class="hljs-type">const</span> <span class="hljs-type">int</span> inf=<span class="hljs-number">1e8</span>;<br><span class="hljs-type">int</span> n,m;<br><span class="hljs-type">int</span> cnt,head[<span class="hljs-number">30005</span>],dis[<span class="hljs-number">30005</span>];<br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Edge</span>&#123;<br>	<span class="hljs-type">int</span> u,v,w,next;<br>&#125;e[<span class="hljs-number">150005</span>];<br><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">node</span>&#123;<br>	<span class="hljs-type">int</span> u,dis;<br>	<span class="hljs-type">bool</span> <span class="hljs-keyword">operator</span>&lt;(<span class="hljs-type">const</span> node &amp;rhs)<span class="hljs-type">const</span>&#123;<br>		<span class="hljs-keyword">return</span> dis&gt;rhs.dis;<br>	&#125;<br>&#125;;<br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">addedge</span><span class="hljs-params">(<span class="hljs-type">int</span> u,<span class="hljs-type">int</span> v,<span class="hljs-type">int</span> w)</span></span>&#123;<br>	e[++cnt]=Edge&#123;u,v,w,head[u]&#125;;<br>	head[u]=cnt;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">spfa</span><span class="hljs-params">()</span></span>&#123;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++) dis[i]=inf;<br>	priority_queue&lt;node&gt; q;<br>	q.<span class="hljs-built_in">push</span>(node&#123;<span class="hljs-number">1</span>,<span class="hljs-number">0</span>&#125;);<br>	dis[<span class="hljs-number">1</span>]=<span class="hljs-number">0</span>;<br>	<span class="hljs-keyword">while</span>(!q.<span class="hljs-built_in">empty</span>())&#123;<br>		node q1=q.<span class="hljs-built_in">top</span>();q.<span class="hljs-built_in">pop</span>();<br>		<span class="hljs-type">int</span> u=q1.u;<br>		<span class="hljs-keyword">if</span>(q1.dis&gt;dis[u]) <span class="hljs-keyword">continue</span>;<br>		<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=head[u];i;i=e[i].next)&#123;<br>			<span class="hljs-type">int</span> v=e[i].v,w=e[i].w;<br>			<span class="hljs-keyword">if</span>(dis[v]&gt;dis[u]+w)&#123;<br>				dis[v]=dis[u]+w;<br>				q.<span class="hljs-built_in">push</span>(node&#123;v,dis[v]&#125;);<br>			&#125;<br>		&#125;<br>	&#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>,&amp;n,&amp;m);<br>	<span class="hljs-type">int</span> x,y,z;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=m;i++)&#123;<br>		<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d%d&quot;</span>,&amp;x,&amp;y,&amp;z);<br>		<span class="hljs-built_in">addedge</span>(x,y,z);<br>	&#125;<br>	<span class="hljs-built_in">spfa</span>();<br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>,dis[n]);<br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+<h4 id="POJ-3169-Layout"><a href="#POJ-3169-Layout" class="headerlink" title="POJ 3169 Layout"></a><a target="_blank" rel="noopener" href="https://vjudge.net/problem/POJ-3169">POJ 3169 Layout</a></h4><p>题意：</p>
+<p>给出若干组两头牛之间的最大距离和最小距离，求1号牛和n号牛的最大可能距离（如果不存在输出-1，如果可以随便取值输出-2）</p>
+<p>题解：</p>
+<p>翻译过来就是给出若干组小于等于和大于等于的约数，求$max(x_n-x_1)$，差分约束</p>
+<p>注：需要考虑负环和终点不可达的情况</p>
+<p>AC代码：</p>
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;cstdio&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;queue&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><span class="hljs-keyword">typedef</span> <span class="hljs-type">long</span> <span class="hljs-type">long</span> ll;<br><span class="hljs-type">const</span> <span class="hljs-type">int</span> inf=<span class="hljs-number">1e8</span>;<br><span class="hljs-type">int</span> n,m,k;<br>ll cnt,head[<span class="hljs-number">30005</span>],dis[<span class="hljs-number">30005</span>],ring[<span class="hljs-number">30005</span>],vis[<span class="hljs-number">30005</span>];<br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Edge</span>&#123;<br>	ll u,v,w,next;<br>&#125;e[<span class="hljs-number">150005</span>];<br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">addedge</span><span class="hljs-params">(ll u,ll v,ll w)</span></span>&#123;<br>	e[++cnt]=Edge&#123;u,v,w,head[u]&#125;;<br>	head[u]=cnt;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">bool</span> <span class="hljs-title">spfa</span><span class="hljs-params">()</span></span>&#123;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++) dis[i]=inf;<br>	queue&lt;<span class="hljs-type">int</span>&gt; q;<br>	q.<span class="hljs-built_in">push</span>(<span class="hljs-number">1</span>);<br>	ring[<span class="hljs-number">1</span>]=<span class="hljs-number">1</span>;<br>	dis[<span class="hljs-number">1</span>]=<span class="hljs-number">0</span>;<br>	vis[<span class="hljs-number">1</span>]=<span class="hljs-number">1</span>;<br>	<span class="hljs-keyword">while</span>(!q.<span class="hljs-built_in">empty</span>())&#123;<br>		ll u=q.<span class="hljs-built_in">front</span>();q.<span class="hljs-built_in">pop</span>();<br>		vis[u]=<span class="hljs-number">0</span>;<br>		<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=head[u];i;i=e[i].next)&#123;<br>			ll v=e[i].v,w=e[i].w;<br>			<span class="hljs-keyword">if</span>(dis[v]&gt;dis[u]+w)&#123;<br>				dis[v]=dis[u]+w;<br>				ring[v]=ring[u]+<span class="hljs-number">1</span>;<br>				<span class="hljs-keyword">if</span>(ring[v]&gt;n) <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>				<span class="hljs-keyword">if</span>(vis[v]==<span class="hljs-number">0</span>)&#123;<br>					vis[v]=<span class="hljs-number">1</span>;<br>					q.<span class="hljs-built_in">push</span>(v);<br>				&#125;<br>			&#125;<br>		&#125;<br>	&#125;<br>	<span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d%d&quot;</span>,&amp;n,&amp;m,&amp;k);<br>	ll x,y,z;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=m;i++)&#123;<br>		<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%lld%lld%lld&quot;</span>,&amp;x,&amp;y,&amp;z);<br>		<span class="hljs-built_in">addedge</span>(x,y,z);<br>	&#125;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=k;i++)&#123;<br>		<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%lld%lld%lld&quot;</span>,&amp;x,&amp;y,&amp;z);<br>		<span class="hljs-built_in">addedge</span>(y,x,-z);<br>	&#125;<br>	<span class="hljs-keyword">if</span>(<span class="hljs-built_in">spfa</span>()) <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;-1\n&quot;</span>);<br>	<span class="hljs-keyword">else</span>&#123;<br>		<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%lld\n&quot;</span>,dis[n]&gt;=inf?<span class="hljs-number">-2</span>:dis[n]);<br>	&#125;<br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+<h4 id="POJ-1716-Integer-Intervals"><a href="#POJ-1716-Integer-Intervals" class="headerlink" title="POJ 1716 Integer Intervals"></a><a target="_blank" rel="noopener" href="https://vjudge.net/problem/POJ-1716">POJ 1716 Integer Intervals</a></h4><p>题意：</p>
+<p>给出若干区间，求一个点集满足所有区间都至少有两个点在这个点集里，求这样的点集的最小大小</p>
+<p>题解：</p>
+<p>关键在于转化为差分约束问题，可以考虑$dis[x]表示[0,x]这个区间在点集内的点的个数$，那么题目就可以转化为（加一是为了防止数组下标有-1出现）</p>
+<script type="math/tex; mode=display">
+dis[r_i+1]-dis[l_i]\geq 2\\</script><p>除此之外，还有非常关键的题目隐含条件（都是整数点）</p>
+<script type="math/tex; mode=display">
+0\leq dis[i+1]-dis[i]\leq1</script><p>现在就可以建图+跑最短路了</p>
+<p>AC代码：</p>
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;cstdio&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;queue&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><span class="hljs-keyword">typedef</span> <span class="hljs-type">long</span> <span class="hljs-type">long</span> ll;<br>ll maxn=<span class="hljs-number">10005</span>;<br><span class="hljs-type">const</span> <span class="hljs-type">int</span> inf=<span class="hljs-number">1e8</span>;<br><span class="hljs-type">int</span> n,m,k;<br>ll Max,cnt,head[<span class="hljs-number">30005</span>],dis[<span class="hljs-number">30005</span>],ring[<span class="hljs-number">30005</span>],vis[<span class="hljs-number">30005</span>];<br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Edge</span>&#123;<br>	ll u,v,w,next;<br>&#125;e[<span class="hljs-number">150005</span>];<br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">addedge</span><span class="hljs-params">(ll u,ll v,ll w)</span></span>&#123;<br>	e[++cnt]=Edge&#123;u,v,w,head[u]&#125;;<br>	head[u]=cnt;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">bool</span> <span class="hljs-title">spfa</span><span class="hljs-params">()</span></span>&#123;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;=Max;i++) dis[i]=-inf;<br>	queue&lt;<span class="hljs-type">int</span>&gt; q;<br>	q.<span class="hljs-built_in">push</span>(<span class="hljs-number">0</span>);<br>	dis[<span class="hljs-number">0</span>]=<span class="hljs-number">0</span>;<br>	vis[<span class="hljs-number">0</span>]=<span class="hljs-number">1</span>;<br>	<span class="hljs-keyword">while</span>(!q.<span class="hljs-built_in">empty</span>())&#123;<br>		ll u=q.<span class="hljs-built_in">front</span>();q.<span class="hljs-built_in">pop</span>();<br>		vis[u]=<span class="hljs-number">0</span>;<br>		<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=head[u];i;i=e[i].next)&#123;<br>			ll v=e[i].v,w=e[i].w;<br>			<span class="hljs-keyword">if</span>(dis[v]&lt;dis[u]+w)&#123;<br>				dis[v]=dis[u]+w;<br>				<span class="hljs-keyword">if</span>(vis[v]==<span class="hljs-number">0</span>)&#123;<br>					vis[v]=<span class="hljs-number">1</span>;<br>					q.<span class="hljs-built_in">push</span>(v);<br>				&#125;<br>			&#125;<br>		&#125;<br>	&#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>,&amp;n);<br>	ll x,y;<br>	Max=<span class="hljs-number">0</span>;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++)&#123;<br>		<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%lld%lld&quot;</span>,&amp;x,&amp;y);<br>		<span class="hljs-built_in">addedge</span>(x,y+<span class="hljs-number">1</span>,<span class="hljs-number">2</span>);<br>		Max=<span class="hljs-built_in">max</span>(Max,y+<span class="hljs-number">1</span>);<span class="hljs-comment">//存区间最大值</span><br>	&#125;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;=Max;i++)&#123;<br>		<span class="hljs-built_in">addedge</span>(i,i+<span class="hljs-number">1</span>,<span class="hljs-number">0</span>);<br>		<span class="hljs-built_in">addedge</span>(i+<span class="hljs-number">1</span>,i,<span class="hljs-number">-1</span>);<br>	&#125;<br>	<span class="hljs-built_in">spfa</span>();<br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%lld\n&quot;</span>,dis[Max]);<br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+<h4 id="HDU-3666-THE-MATRIX-PROBLEM"><a href="#HDU-3666-THE-MATRIX-PROBLEM" class="headerlink" title="HDU 3666 THE MATRIX PROBLEM"></a><a target="_blank" rel="noopener" href="https://vjudge.net/problem/HDU-3666">HDU 3666 THE MATRIX PROBLEM</a></h4><p><del><strong>这真是一道TMD无敌宇宙霹雳巨恶心的题，甚至还带点玄学算法，搞得我半夜十二点不能睡觉</strong></del></p>
+<p>题意：</p>
+<p>给出一个$n*m$的矩阵，要求构造两个数列$a<em>n,b_m$使矩阵第$i$行元素乘上$a_i$，第$j$列元素除以$b_j$得到一个新矩阵$C$，且需要满足$C</em>{i,j}\in [L,U]$，问能否构造成功？</p>
+<p>题解：</p>
+<p>这TM？？第一眼看到：神仙题？</p>
+<p>考虑将题目条件转换为数学文字：</p>
+<script type="math/tex; mode=display">
+L\leq \frac{x_{i,j}\cdot A_i}{B_j}\leq U\Rightarrow \frac{L}{x_{i,j}}\leq \frac{A_i}{B_j}\leq\frac{U}{x_{i,j}}\\
+两边取对数，得出\\
+log(\frac{L}{x_{i,j}})\leq log(A_i)-log(B_i)\leq log(\frac{U}{x_{i,j}})</script><p>可以差分约束+判负环搞起来了</p>
+<p>什么？？TLE了！什么？传统判负环方法不行了？？</p>
+<p>于是上网找到这道题TMD居然会卡时间卡得这么紧？？！</p>
+<h5 id="MARK-新姿势"><a href="#MARK-新姿势" class="headerlink" title="MARK 新姿势"></a>MARK 新姿势</h5><p>于是查到有两种方案（玄学剪枝法）：</p>
+<ol>
+<li><p>一个节点更新次数大于$\sqrt{n}$就判定位负环（无法证明？有什么办法，这题只能这么胡搞）</p>
+</li>
+<li><p>所有节点更新总次数大于$k*n$就判定为负环（一般k取2，然并卵，也是个玄学方法）</p>
+</li>
+</ol>
+<p>除此之外，我还发现我一直使用的判负环方法会WA？？</p>
+<p>因此我得出结论：</p>
+<p>对于此类题，先用我自己的判负环方法，如果WA了，改为更强的方法，如果还TLE，那么就用上面的玄学剪枝法</p>
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><span class="hljs-keyword">typedef</span> <span class="hljs-type">long</span> <span class="hljs-type">long</span> ll;<br><span class="hljs-type">const</span> <span class="hljs-type">double</span> inf=<span class="hljs-number">0x3f3f3f3f</span>;<br><span class="hljs-type">int</span> n,m,k;<br><span class="hljs-type">double</span> l,r;<br>ll cnt,head[<span class="hljs-number">600005</span>],ring[<span class="hljs-number">600005</span>],vis[<span class="hljs-number">600005</span>];<br><span class="hljs-type">double</span> dis[<span class="hljs-number">600005</span>];<br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Edge</span>&#123;<br>	ll u,v,next;<br>	<span class="hljs-type">double</span> w;<br>&#125;e[<span class="hljs-number">3500005</span>];<br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">addedge</span><span class="hljs-params">(ll u,ll v,<span class="hljs-type">double</span> w)</span></span>&#123;<br>	e[++cnt]=Edge&#123;u,v,head[u],w&#125;;<br>	head[u]=cnt;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">bool</span> <span class="hljs-title">spfa</span><span class="hljs-params">(<span class="hljs-type">int</span> st)</span></span>&#123;<br>	<span class="hljs-built_in">memset</span>(vis,<span class="hljs-number">0</span>,<span class="hljs-built_in">sizeof</span>(vis));<br>	<span class="hljs-built_in">memset</span>(ring,<span class="hljs-number">0</span>,<span class="hljs-built_in">sizeof</span>(ring));<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=n+m+<span class="hljs-number">10</span>;i++) dis[i]=inf;<br>	queue&lt;<span class="hljs-type">int</span>&gt; q;<br>	q.<span class="hljs-built_in">push</span>(st);<br>	dis[st]=<span class="hljs-number">0</span>;<br>	vis[st]=<span class="hljs-number">1</span>;<br>	<span class="hljs-keyword">while</span>(!q.<span class="hljs-built_in">empty</span>())&#123;<br>		ll u=q.<span class="hljs-built_in">front</span>();q.<span class="hljs-built_in">pop</span>();<br>		vis[u]=<span class="hljs-number">0</span>;<br>		ring[u]++; <span class="hljs-comment">//新判法</span><br>		<span class="hljs-keyword">if</span>(ring[u]&gt;<span class="hljs-built_in">sqrt</span>(n+m)) <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>; <span class="hljs-comment">//超级玄学搞法</span><br>		<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=head[u];i!=<span class="hljs-number">-1</span>;i=e[i].next)&#123;<br>			ll v=e[i].v;<br>			<span class="hljs-type">double</span> w=e[i].w;<br>			<span class="hljs-keyword">if</span>(dis[v]&gt;dis[u]+w)&#123;<br>				dis[v]=dis[u]+w;<br>				<span class="hljs-keyword">if</span>(vis[v]==<span class="hljs-number">0</span>)&#123;<br>					vis[v]=<span class="hljs-number">1</span>;<br>					q.<span class="hljs-built_in">push</span>(v);<br>				&#125;<br>			&#125;<br>		&#125;<br>	&#125;<br>	<span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	<span class="hljs-keyword">while</span>(~<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d%lf%lf&quot;</span>,&amp;n,&amp;m,&amp;l,&amp;r))&#123;<br>		cnt=<span class="hljs-number">0</span>;<br>		l=<span class="hljs-built_in">log2</span>(l);<br>		r=<span class="hljs-built_in">log2</span>(r);<br>		<span class="hljs-built_in">memset</span>(head,<span class="hljs-number">-1</span>,<span class="hljs-built_in">sizeof</span>(head));<br>		<span class="hljs-type">double</span> x;<br>		<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++)&#123;<br>			<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j=<span class="hljs-number">1</span>;j&lt;=m;j++)&#123;<br>				<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%lf&quot;</span>,&amp;x);<br>				<span class="hljs-type">double</span> temp=<span class="hljs-built_in">log2</span>(x);<br>				<span class="hljs-built_in">addedge</span>(n+j,i,r-temp);<br>				<span class="hljs-built_in">addedge</span>(i,n+j,temp-l);<br>			&#125;<br>		&#125;<br><span class="hljs-comment">//		for(int i=1;i&lt;=n+m;i++) addedge(0,i,0);</span><br>		<span class="hljs-keyword">if</span>(<span class="hljs-built_in">spfa</span>(<span class="hljs-number">1</span>)) <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;NO\n&quot;</span>);<br>		<span class="hljs-keyword">else</span> <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;YES\n&quot;</span>);<br>	&#125;<br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E5%9B%BE%E8%AE%BA/">图论</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E5%B7%AE%E5%88%86%E7%BA%A6%E6%9D%9F/">差分约束</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/03/20/%E6%AC%A7%E6%8B%89%E5%9B%9E%E8%B7%AF/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">欧拉回路</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/03/16/%E5%9B%BE%E8%AE%BA%E3%81%AE%E5%BB%BA%E5%9B%BE%E7%BB%83%E4%B9%A0/">
+                        <span class="hidden-mobile">图论の建图练习</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://fastly.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"8WpS33YNRGD4IQNVQgVCmHQy-gzGzoHsz","appKey":"jed4H3219MxS5igBfmfTU81w","path":"window.location.pathname","placeholder":"write something here","avatar":"retro","meta":["nick","mail","link"],"requiredFields":["nick"],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":true},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://fastly.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://fastly.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://fastly.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://fastly.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://fastly.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://fastly.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://fastly.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://fastly.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- MathJax -->
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']]
+        },
+        loader: {
+          load: ['ui/lazy']
+        },
+        options: {
+          renderActions: {
+            findScript: [10, doc => {
+              document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = { node: text, delim: '', n: 0 };
+                math.end = { node: text, delim: '', n: 0 };
+                doc.math.push(math);
+              });
+            }, '', false],
+            insertedScript: [200, () => {
+              document.querySelectorAll('mjx-container').forEach(node => {
+                let target = node.parentNode;
+                if (target.nodeName.toLowerCase() === 'li') {
+                  target.parentNode.classList.add('has-jax');
+                }
+              });
+            }, '', false]
+          }
+        }
+      };
+    </script>
+
+    <script async src="https://fastly.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" ></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+</body>
+</html>

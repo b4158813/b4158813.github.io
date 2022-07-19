@@ -1,0 +1,580 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="琉璃糖">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="一道神奇的分块题">
+<meta property="og:type" content="article">
+<meta property="og:title" content="USST内部训练4补题">
+<meta property="og:url" content="http://example.com/2020/05/21/USST%E5%86%85%E9%83%A8%E8%AE%AD%E7%BB%834%E8%A1%A5%E9%A2%98/index.html">
+<meta property="og:site_name" content="BlablaWu&#39;s Blog">
+<meta property="og:description" content="一道神奇的分块题">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-05-21T15:10:39.000Z">
+<meta property="article:modified_time" content="2020-05-21T15:21:26.000Z">
+<meta property="article:author" content="琉璃糖">
+<meta property="article:tag" content="刷题">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  <title>USST内部训练4补题 - BlablaWu&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":50,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>BlablaWu の Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/index_bg.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="USST内部训练4补题">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2020-05-21 23:10" pubdate>
+        2020年5月21日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      5k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      42 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">USST内部训练4补题</h1>
+            
+            <div class="markdown-body">
+              <h2 id="一道神奇的分块题"><a href="#一道神奇的分块题" class="headerlink" title="一道神奇的分块题"></a><center>一道神奇的分块题</center></h2><span id="more"></span>
+<h4 id="F-牛牛的繁星"><a href="#F-牛牛的繁星" class="headerlink" title="F. 牛牛的繁星"></a>F. <a target="_blank" rel="noopener" href="https://ac.nowcoder.com/acm/contest/5205/F">牛牛的繁星</a></h4><p>题意：</p>
+<p>给出长度为n的序列a，和m个询问，每次询问区间[l,r]内<strong>出现次数第k大的数的出现次数</strong>（注意：是出现次数第k大，不是第k大元素的出现次数），且强制在线。</p>
+<p>题解：</p>
+<p>可参考官方题解：<a target="_blank" rel="noopener" href="https://ac.nowcoder.com/acm/problem/blogs/204649">https://ac.nowcoder.com/acm/problem/blogs/204649</a></p>
+<p>如果是第k大元素的出现次数，那就是主席树的裸题了，开n个权值线段树，第i个维护前i个数信息，然后用前缀和思想处理在线区间询问就行了</p>
+<p>但是，<strong>本题是无法使用线段树维护住的</strong>，因此就需要<del>看别人的AC代码</del>使用 <strong>暴力+优化</strong> 方法过这道题，具体实现应该是 <strong>预处理+分块+莫队的一点点思想</strong>（其实我自己还没整明白），但我所了解的莫队基本上都是离线做法。。所以这题还需要提前预处理，也就是需要提前预处理出<code>pre[i][j]</code>数组，代表<strong>前i个块中j这个元素的出现次数</strong>，这是为了方便分块时对于中间整块的处理</p>
+<p>更具体的，本题需要开一个桶统计每个数的出现次数，同时还需要统计某个出现次数的数的个数，通过莫队思想更新，但是仅仅这样似乎复杂度还是不够（因为强制在线，所以无法用莫队的玄学排序），因此还需要预处理一些分块数组的信息，这样对于区间很大的询问的处理速度就加快了（应该吧）</p>
+<p>对于每一次[l,r]询问，类似普通分块一样 先定位两端点所在块，如果在同一块中，就暴力更新该区间的数的所有信息，更新完后，再查找k大出现次数，这里需要仔细解释一下如何查找：</p>
+<p>本题的分块数组有两个作用，除了记录每个元素所在的块之外，还可以用它来记录不同的出现次数所在的块（类似于权值线段树？或者叫做值域分块），出现次数越多，所在的块就越靠后，那么对于每一次的询问，我们就需要从最后一个块开始往第一块遍历（因为越靠后的块对应的出现次数越多），如果当前块所对应的的出现次数小于k，那么就让k减去当前块的出现次数数，然后继续查找前一块，否则就说明这个k大的出现次数在这个块里面，于是进入该块，暴力查找即可</p>
+<p>对于不在同一块中的两端点，左右端点对应的零散块也是同上暴力处理，对于中间的完整快，需要利用之前的预处理，$O(1)$得到完整块内的数的素有信息，然后更新即可</p>
+<p>在处理完上述所有信息并完成一次查询后，记得要把这些用到的桶和数组归零，以便下一次查询</p>
+<p>另外，代码里有个注意点</p>
+<ul>
+<li>用emplace_back代替了push_back，否则会TLE（91分）？？具体可以百度这两者的区别</li>
+</ul>
+<p>个人感觉本题题的思想和 <a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P1903">洛谷 P1903 [国家集训队]数颜色 / 维护队列</a> 这道题有一点类似（不会的可以先看看这题找找自信）</p>
+<p>最后，本蒟蒻写得很乱，如果看不懂的话 就看看代码理解理解吧！QAQ</p>
+<p>更具体的可以看代码</p>
+<p>AC代码：</p>
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span><br><span class="hljs-keyword">typedef</span> <span class="hljs-type">long</span> <span class="hljs-type">long</span> ll;<br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><br><span class="hljs-comment">// fread 加速读入</span><br><span class="hljs-keyword">inline</span> <span class="hljs-type">char</span> _nc()&#123;<br>    <span class="hljs-type">static</span> <span class="hljs-type">char</span> buf[<span class="hljs-number">100000</span>],*L=buf,*R=buf;<br>    <span class="hljs-keyword">return</span> L==R&amp;&amp;(R=(L=buf)+<span class="hljs-built_in">fread</span>(buf,<span class="hljs-number">1</span>,<span class="hljs-number">100000</span>,stdin),L==R)?EOF:*L++;<br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">class</span> T&gt; <span class="hljs-type">void</span> <span class="hljs-title">read</span><span class="hljs-params">(T &amp;x)</span> </span>&#123;<br>	x=<span class="hljs-number">0</span>;<span class="hljs-type">int</span> f=<span class="hljs-number">0</span>;<span class="hljs-type">char</span> ch=_nc();<br>	<span class="hljs-keyword">while</span>(ch&lt;<span class="hljs-string">&#x27;0&#x27;</span>||ch&gt;<span class="hljs-string">&#x27;9&#x27;</span>)&#123;f|=(ch==<span class="hljs-string">&#x27;-&#x27;</span>);ch=_nc();&#125;<br>	<span class="hljs-keyword">while</span>(ch&gt;=<span class="hljs-string">&#x27;0&#x27;</span>&amp;&amp;ch&lt;=<span class="hljs-string">&#x27;9&#x27;</span>)&#123;x=(x&lt;&lt;<span class="hljs-number">1</span>)+(x&lt;&lt;<span class="hljs-number">3</span>)+(ch^<span class="hljs-number">48</span>);ch=_nc();&#125;<br>	x=f?-x:x;<br>	<span class="hljs-keyword">return</span>;<br>&#125;<br><br><span class="hljs-comment">//fast write</span><br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">write</span><span class="hljs-params">(ll x)</span></span>&#123;<br>	<span class="hljs-keyword">if</span>(x&lt;<span class="hljs-number">0</span>)<span class="hljs-built_in">putchar</span>(<span class="hljs-string">&#x27;-&#x27;</span>),x=-x;<br>    <span class="hljs-keyword">if</span>(x&gt;<span class="hljs-number">9</span>)<span class="hljs-built_in">write</span>(x/<span class="hljs-number">10</span>);<br>    <span class="hljs-built_in">putchar</span>(x%<span class="hljs-number">10</span>+<span class="hljs-string">&#x27;0&#x27;</span>);<br>&#125;<br><br><span class="hljs-type">int</span> n,m,type,mx,sz;<br><span class="hljs-type">int</span> block[<span class="hljs-number">100005</span>],L[<span class="hljs-number">100005</span>],R[<span class="hljs-number">100005</span>],a[<span class="hljs-number">100005</span>],cnt[<span class="hljs-number">100005</span>],num[<span class="hljs-number">100005</span>],sum[<span class="hljs-number">405</span>],pre[<span class="hljs-number">405</span>][<span class="hljs-number">100005</span>];<br><span class="hljs-type">bool</span> vis[<span class="hljs-number">100005</span>];<br><br>vector&lt;pair&lt;<span class="hljs-type">int</span>,<span class="hljs-type">int</span>&gt;&gt; v[<span class="hljs-number">340</span>][<span class="hljs-number">340</span>];<br>vector&lt;<span class="hljs-type">int</span>&gt; ve;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">add</span><span class="hljs-params">(<span class="hljs-type">int</span> x,<span class="hljs-type">int</span> number)</span></span>&#123;<span class="hljs-comment">//更新出现次数为x的数所在的块</span><br>    <span class="hljs-type">int</span> bo=block[x];<br>    num[x]+=number;<br>    sum[bo]+=number;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">query</span><span class="hljs-params">(<span class="hljs-type">int</span> k)</span></span>&#123;<span class="hljs-comment">//查询次数第k大的次数</span><br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i=mx;i&gt;=<span class="hljs-number">1</span>;i--)&#123;<br>        <span class="hljs-keyword">if</span>(k&gt;sum[i]) k-=sum[i];<br>        <span class="hljs-keyword">else</span>&#123;<br>            <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j=R[i];j&gt;=L[i];j--)&#123;<br>                <span class="hljs-keyword">if</span>(k&gt;num[j]) k-=num[j];<br>                <span class="hljs-keyword">else</span> <span class="hljs-keyword">return</span> j;<br>            &#125;<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">cal</span><span class="hljs-params">(<span class="hljs-type">int</span> l,<span class="hljs-type">int</span> r,<span class="hljs-type">int</span> k)</span></span>&#123;<br>    <span class="hljs-keyword">if</span>(l&gt;r) <span class="hljs-built_in">swap</span>(l, r);<br>    <span class="hljs-type">int</span> ans=<span class="hljs-number">0</span>;<br>    <span class="hljs-type">int</span> bol=block[l],bor=block[r];<br>    <span class="hljs-keyword">if</span>(bol==bor)&#123;<span class="hljs-comment">//处理左右端点在同一块内的情况</span><br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i=l;i&lt;=r;i++)&#123;<br>            cnt[a[i]]++;<br>            vis[a[i]]=<span class="hljs-literal">true</span>;<br>        &#125;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i=l;i&lt;=r;i++)&#123;<br>            <span class="hljs-keyword">if</span>(vis[a[i]])&#123;<br>                vis[a[i]]=<span class="hljs-literal">false</span>;<br>                <span class="hljs-built_in">add</span>(cnt[a[i]],<span class="hljs-number">1</span>);<br>            &#125;<br>        &#125;<br>        ans=<span class="hljs-built_in">query</span>(k);<span class="hljs-comment">//询问</span><br>        <span class="hljs-comment">//询问完了给它重置回去</span><br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i=l;i&lt;=r;i++)&#123;<br>            <span class="hljs-keyword">if</span>(!cnt[a[i]]) <span class="hljs-keyword">continue</span>;<br>            <span class="hljs-built_in">add</span>(cnt[a[i]],<span class="hljs-number">-1</span>);<br>            cnt[a[i]]=<span class="hljs-number">0</span>;<br>        &#125;<br>    &#125;<span class="hljs-keyword">else</span>&#123;<span class="hljs-comment">//处理左右端点不在同一块内的情况</span><br>        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> x:v[bol+<span class="hljs-number">1</span>][bor<span class="hljs-number">-1</span>]) <span class="hljs-built_in">add</span>(x.first,x.second);<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i=l;i&lt;=R[bol];i++)&#123;<br>            cnt[a[i]]++;<br>            vis[a[i]]=<span class="hljs-literal">true</span>;<br>        &#125;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i=L[bor];i&lt;=r;i++)&#123;<br>            cnt[a[i]]++;<br>            vis[a[i]]=<span class="hljs-literal">true</span>;<br>        &#125;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i=l;i&lt;=R[bol];i++)&#123;<br>            <span class="hljs-keyword">if</span>(vis[a[i]])&#123;<br>                <span class="hljs-type">int</span> res=pre[bor<span class="hljs-number">-1</span>][a[i]]-pre[bol][a[i]];<br>                <span class="hljs-built_in">add</span>(res,<span class="hljs-number">-1</span>);<br>                <span class="hljs-built_in">add</span>(res+cnt[a[i]],<span class="hljs-number">1</span>);<br>                vis[a[i]]=<span class="hljs-literal">false</span>;<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i=L[bor];i&lt;=r;i++)&#123;<br>            <span class="hljs-keyword">if</span>(vis[a[i]])&#123;<br>                <span class="hljs-type">int</span> res=pre[bor<span class="hljs-number">-1</span>][a[i]]-pre[bol][a[i]];<br>                <span class="hljs-built_in">add</span>(res,<span class="hljs-number">-1</span>);<br>                <span class="hljs-built_in">add</span>(res+cnt[a[i]],<span class="hljs-number">1</span>);<br>                vis[a[i]]=<span class="hljs-literal">false</span>;<br>            &#125;<br>        &#125;<br>        ans=<span class="hljs-built_in">query</span>(k);<span class="hljs-comment">//询问</span><br>        <span class="hljs-comment">//询问完了给它重置回去</span><br>        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> x:v[bol+<span class="hljs-number">1</span>][bor<span class="hljs-number">-1</span>]) <span class="hljs-built_in">add</span>(x.first,-x.second);<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i=l;i&lt;=R[bol];i++)&#123;<br>            <span class="hljs-keyword">if</span>(cnt[a[i]])&#123;<br>                <span class="hljs-type">int</span> res=pre[bor<span class="hljs-number">-1</span>][a[i]]-pre[bol][a[i]];<br>                <span class="hljs-built_in">add</span>(res,<span class="hljs-number">1</span>);<br>                <span class="hljs-built_in">add</span>(res+cnt[a[i]],<span class="hljs-number">-1</span>);<br>                cnt[a[i]]=<span class="hljs-number">0</span>;<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i=L[bor];i&lt;=r;i++)&#123;<br>            <span class="hljs-keyword">if</span>(cnt[a[i]])&#123;<br>                <span class="hljs-type">int</span> res=pre[bor<span class="hljs-number">-1</span>][a[i]]-pre[bol][a[i]];<br>                <span class="hljs-built_in">add</span>(res,<span class="hljs-number">1</span>);<br>                <span class="hljs-built_in">add</span>(res+cnt[a[i]],<span class="hljs-number">-1</span>);<br>                cnt[a[i]]=<span class="hljs-number">0</span>;<br>            &#125;<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> ans;<br>&#125;<br> <br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-comment">// freopen(&quot;test.in&quot;,&quot;r&quot;,stdin);</span><br>    <span class="hljs-built_in">read</span>(n),<span class="hljs-built_in">read</span>(m),<span class="hljs-built_in">read</span>(type);<span class="hljs-comment">//读入</span><br>    mx=<span class="hljs-built_in">sqrt</span>(n);<span class="hljs-comment">//mx个块</span><br>   	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=mx;i++)&#123;<br>   		L[i]=R[i<span class="hljs-number">-1</span>]+<span class="hljs-number">1</span>;<br>   		R[i]=n/mx*i;<br>   	&#125;<br>   	R[mx]=n;<span class="hljs-comment">//最后一个块的右端为第n，自己的习惯，也可以再开一个块</span><br>   	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=mx;i++)&#123;<br>   		<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j=L[i];j&lt;=R[i];j++)<br>   			block[j]=i;<span class="hljs-comment">//j号元素在i号块内</span><br>   	&#125;<br>    <span class="hljs-comment">//上面是分块预处理</span><br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++) <span class="hljs-built_in">read</span>(a[i]);<span class="hljs-comment">//读入</span><br>    <span class="hljs-comment">//下面这波是预处理前i个块中j这个元素的出现次数，即预处理pre[i][j]数组</span><br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> l=<span class="hljs-number">1</span>;l&lt;=mx;l++)&#123;<br>        ve.<span class="hljs-built_in">clear</span>();<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++) pre[l][i]=pre[l<span class="hljs-number">-1</span>][i];<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i=L[l]; i&lt;=R[l];i++) pre[l][a[i]]++;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> r=l; r&lt;=mx;r++)&#123;<br>            <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i=L[r];i&lt;=R[r];i++)&#123;<br>                num[cnt[a[i]]]--;<br>                cnt[a[i]]++;<br>                num[cnt[a[i]]]++;<br>                <span class="hljs-keyword">if</span>(num[cnt[a[i]]]==<span class="hljs-number">1</span>) ve.<span class="hljs-built_in">emplace_back</span>(cnt[a[i]]);<br>                <span class="hljs-comment">//emplace_back的使用</span><br>            &#125;<br>            <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> x:ve) <span class="hljs-keyword">if</span>(num[x]!=<span class="hljs-number">0</span>&amp;&amp;!vis[x]) v[l][r].<span class="hljs-built_in">emplace_back</span>(<span class="hljs-built_in">make_pair</span>(x,num[x])),vis[x]=<span class="hljs-literal">true</span>;<br>            <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> x:ve) vis[x]=<span class="hljs-literal">false</span>;<br>        &#125;<br>        <span class="hljs-built_in">memset</span>(cnt,<span class="hljs-number">0</span>,<span class="hljs-built_in">sizeof</span>(cnt));<br>        <span class="hljs-built_in">memset</span>(num,<span class="hljs-number">0</span>,<span class="hljs-built_in">sizeof</span>(num));<br>    &#125;<br> <br>    <span class="hljs-type">int</span> ans=<span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>,l,r,k;i&lt;=m;i++)&#123;<br>        <span class="hljs-built_in">read</span>(l),<span class="hljs-built_in">read</span>(r),<span class="hljs-built_in">read</span>(k);<br>        <span class="hljs-keyword">if</span>(type==<span class="hljs-number">1</span>) l^=ans,r^=ans,k^=ans;<br>        ans=<span class="hljs-built_in">cal</span>(l,r,k);<br>       	<span class="hljs-built_in">write</span>(ans);<br>       	<span class="hljs-built_in">puts</span>(<span class="hljs-string">&quot;&quot;</span>);<br>    &#125;<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E5%88%B7%E9%A2%98/">刷题</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/05/30/%E8%81%94%E6%83%B3%E6%9D%AF%E2%80%9C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%AB%9E%E8%B5%9B%E5%88%92%E6%B0%B4%E8%B5%9B%E5%90%8E/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile"> “联想杯”程序设计竞赛划水赛后 </span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/05/13/My-Algorithm-Template/">
+                        <span class="hidden-mobile">My Algorithm Template</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://fastly.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"8WpS33YNRGD4IQNVQgVCmHQy-gzGzoHsz","appKey":"jed4H3219MxS5igBfmfTU81w","path":"window.location.pathname","placeholder":"write something here","avatar":"retro","meta":["nick","mail","link"],"requiredFields":["nick"],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":true},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://fastly.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://fastly.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://fastly.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://fastly.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://fastly.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://fastly.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://fastly.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://fastly.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- MathJax -->
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']]
+        },
+        loader: {
+          load: ['ui/lazy']
+        },
+        options: {
+          renderActions: {
+            findScript: [10, doc => {
+              document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = { node: text, delim: '', n: 0 };
+                math.end = { node: text, delim: '', n: 0 };
+                doc.math.push(math);
+              });
+            }, '', false],
+            insertedScript: [200, () => {
+              document.querySelectorAll('mjx-container').forEach(node => {
+                let target = node.parentNode;
+                if (target.nodeName.toLowerCase() === 'li') {
+                  target.parentNode.classList.add('has-jax');
+                }
+              });
+            }, '', false]
+          }
+        }
+      };
+    </script>
+
+    <script async src="https://fastly.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" ></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+</body>
+</html>

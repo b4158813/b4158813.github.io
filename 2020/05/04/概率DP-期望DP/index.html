@@ -1,0 +1,801 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="琉璃糖">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="概率dp学习记录">
+<meta property="og:type" content="article">
+<meta property="og:title" content="概率DP(期望DP)">
+<meta property="og:url" content="http://example.com/2020/05/04/%E6%A6%82%E7%8E%87DP-%E6%9C%9F%E6%9C%9BDP/index.html">
+<meta property="og:site_name" content="BlablaWu&#39;s Blog">
+<meta property="og:description" content="概率dp学习记录">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/imag/ttttmg.jpg">
+<meta property="article:published_time" content="2020-05-04T14:42:48.000Z">
+<meta property="article:modified_time" content="2022-05-17T11:35:14.000Z">
+<meta property="article:author" content="琉璃糖">
+<meta property="article:tag" content="动态规划">
+<meta property="article:tag" content="概率DP">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/imag/ttttmg.jpg">
+  
+  
+  <title>概率DP(期望DP) - BlablaWu&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":50,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>BlablaWu の Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/index_bg.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="概率DP(期望DP)">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2020-05-04 22:42" pubdate>
+        2020年5月4日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      13k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      112 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">概率DP(期望DP)</h1>
+            
+            <div class="markdown-body">
+              <h2 id="概率dp学习记录"><a href="#概率dp学习记录" class="headerlink" title="概率dp学习记录"></a><center>概率dp学习记录</center></h2><span id="more"></span>
+<p>参考神仙blog：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/hua-dong/p/8166093.html">【整理】简单的数学期望和概率DP</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/blog/ShineEternal/mathematical-expectation">数论小白都能看懂的数学期望讲解</a></li>
+</ul>
+<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>概率（期望）DP，就是一类结合概率论中求期望的动态规划问题，通常情况下的处理方式为<strong>倒推</strong>，即定义一个状态$dp[i]$为：<strong>已经到达$i$状态（根据题目自己定义），完成剩余要求所需要的期望步数</strong>，于是显然有$dp[n]=0$（如果$n$代表了最后一个状态），从而倒推求出$dp[0]$（或$dp[1]$之类的）</p>
+<p>给出了一般方法，但由于<strong>动态规划没有模板</strong>一说，剩下就是多刷题了</p>
+<h2 id="习题"><a href="#习题" class="headerlink" title="习题"></a>习题</h2><h3 id="UVA10288-优惠券-Coupons"><a href="#UVA10288-优惠券-Coupons" class="headerlink" title="UVA10288 优惠券 Coupons"></a><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/UVA10288">UVA10288 优惠券 Coupons</a></h3><p>题意：</p>
+<p>每张彩票上有一个漂亮图案，图案一共$n$种，如果你集齐了这$n$种图案就可以兑换大奖。现在请问，在理想（平均）情况下，你买多少张彩票才能获得大奖的？$n\le 33$</p>
+<p>题解：</p>
+<p>最经典的期望题，我们需要知道，如果买一次彩票能中$A$奖的概率为$\frac{b}{a}$，那么能中奖的期望购买彩票次数为$\frac{a}{b}$（取倒数即可），于是回到这题，定义状态$dp[i]$为：手上已有$i$种图案，兑换大奖还需要买的彩票数的期望，则答案为$dp[0]$，转移如下：</p>
+<ol>
+<li>如果下一张彩票出的图案是已经有的：概率为$\frac{i}{n}$，$dp[i]=\frac{i}{n}(dp[i]+1)$</li>
+<li>如果下一张彩票出的图案是新的：概率为$\frac{n-i}{n}$，$dp[i]=\frac{n-i}{n}(dp[i+1]+1)$</li>
+</ol>
+<p>两者合并一下，得到：$dp[i]=\frac{i}{n}(dp[i]+1)+\frac{n-i}{n}(dp[i+1]+1)$</p>
+<p>化简得：$dp[i]=dp[i+1]+\frac{n}{n-i}$</p>
+<p>其实到这里就已经可以用动态规划A了这题，但我们再追求一下极致，从这个递推方程里推出一个公式来：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+dp[0]&=dp[1]+1=dp[2]+\frac{n}{n-1}+1\\
+&=...=dp[n]+n*(1+\frac{1}{2}+\frac{1}{3}+...+\frac{1}{n})\\
+&=n*(1+\frac{1}{2}+\frac{1}{3}+...+\frac{1}{n})
+\end{aligned}</script><p>OK，很完美，接下来就是毒瘤的输出处理了，模拟通分+约分，然后输出格式处理一下就行了</p>
+<details>
+<summary>code</summary>
+
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-function">ll <span class="hljs-title">lcm</span><span class="hljs-params">(ll a,ll b)</span> </span>&#123;<span class="hljs-keyword">return</span> a/<span class="hljs-built_in">gcd</span>(a,b)*b;&#125;<br><span class="hljs-type">int</span> n;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">count</span><span class="hljs-params">(ll x)</span></span>&#123;<br>	<span class="hljs-type">int</span> ans=<span class="hljs-number">0</span>;<br>	<span class="hljs-keyword">while</span>(x)&#123;<br>		ans++;<br>		x/=<span class="hljs-number">10</span>;<br>	&#125;<br>	<span class="hljs-keyword">return</span> ans;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	<span class="hljs-keyword">while</span>(~<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>,&amp;n))&#123;<br>		ll ans1=<span class="hljs-number">1</span>,ans2=<span class="hljs-number">1</span>;<br>		<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">2</span>;i&lt;=n;i++)&#123;<br>			ll tp=<span class="hljs-built_in">lcm</span>(i,ans2);<br>			ll x1=tp/ans2,x2=tp/i;<br>			ans2=tp;<br>			ans1=ans1*x1+x2;<br>			ll tp2=<span class="hljs-built_in">gcd</span>(ans1,ans2);<br>			ans1/=tp2,ans2/=tp2;<br>		&#125;<br>		ans1*=n;<br>		ll tp2=<span class="hljs-built_in">gcd</span>(ans1,ans2);<br>		ans1/=tp2,ans2/=tp2;<br>		<span class="hljs-keyword">if</span>(ans2==<span class="hljs-number">1</span>)&#123;<br>			<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%lld\n&quot;</span>,ans1);<br>			<span class="hljs-keyword">continue</span>;<br>		&#125;<br>		ll dai=ans1/ans2;<br>		<span class="hljs-keyword">if</span>(dai) ans1%=ans2;<br>		<span class="hljs-type">int</span> numfen=<span class="hljs-built_in">max</span>(<span class="hljs-built_in">count</span>(ans1),<span class="hljs-built_in">count</span>(ans2)),numdai=<span class="hljs-built_in">count</span>(dai);<br>		<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;=numdai;i++)<br>			<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot; &quot;</span>);<br>		<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%lld\n%lld &quot;</span>,ans1,dai);<br>		<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;numfen;i++)<br>			<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;-&quot;</span>);<br>		<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;\n&quot;</span>);<br>		<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;=numdai;i++)<br>			<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot; &quot;</span>);<br>		<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%lld\n&quot;</span>,ans2);<br>	&#125;<br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<span class="hljs-comment">// https://www.luogu.com.cn/problem/UVA10288</span><br></code></pre></div></td></tr></table></figure>
+
+</details>
+
+<h3 id="P4316-绿豆蛙的归宿"><a href="#P4316-绿豆蛙的归宿" class="headerlink" title="P4316 绿豆蛙的归宿"></a><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P4316">P4316 绿豆蛙的归宿</a></h3><p>题意：</p>
+<p>给一个DAG，起点为1，终点为n，每次绿豆蛙可以等概率地选择一条从这个节点出发的出边走过去，求从起点到终点的期望路径长度</p>
+<p>题解：</p>
+<p>设状态：$dp[i]$为已走到$i$节点，走完剩下节点所需要的期望路径长度，则转移方程为$dp[i]=\frac{1}{deg[i]}(\sum{(dp[v]+w)})$，其中$deg[i]$为$i$节点的出度，由于当前状态的转移用到了他的出边所连节点的转移，因此需要倒推，所以可以考虑<strong>反向建图</strong>然后跑一遍<strong>拓扑排序</strong>，在拓扑序上DP即可（其实<strong>大部分DAG上DP的题都需要拓扑排序</strong>，保证无后效性）</p>
+<details>
+<summary>code</summary>
+
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-type">int</span> deg1[maxn],deg2[maxn];<br><span class="hljs-type">double</span> dp[maxn];<br><br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">toposort</span><span class="hljs-params">()</span></span>&#123;<br>	queue&lt;<span class="hljs-type">int</span>&gt; q;<br>	q.<span class="hljs-built_in">push</span>(n);<br>	<span class="hljs-keyword">while</span>(q.<span class="hljs-built_in">size</span>())&#123;<br>		<span class="hljs-type">int</span> u=q.<span class="hljs-built_in">front</span>();<br>		q.<span class="hljs-built_in">pop</span>();<br>		<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=head[u];~i;i=e[i].next)&#123;<br>			<span class="hljs-type">int</span> v=e[i].v,w=e[i].w;<br>			dp[v]+=(dp[u]+<span class="hljs-number">1.0</span>*w)/deg1[v];<span class="hljs-comment">//拓扑序上DP</span><br>			<span class="hljs-keyword">if</span>(deg2[v])&#123;<br>				deg2[v]--;<br>				<span class="hljs-keyword">if</span>(!deg2[v])<br>					q.<span class="hljs-built_in">push</span>(v);<br>			&#125;<br>		&#125;<br>	&#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>,&amp;n,&amp;m);<br>	<span class="hljs-built_in">init_graph</span>();<br>	<span class="hljs-built_in">rep</span>(i,<span class="hljs-number">1</span>,m)&#123;<br>		<span class="hljs-type">int</span> x,y,z;<br>		<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d%d&quot;</span>,&amp;x,&amp;y,&amp;z);<br>		<span class="hljs-built_in">addedge</span>(y,x,z);<br>		deg1[x]++,deg2[x]++;<br>	&#125;<br>	<span class="hljs-built_in">toposort</span>();<br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%.2lf\n&quot;</span>,dp[<span class="hljs-number">1</span>]);<br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+
+</details>
+
+<h3 id="CF235B-Let’s-Play-Osu"><a href="#CF235B-Let’s-Play-Osu" class="headerlink" title="CF235B Let’s Play Osu!"></a><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/CF235B">CF235B Let’s Play Osu!</a></h3><p>重题：<a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P1365">P1365 WJMZBMR打osu! / Easy</a></p>
+<p>题意：</p>
+<p>打OSU游戏（一种音游），会出现正确(O)和失误(X)两种情况，每N次正确的连击能获得$N^2$的分数加成，现在给你每次击打取得正确概率和N次击打，问最终获得的分数的期望</p>
+<p>题解：</p>
+<p>典型的<strong>高次期望</strong>问题，我们可以先考虑线性的问题：每N次正确的连击能获得N的分数加成，那么考虑状态$f[i]$表示达到第$i$次期望得分，则转移如下：</p>
+<script type="math/tex; mode=display">
+f[i]=p[i]\cdot(f[i-1]+1)</script><p>那么如果分数加成是平方次的呢？考虑状态$F[i]$表示这一状态，则转移如下：</p>
+<script type="math/tex; mode=display">
+F[i]=F[i-1]+p[i]\cdot(2f[i-1]+1)</script><p>为什么呢，因为$(x+1)^2-x^2=2x+1$，即：一个平方中+1所带来的分数加成为$2*线性加成+1$</p>
+<details>
+    <summary>code</summary>
+
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-type">int</span> n;<br>db p[maxn],f[maxn],F[maxn];<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>,&amp;n);<br>	<span class="hljs-built_in">rep</span>(i,<span class="hljs-number">1</span>,n) <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%lf&quot;</span>,&amp;p[i]);<br>	F[<span class="hljs-number">1</span>]=f[<span class="hljs-number">1</span>]=p[<span class="hljs-number">1</span>]*<span class="hljs-number">1</span>;<br>	<span class="hljs-built_in">rep</span>(i,<span class="hljs-number">2</span>,n)&#123;<br>		f[i]=(f[i<span class="hljs-number">-1</span>]+<span class="hljs-number">1</span>)*p[i];<br>		F[i]=F[i<span class="hljs-number">-1</span>]+p[i]*(<span class="hljs-number">2</span>*f[i<span class="hljs-number">-1</span>]+<span class="hljs-number">1</span>);<br>	&#125;<br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%.12lf\n&quot;</span>,F[n]);<br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<span class="hljs-comment">// https://www.luogu.com.cn/problem/CF235B</span><br></code></pre></div></td></tr></table></figure>
+
+</details>
+
+<h3 id="P654-OSU"><a href="#P654-OSU" class="headerlink" title="P654 OSU!"></a><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P1654">P654 OSU!</a></h3><p>题意：</p>
+<p>跟上一道题一样，只是分数加成改为了$N^3$</p>
+<p>题解：</p>
+<p>那么转移方程对应改为：$Z[i]=Z[i-1]+p<a href="3F[i-1]+3f[i-1]+1">i</a>$</p>
+<details>
+    <summary>code</summary>
+
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-type">int</span> n;<br>db p[maxn],f[maxn],F[maxn],z[maxn];<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>,&amp;n);<br>	<span class="hljs-built_in">rep</span>(i,<span class="hljs-number">1</span>,n) <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%lf&quot;</span>,&amp;p[i]);<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++)&#123;<br>		z[i]=z[i<span class="hljs-number">-1</span>]+(<span class="hljs-number">3</span>*f[i<span class="hljs-number">-1</span>]+<span class="hljs-number">3</span>*F[i<span class="hljs-number">-1</span>]+<span class="hljs-number">1</span>)*p[i];<br>		F[i]=(F[i<span class="hljs-number">-1</span>]+<span class="hljs-number">2</span>*f[i<span class="hljs-number">-1</span>]+<span class="hljs-number">1</span>)*p[i];<br>		f[i]=(f[i<span class="hljs-number">-1</span>]+<span class="hljs-number">1</span>)*p[i];<br>	&#125;<br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%.1lf\n&quot;</span>,z[n]);<br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<span class="hljs-comment">// https://www.luogu.com.cn/problem/P1654</span><br></code></pre></div></td></tr></table></figure>
+
+</details>
+
+<h3 id="UVA12230-过河-Crossing-Rivers"><a href="#UVA12230-过河-Crossing-Rivers" class="headerlink" title="UVA12230 过河 Crossing Rivers"></a><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/UVA12230">UVA12230 过河 Crossing Rivers</a></h3><p>题意：</p>
+<p>从起点到终点路上有N条河，需要坐船才能过，给出每条河的宽度和船速，走路速度恒为1，问从起点到终点的期望时间</p>
+<p>题解：</p>
+<p>对于过河来说，最慢的时间为$\frac{3L}{V}$（到达河边时船刚从河边离开，那么就需要等船跑完一个来回才能再乘坐），最快为$\frac{L}{V}$（到达河边时船刚好也到达，直接乘坐过去就行），又因为船速恒定，所以船出现在河内任何位置的的概率是相等的，即均匀分布，因此期望时间就是$\frac{\frac{3L}{V}+\frac{L}{V}}{2}=\frac{2L}{V}$，再加上走路的时间就是答案了</p>
+<details>
+    <summary>code</summary>
+
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-type">int</span> n,D;<br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	<span class="hljs-type">int</span> cnt=<span class="hljs-number">0</span>;<br>	<span class="hljs-keyword">while</span>(<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>,&amp;n,&amp;D))&#123;<br>		<span class="hljs-keyword">if</span>(n==<span class="hljs-number">0</span>&amp;&amp;D==<span class="hljs-number">0</span>) <span class="hljs-keyword">break</span>;<br>		<span class="hljs-type">double</span> ans=<span class="hljs-number">0</span>,zuo=<span class="hljs-number">0</span>;<br>		<span class="hljs-built_in">rep</span>(i,<span class="hljs-number">1</span>,n)&#123;<br>			<span class="hljs-type">int</span> p,L,v;<br>			<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d%d&quot;</span>,&amp;p,&amp;L,&amp;v);<br>			ans+=<span class="hljs-number">2.0</span>*L/v;<br>			ans+=<span class="hljs-number">1.0</span>*p-zuo;<br>			zuo+=<span class="hljs-number">1.0</span>*(p-zuo)+L;<br>		&#125;<br>		ans+=<span class="hljs-number">1.0</span>*D-zuo;<br>		<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Case %d: %.3lf\n\n&quot;</span>,++cnt,ans);<br>	&#125;<br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<span class="hljs-comment">// https://www.luogu.com.cn/problem/UVA12230</span><br></code></pre></div></td></tr></table></figure>
+
+</details>
+
+<h3 id="ZOJ-3640-Help-me-escape"><a href="#ZOJ-3640-Help-me-escape" class="headerlink" title="ZOJ 3640 Help me escape"></a><a target="_blank" rel="noopener" href="https://zoj.pintia.cn/problem-sets/91827364500/problems/91827369307">ZOJ 3640 Help me escape</a></h3><p>题意：</p>
+<p>小明被困在一个洞穴里，他有个初始战斗力$f$，他每次有$N$条道路可选择（等概率随机选择），每条道路都有一个困难值$c_i$，如果他的战斗力大于所选通道的困难值，则他可以花费对应道路的天数$t_i$逃出洞穴，否则，他就只能花一天时间来使自己的战斗力增加对应道路的困难值的大小，问小明逃出洞穴的天数的期望</p>
+<p>题解：</p>
+<p>设状态$dp[i]$为小明战斗力为$i$时逃出洞穴的期望天数，则转移如下：</p>
+<script type="math/tex; mode=display">
+dp[i]=dp[i]+
+\begin{cases}
+\frac{1}{n}(t[i])\ (if\ f>c[i])\\
+\frac{1}{n}(dp[i+c[i]]+1)\ (if\ f\le c[i])
+\end{cases}</script><p>由于可能出现大于初始战斗力的情况，所以初始时选两到三倍战斗力开始转移</p>
+<details>
+    <summary>code</summary>
+
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-type">int</span> n,f,c[maxn],t[maxn];<br><span class="hljs-type">double</span> dp[maxn];<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	<span class="hljs-keyword">while</span>(~<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>,&amp;n,&amp;f))&#123;<br>		<span class="hljs-built_in">memset</span>(dp,<span class="hljs-number">0</span>,<span class="hljs-built_in">sizeof</span>(dp));<br>		<span class="hljs-built_in">rep</span>(i,<span class="hljs-number">1</span>,n)<br>			<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>,&amp;c[i]),<br>			t[i]=<span class="hljs-built_in">floor</span>((<span class="hljs-number">1.0</span>+<span class="hljs-built_in">sqrt</span>(<span class="hljs-number">5.0</span>))/<span class="hljs-number">2.0</span>*c[i]*c[i]);<br><br>		<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">30000</span>;i&gt;=f;i--)&#123;<br>			<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j=<span class="hljs-number">1</span>;j&lt;=n;j++)&#123;<br>				<span class="hljs-keyword">if</span>(i&gt;c[j]) dp[i]+=<span class="hljs-number">1.0</span>*t[j]/n;<br>				<span class="hljs-keyword">else</span> dp[i]+=(<span class="hljs-number">1.0</span>+<span class="hljs-number">1.0</span>*dp[i+c[j]])/n;<br>			&#125;<br>		&#125;<br>		<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%.3lf\n&quot;</span>,dp[f]);<br>	&#125;<br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<span class="hljs-comment">// https://vjudge.net/problem/ZOJ-3640</span><br></code></pre></div></td></tr></table></figure>
+
+</details>
+
+<h3 id="HDU-3853-LOOPS"><a href="#HDU-3853-LOOPS" class="headerlink" title="HDU 3853 LOOPS"></a><a target="_blank" rel="noopener" href="http://acm.hdu.edu.cn/showproblem.php?pid=3853">HDU 3853 LOOPS</a></h3><p>题意：</p>
+<p>小明又被困住了，这次他被困在了一个$n*m$的矩阵中，初始他处于$(1,1)$（左上角），终点在$(n,m)$（右下角），每次他需要花费两点法力值然后在如下三种选择中选一种（给出三种选择的概率$p_1,p_2,p_3$，且保证$p_1+p_2+p_3=1$，且最右边一列的格子$p_2=0$，最下边一行的格子$p_1=0$）</p>
+<ol>
+<li>往下走一格</li>
+<li>往右走一个</li>
+<li>原地不动</li>
+</ol>
+<p>问小明到达终点的所花费法力值的期望</p>
+<p>题解：</p>
+<p>中规中矩的二维概率DP，考虑状态$dp[i][j]$为现在处在第$(i,j)$格子，到达终点的期望花费法力值，则转移为：</p>
+<script type="math/tex; mode=display">
+dp[i][j]=p_1[i][j](dp[i+1][j]+2)+p_2[i][j](dp[i][j+1]+2)+p_3[i][j](dp[i][j]+2)​</script><p>化简可得：</p>
+<script type="math/tex; mode=display">
+dp[i][j]=\frac{p_1[i][j]+p_2[i][j]+2}{1-p_3[i][j]}</script><p>有一个坑点，就是这个式子分母不能为0（否则就浮点错误了），所以遇到$p_3=1$就跳过</p>
+<details>
+    <summary>code</summary>
+
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-type">int</span> n,m;<br>db p1[<span class="hljs-number">1015</span>][<span class="hljs-number">1015</span>],p2[<span class="hljs-number">1015</span>][<span class="hljs-number">1015</span>],p3[<span class="hljs-number">1015</span>][<span class="hljs-number">1015</span>];<br>db dp[<span class="hljs-number">1015</span>][<span class="hljs-number">1015</span>];<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	<span class="hljs-keyword">while</span>(<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>,&amp;n,&amp;m)!=EOF)&#123;<br>		<span class="hljs-built_in">memset</span>(dp,<span class="hljs-number">0</span>,<span class="hljs-built_in">sizeof</span>(dp));<br>		<span class="hljs-built_in">rep</span>(i,<span class="hljs-number">1</span>,n)&#123;<br>			<span class="hljs-built_in">rep</span>(j,<span class="hljs-number">1</span>,m)&#123;<br>				<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%lf%lf%lf&quot;</span>,&amp;p1[i][j],&amp;p2[i][j],&amp;p3[i][j]);<br>				<span class="hljs-comment">// cin&gt;&gt;p1[i][j]&gt;&gt;p2[i][j]&gt;&gt;p3[i][j];</span><br>			&#125;<br>		&#125;<br>		<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=n;i&gt;=<span class="hljs-number">1</span>;i--)&#123;<br>			<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j=m;j&gt;=<span class="hljs-number">1</span>;j--)&#123;<br>				<span class="hljs-keyword">if</span>(<span class="hljs-built_in">fabs</span>(p1[i][j]<span class="hljs-number">-1.0</span>)&lt;eps) <span class="hljs-keyword">continue</span>;<br>				dp[i][j]=(p2[i][j]*dp[i][j+<span class="hljs-number">1</span>]+p3[i][j]*dp[i+<span class="hljs-number">1</span>][j]+<span class="hljs-number">2.0</span>)/(<span class="hljs-number">1.0</span>-p1[i][j]);<br>			&#125;<br>		&#125;<br>		<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%.3lf\n&quot;</span>,dp[<span class="hljs-number">1</span>][<span class="hljs-number">1</span>]);<br>	&#125;<br>	<br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<span class="hljs-comment">// http://acm.hdu.edu.cn/showproblem.php?pid=3853</span><br></code></pre></div></td></tr></table></figure>
+
+</details>
+
+<h3 id="P4550-收集邮票"><a href="#P4550-收集邮票" class="headerlink" title="P4550 收集邮票"></a><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P4550">P4550 收集邮票</a></h3><p>题意：</p>
+<p>类似于优惠券那题，但难度有提高</p>
+<p>有N中邮票，每次买到一种邮票的概率相等，为$\frac{1}{N}$，但是购买第$k$张邮票需要支付$k$元钱，问集齐所有N种邮票所需要花费的钱数的期望</p>
+<p>题解：</p>
+<p>如果是优惠券那题的题意，就是买一张邮票恒为1块钱，但现在变成了只要多买一张邮票，钱数就要+1，怎么办呢？不妨把需要买的张数和花钱数分开来考虑，先考虑怎么计算需要买的张数的期望，很简单，因为这就是优惠券那题$f[i]=f[i+1]+\frac{n}{n-i}$</p>
+<p>现在来考虑钱数，由于买当前邮票所花的钱数还跟买当前邮票之前已经买了多少邮票（买的邮票张数）有关，因此转移应该为：</p>
+<script type="math/tex; mode=display">
+F[i]=\frac{i}{n}(F[i]+f[i]+1)+\frac{n-i}{n}(F[i+1]+f[i+1]+1)</script><p>因而化简得到：</p>
+<script type="math/tex; mode=display">
+F[i]=F[i+1]+f[i+1]+\frac{i}{n-i}f[i]+\frac{n}{n-i}</script><details>
+    <summary>code</summary>
+
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-type">int</span> n;<br>db f[maxn],dp[maxn];<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>,&amp;n);<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=n<span class="hljs-number">-1</span>;i&gt;=<span class="hljs-number">0</span>;i--)&#123;<br>		f[i]=f[i+<span class="hljs-number">1</span>]+<span class="hljs-number">1.0</span>*n/(n-i);<br>		dp[i]=<span class="hljs-number">1.0</span>*i/(n-i)*f[i]+dp[i+<span class="hljs-number">1</span>]+f[i+<span class="hljs-number">1</span>]+<span class="hljs-number">1.0</span>*n/(n-i);<br>	&#125;<br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%.2lf\n&quot;</span>,dp[<span class="hljs-number">0</span>]);<br><br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<span class="hljs-comment">// https://www.luogu.com.cn/problem/P4550</span><br></code></pre></div></td></tr></table></figure>
+
+</details>
+
+<h3 id="ZOJ-3551-Bloodsucker"><a href="#ZOJ-3551-Bloodsucker" class="headerlink" title="ZOJ 3551 Bloodsucker"></a><a target="_blank" rel="noopener" href="https://zoj.pintia.cn/problem-sets/91827364500/problems/91827369029">ZOJ 3551 Bloodsucker</a></h3><p>题意：</p>
+<p>村中有$1$个吸血鬼和$n-1$个村民，每天从这个$n$个里面随机选出两个，如果他俩是同类则无事发生，否则村民有$p$的概率会变成吸血鬼，问最后使得所有$n$个人都变为吸血鬼的天数的期望</p>
+<p>题解：</p>
+<p>经典的概率DP题，应该可以推公式，考虑定义状态$dp[i]$为现在有$i$个吸血鬼，把剩余人都变为吸血鬼的期望天数，则下一波选出的两个人为不同类的概率为：</p>
+<script type="math/tex; mode=display">
+\frac{C_i^1C_{n-i}^1}{C_n^2}</script><p>因此转移方程为：</p>
+<script type="math/tex; mode=display">
+dp[i]=\frac{C_i^1C_{n-i}^1}{C_n^2}\cdot p\cdot(dp[i+1]+1)+(1-\frac{C_i^1C_{n-i}^1}{C_n^2}\cdot p)(dp[i]+1)</script><p>令</p>
+<script type="math/tex; mode=display">
+P=\frac{C_i^1C_{n-i}^1}{C_n^2}\cdot p</script><p>化简得到：</p>
+<script type="math/tex; mode=display">
+dp[i]=dp[i+1]+\frac{1}{P}</script><details>
+    <summary>code</summary>
+
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-type">int</span> _,n;<br>db dp[maxn],p;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>,&amp;_);_;_--)&#123;<br>		<span class="hljs-built_in">memset</span>(dp,<span class="hljs-number">0</span>,<span class="hljs-built_in">sizeof</span>(dp));<br>		<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%lf&quot;</span>,&amp;n,&amp;p);<br>		<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=n<span class="hljs-number">-1</span>;i&gt;=<span class="hljs-number">1</span>;i--)&#123;<br>			db P=<span class="hljs-number">2.0</span>*i*(n-i)/(n<span class="hljs-number">-1</span>)/n*p;<br>			dp[i]=(P*dp[i+<span class="hljs-number">1</span>]+<span class="hljs-number">1.0</span>)/P;<br>		&#125;<br>		<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%.3lf\n&quot;</span>,dp[<span class="hljs-number">1</span>]);<br>	&#125;<br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<span class="hljs-comment">// https://zoj.pintia.cn/problem-sets/91827364500/problems/91827369029</span><br></code></pre></div></td></tr></table></figure>
+
+</details>
+
+<h3 id="HDU-4035-Maze（循环型概率DP）"><a href="#HDU-4035-Maze（循环型概率DP）" class="headerlink" title="HDU 4035 Maze（循环型概率DP）"></a><a target="_blank" rel="noopener" href="http://acm.hdu.edu.cn/showproblem.php?pid=4035">HDU 4035 Maze</a>（循环型概率DP）</h3><p>题意：</p>
+<p>小明被困在了一棵<strong>树</strong>中，初始时位于$1$号节点，每次随机选取与该节点相连的另一个节点走过去，有一定概率$k_i$掉入陷阱直接GG，有一定概率$e_i$被小红救走，求小明被救走之前所经过的边数的期望</p>
+<p>题解：</p>
+<p>首先我们可以根据题意定义出一个状态：$dp[i]$表示当前处在$i$号节点被救走所需要经过的边数的期望，则转移方程如下：</p>
+<p>对于叶子节点：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+dp[i]&=k_i\cdot dp[1]+e_i\cdot0+(1-k_i-e_i)(dp[fa[i]]+1)\\
+&=k_i\cdot dp[1]+(1-k_i-e_i)dp[fa[i]]+(1-k_i-e_i)
+\end{aligned}</script><p>对于非叶子节点：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+dp[i]&=k_i\cdot dp[1]+e_i\cdot0+\frac{1-k_i-e_i}{m}\left(dp[fa[i]]+1+\sum{\left(dp[son[i]]+1\right)}\right)\\
+&=k_i\cdot dp[1]+\frac{1-k_i-e_i}{m}dp[fa[i]]+\frac{1-k_i-e_i}{m}\sum{(dp[son[i]])}+(1-k_i-e_i)
+\end{aligned}</script><p>其中，$m$为当前节点的度数</p>
+<p>可以发现，一个状态不仅和他之后的状态有关，还和他之前的状态有关，那么这个问题就无法用DP解决了（因为DP的前提是无后效性），因此，到这一步还没完，还需要经过一系列的数学处理才能搞出一个无后效性的递推式，对于一个节点$i$，他的递推式可以写成 $dp[i]=A_i\cdot dp[1]+B_i\cdot dp[fa[i]]+C_i$    $(*)$</p>
+<p>现在考虑将$dp[son[i]]转换一下$，设$i$的儿子点为$j$，则有：</p>
+<script type="math/tex; mode=display">
+dp[son[i]]=dp[j]
+=A_j\cdot dp[1]+B_j\cdot dp[i]+C_j</script><p>代入到<strong>非叶子节点</strong>式子中，并化简，与$(*)$式作比较，得到三个系数如下：</p>
+<script type="math/tex; mode=display">
+A_i=\frac{k_i+\frac{1-k_i-e_i}{m}\cdot\sum{A_j}}{1-\frac{1-k_i-e_i}{m}\cdot \sum{B_j}}\\
+B_i=\frac{\frac{1-k_i-e_i}{m}}{1-\frac{1-k_i-e_i}{m}\cdot \sum{B_j}}\\
+C_i=\frac{(1-k_i-e_i)+\frac{1-k_i-e_i}{m}\cdot\sum{C_j}}{1-\frac{1-k_i-e_i}{m}\cdot \sum{B_j}}\\</script><p>而对于叶子节点，有：</p>
+<script type="math/tex; mode=display">
+A_i=k_i\\
+B_i=1-k_i-e_i\\
+C_i=1-k_i-e_i</script><p>可以发现，叶子节点的三个系数是可以直接得到的，那么我们可以从叶子节点出发，最终求得$A_1,C_1$，则答案为 $\frac{C_1}{1-A_1}$，显然当分母为$0$时无解</p>
+<details>
+    <summary>code</summary>
+
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-type">int</span> _,n;<br>vector&lt;<span class="hljs-type">int</span> &gt; E[maxn];<br>db k[maxn],e[maxn];<br>db a[maxn],b[maxn],c[maxn];<br><br><span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">dfs</span><span class="hljs-params">(<span class="hljs-type">int</span> u,<span class="hljs-type">int</span> fa)</span></span>&#123;<br>	a[u]=k[u];<br>	b[u]=(<span class="hljs-number">1</span>-k[u]-e[u])/E[u].<span class="hljs-built_in">size</span>();<br>	c[u]=<span class="hljs-number">1</span>-k[u]-e[u];<br>	db tp=<span class="hljs-number">0</span>;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;(<span class="hljs-type">int</span>)E[u].<span class="hljs-built_in">size</span>();i++)&#123;<br>		<span class="hljs-type">int</span> v=E[u][i];<br>		<span class="hljs-keyword">if</span>(v!=fa)&#123;<br>			<span class="hljs-keyword">if</span>(!<span class="hljs-built_in">dfs</span>(v,u)) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>			a[u]+=(<span class="hljs-number">1</span>-k[u]-e[u])/E[u].<span class="hljs-built_in">size</span>()*a[v];<br>			c[u]+=(<span class="hljs-number">1</span>-k[u]-e[u])/E[u].<span class="hljs-built_in">size</span>()*c[v];<br>			tp+=(<span class="hljs-number">1</span>-k[u]-e[u])/E[u].<span class="hljs-built_in">size</span>()*b[v];<br>		&#125;<br>	&#125;<br>	<span class="hljs-keyword">if</span>(<span class="hljs-built_in">fabs</span>(<span class="hljs-number">1</span>-tp)&lt;eps) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>	a[u]/=<span class="hljs-number">1</span>-tp;<br>	b[u]/=<span class="hljs-number">1</span>-tp;<br>	c[u]/=<span class="hljs-number">1</span>-tp;<br>	<span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	<span class="hljs-type">int</span> Ca=<span class="hljs-number">0</span>;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>,&amp;_);_;_--)&#123;<br>		<span class="hljs-built_in">rep</span>(i,<span class="hljs-number">1</span>,n) E[i].<span class="hljs-built_in">clear</span>();<br>		<span class="hljs-built_in">memset</span>(a,<span class="hljs-number">0</span>,<span class="hljs-built_in">sizeof</span>(a));<br>		<span class="hljs-built_in">memset</span>(b,<span class="hljs-number">0</span>,<span class="hljs-built_in">sizeof</span>(b));<br>		<span class="hljs-built_in">memset</span>(c,<span class="hljs-number">0</span>,<span class="hljs-built_in">sizeof</span>(c));<br>		<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>,&amp;n);<br>		<span class="hljs-built_in">rep</span>(i,<span class="hljs-number">1</span>,n<span class="hljs-number">-1</span>)&#123;<br>			<span class="hljs-type">int</span> x,y;<br>			<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>,&amp;x,&amp;y);<br>			E[x].<span class="hljs-built_in">pb</span>(y),E[y].<span class="hljs-built_in">pb</span>(x);<br>		&#125;<br>		<span class="hljs-built_in">rep</span>(i,<span class="hljs-number">1</span>,n)&#123;<br>			<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%lf%lf&quot;</span>,&amp;k[i],&amp;e[i]);<br>			k[i]/=<span class="hljs-number">100</span>,e[i]/=<span class="hljs-number">100</span>;<br>		&#125;<br>		<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Case %d: &quot;</span>,++Ca);<br>		<span class="hljs-keyword">if</span>(<span class="hljs-built_in">dfs</span>(<span class="hljs-number">1</span>,<span class="hljs-number">-1</span>)&amp;&amp;<span class="hljs-built_in">fabs</span>(<span class="hljs-number">1</span>-a[<span class="hljs-number">1</span>])&gt;eps) <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%.12lf\n&quot;</span>,c[<span class="hljs-number">1</span>]/(<span class="hljs-number">1</span>-a[<span class="hljs-number">1</span>]));<br>		<span class="hljs-keyword">else</span> <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;impossible\n&quot;</span>);<br>	&#125;<br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<span class="hljs-comment">// http://acm.hdu.edu.cn/showproblem.php?pid=4035</span><br></code></pre></div></td></tr></table></figure>
+
+</details>
+
+<h3 id="ZOJ3329-One-Person-Game（循环型概率DP）"><a href="#ZOJ3329-One-Person-Game（循环型概率DP）" class="headerlink" title="ZOJ3329 One Person Game（循环型概率DP）"></a><a target="_blank" rel="noopener" href="https://zoj.pintia.cn/problem-sets/91827364500/problems/91827368253">ZOJ3329 One Person Game</a>（循环型概率DP）</h3><p>题意：</p>
+<p>有三枚骰子，面数分别为$k_1,k_2,k_3$，规定一个值$n$，初始答案为$Ans=0$，每次掷骰子三枚骰子同时掷，掷完后将骰子面朝上的权值和加入到答案中，此时如果出现了三枚骰子的点数分别为$a,b,c$，则回到$Ans=0$重新开始，如果$Ans&gt;n$了就结束，问达到$Ans&gt;n$所需掷骰子的次数的期望</p>
+<p>题解：</p>
+<p>其实是类似于上面那题，也属于转移方程有后效性需要数学推导的题型，这里定义状态为：$dp[i]$为$Ans=i$时完成任务所需要掷骰子的次数的期望，则转移方程如下：</p>
+<script type="math/tex; mode=display">
+dp[i]=p[0]dp[0]+\sum_{k=3}^{k_1+k_2+k_3}(p[k]dp[i+k])+1</script><p>其中，$p[0]$代表掷到三个骰子分别为$a,b,c$的概率，即$\frac{1}{k<em>1k_2k_3}$，$p[k]$代表掷到骰子之和为$k$的概率，这些可以通过$O(k_1k_2k_3)$的预处理得到，下面考虑转化这个式子，令$dp[i]=A_idp[0]+B_i$，则$dp[i+k]=A</em>{i+k}dp[0]+B_{i+k}$，代入上式，得到</p>
+<script type="math/tex; mode=display">
+dp[i]=p[0]dp[0]+\sum(p[k]\left(A_{i+k}dp[0]+B_{i+k})\right)+1\\
+=(p[0]+\sum(p[k]A_{i+k}))dp[0]+\sum(p[k]B_{i+k})+1</script><p>于是得到：</p>
+<script type="math/tex; mode=display">
+A_i=p[0]+\sum(p[k]A_{i+k})\\
+B_i=\sum(p[k]B_{i+k})+1</script><p>最终答案为：$\frac{B_0}{1-A_0}$</p>
+<details>
+    <summary>code</summary>
+
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-type">int</span> _,n,k1,k2,k3,a,b,c;<br><span class="hljs-type">double</span> p[maxn],A[maxn],B[maxn];<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">dfs</span><span class="hljs-params">(<span class="hljs-type">int</span> i)</span></span>&#123;<br>	<span class="hljs-keyword">if</span>(A[i]) <span class="hljs-keyword">return</span>;<br>	<span class="hljs-keyword">if</span>(i&gt;n)&#123;<br>		A[i]=B[i]=<span class="hljs-number">0</span>;<br>		<span class="hljs-keyword">return</span>;<br>	&#125;<br>	A[i]=p[<span class="hljs-number">0</span>],B[i]=<span class="hljs-number">1</span>;<br>	<span class="hljs-built_in">rep</span>(k,<span class="hljs-number">3</span>,k1+k2+k3)&#123;<br>		<span class="hljs-built_in">dfs</span>(i+k);<br>		A[i]+=p[k]*A[i+k];<br>		B[i]+=p[k]*B[i+k];<br>	&#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>,&amp;_);_;_--)&#123;<br>		<span class="hljs-built_in">memset</span>(p,<span class="hljs-number">0</span>,<span class="hljs-built_in">sizeof</span>(p));<br>		<span class="hljs-built_in">memset</span>(A,<span class="hljs-number">0</span>,<span class="hljs-built_in">sizeof</span>(A));<br>		<span class="hljs-built_in">memset</span>(B,<span class="hljs-number">0</span>,<span class="hljs-built_in">sizeof</span>(B));<br>		<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d%d%d%d%d%d&quot;</span>,&amp;n,&amp;k1,&amp;k2,&amp;k3,&amp;a,&amp;b,&amp;c);<br>		p[<span class="hljs-number">0</span>]=<span class="hljs-number">1.0</span>/(k1*k2*k3);<br>		<span class="hljs-built_in">rep</span>(i,<span class="hljs-number">1</span>,k1)&#123;<br>			<span class="hljs-built_in">rep</span>(j,<span class="hljs-number">1</span>,k2)&#123;<br>				<span class="hljs-built_in">rep</span>(k,<span class="hljs-number">1</span>,k3)&#123;<br>					<span class="hljs-keyword">if</span>(i!=a||j!=b||k!=c)<br>						p[i+j+k]+=p[<span class="hljs-number">0</span>];<br>				&#125;<br>			&#125;<br>		&#125;<br>		<span class="hljs-built_in">dfs</span>(<span class="hljs-number">0</span>);<br>		<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%.16lf\n&quot;</span>,B[<span class="hljs-number">0</span>]/(<span class="hljs-number">1</span>-A[<span class="hljs-number">0</span>]));<br>	&#125;<br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<span class="hljs-comment">// https://zoj.pintia.cn/problem-sets/91827364500/problems/91827368253</span><br></code></pre></div></td></tr></table></figure>
+
+</details>
+
+<h3 id="CF148D-Bag-of-micde"><a href="#CF148D-Bag-of-micde" class="headerlink" title="CF148D Bag of micde"></a><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/CF148D">CF148D Bag of micde</a></h3><p>题意：</p>
+<p>袋子里有$w$只白鼠和$b$ 只黑鼠 ，$A$和$B$轮流从袋子里抓，谁先抓到白色谁就赢。$A$每次随机抓一只，$B$每次随机抓完一只之后会有另一只随机老鼠跑出来。如果两个人都没有抓到白色则$B$赢。$A$先抓，问$A$赢的概率。</p>
+<p>题解：</p>
+<p>状态$dp[i][j]$表示袋子里有$i$个白鼠和$j$黑鼠时$A$赢的概率，则分类讨论如下：</p>
+<ol>
+<li>A拿出白鼠，直接赢，概率：$\frac{i}{i+j}$</li>
+<li>A拿出黑鼠，B紧接着拿出白鼠，A赢概率为：0</li>
+<li><p>两个人都拿出黑鼠，跑出来一个白鼠，A赢概率：$\frac{j}{i+j}\cdot\frac{j-1}{i+j-1}\cdot\frac{i}{i+j-2}\cdot dp[i-1][j-2]$</p>
+</li>
+<li><p>两个人都拿出黑鼠，跑出来一个黑鼠，A赢概率：$\frac{j}{i+j}\cdot\frac{j-1}{i+j-1}\cdot\frac{j-2}{i+j-2}\cdot dp[i][j-3]$</p>
+</li>
+</ol>
+<p>初始化：$dp[i][0]=1,dp[i][1]=\frac{i}{i+1}$，则答案为：$dp[w][b]$</p>
+<details>
+    <summary>code</summary>
+
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-type">int</span> w,b;<br><span class="hljs-type">double</span> dp[<span class="hljs-number">1005</span>][<span class="hljs-number">1005</span>];<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>,&amp;w,&amp;b);<br>	<span class="hljs-built_in">rep</span>(i,<span class="hljs-number">1</span>,w)&#123;<br>		dp[i][<span class="hljs-number">0</span>]=<span class="hljs-number">1</span>;<br>		dp[i][<span class="hljs-number">1</span>]=i*<span class="hljs-number">1.0</span>/(i+<span class="hljs-number">1</span>);<br>	&#125;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=w;i++)&#123;<br>		<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j=<span class="hljs-number">2</span>;j&lt;=b;j++)&#123;<br>			dp[i][j]=i*<span class="hljs-number">1.0</span>/(i+j)+j*<span class="hljs-number">1.0</span>/(i+j)*(j<span class="hljs-number">-1</span>)/(i+j<span class="hljs-number">-1</span>)*i/(i+j<span class="hljs-number">-2</span>)*dp[i<span class="hljs-number">-1</span>][j<span class="hljs-number">-2</span>];<br>			<span class="hljs-keyword">if</span>(j&gt;<span class="hljs-number">2</span>) dp[i][j]+=(j*<span class="hljs-number">1.0</span>/(i+j)*(j<span class="hljs-number">-1</span>)/(i+j<span class="hljs-number">-1</span>)*(j<span class="hljs-number">-2</span>)/(i+j<span class="hljs-number">-2</span>)*dp[i][j<span class="hljs-number">-3</span>]);<br>		&#125;<br>	&#125;<br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%.9lf\n&quot;</span>,dp[w][b]);<br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+
+</details>
+
+<h3 id="POJ-3682-King-Arthur’s-Birthday-Celebration"><a href="#POJ-3682-King-Arthur’s-Birthday-Celebration" class="headerlink" title="POJ 3682 King Arthur’s Birthday Celebration"></a><a target="_blank" rel="noopener" href="http://poj.org/problem?id=3682">POJ 3682 <strong>King Arthur’s Birthday Celebration</strong></a></h3><p>题意：</p>
+<p>有一个富豪，他决定每天撒钱，并且抛硬币，第一天1块钱，第二天3块钱，第三天5块，直到他抛到硬币向上的数量为K。求天数期望和钱期望。</p>
+<p>题解：</p>
+<p>类似于<strong>邮票收集</strong>那题，天数太简单了，$f[i]=f[i+1]+\frac{1}{p}$，对于钱数，增长是每次+2的，我们维护的$f[i]$代表天数，则$2f[i]-1$就是第$i$天花的钱，下一天如果硬币朝上，则需要花$2(f[i+1]+1)-1$的钱数，即$2f[i+1]+1$，常规递推即可</p>
+<details>
+    <summary>code</summary>
+
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-type">int</span> k;<br>db p,f[maxn],F[maxn];<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	<span class="hljs-keyword">while</span>(~<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>,&amp;k)&amp;&amp;k)&#123;<br>		<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%lf&quot;</span>,&amp;p);<br>		<span class="hljs-built_in">memset</span>(f,<span class="hljs-number">0</span>,<span class="hljs-built_in">sizeof</span>(f));<br>		<span class="hljs-built_in">memset</span>(F,<span class="hljs-number">0</span>,<span class="hljs-built_in">sizeof</span>(F));<br>		<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=k<span class="hljs-number">-1</span>;i&gt;=<span class="hljs-number">0</span>;i--)&#123;<br>			f[i]=f[i+<span class="hljs-number">1</span>]+<span class="hljs-number">1</span>/p;<br>			F[i]=F[i+<span class="hljs-number">1</span>]+<span class="hljs-number">2</span>*f[i+<span class="hljs-number">1</span>]+(<span class="hljs-number">2</span>*(<span class="hljs-number">1</span>-p)*f[i]+<span class="hljs-number">1.0</span>)/p;<br>		&#125;<br>		<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%.3lf %.3lf\n&quot;</span>,f[<span class="hljs-number">0</span>],F[<span class="hljs-number">0</span>]);<br>	&#125;<br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+
+</details>
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">动态规划</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E6%A6%82%E7%8E%87DP/">概率DP</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/05/06/Typora%E9%85%8D%E7%BD%AEsmms%E5%9B%BE%E5%BA%8A/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Typora配置smms图床</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/05/02/%E5%8D%9A%E5%BC%88%E8%AE%BA%E5%85%A5%E9%97%A8-Nim%E6%B8%B8%E6%88%8F-SG%E5%87%BD%E6%95%B0/">
+                        <span class="hidden-mobile">博弈论入门:Nim游戏&SG函数</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://fastly.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"8WpS33YNRGD4IQNVQgVCmHQy-gzGzoHsz","appKey":"jed4H3219MxS5igBfmfTU81w","path":"window.location.pathname","placeholder":"write something here","avatar":"retro","meta":["nick","mail","link"],"requiredFields":["nick"],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":true},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://fastly.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://fastly.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://fastly.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://fastly.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://fastly.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://fastly.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://fastly.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://fastly.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- MathJax -->
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']]
+        },
+        loader: {
+          load: ['ui/lazy']
+        },
+        options: {
+          renderActions: {
+            findScript: [10, doc => {
+              document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = { node: text, delim: '', n: 0 };
+                math.end = { node: text, delim: '', n: 0 };
+                doc.math.push(math);
+              });
+            }, '', false],
+            insertedScript: [200, () => {
+              document.querySelectorAll('mjx-container').forEach(node => {
+                let target = node.parentNode;
+                if (target.nodeName.toLowerCase() === 'li') {
+                  target.parentNode.classList.add('has-jax');
+                }
+              });
+            }, '', false]
+          }
+        }
+      };
+    </script>
+
+    <script async src="https://fastly.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" ></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+</body>
+</html>

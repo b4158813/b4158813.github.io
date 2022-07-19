@@ -1,0 +1,694 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="琉璃糖">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Binary Indexed Tree">
+<meta property="og:type" content="article">
+<meta property="og:title" content="树状数组(BIT)专题">
+<meta property="og:url" content="http://example.com/2020/03/30/%E6%A0%91%E7%8A%B6%E6%95%B0%E7%BB%84-BIT-%E4%B8%93%E9%A2%98/index.html">
+<meta property="og:site_name" content="BlablaWu&#39;s Blog">
+<meta property="og:description" content="Binary Indexed Tree">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-03-30T13:29:16.000Z">
+<meta property="article:modified_time" content="2020-04-05T04:18:38.000Z">
+<meta property="article:author" content="琉璃糖">
+<meta property="article:tag" content="数据结构">
+<meta property="article:tag" content="树状数组">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  <title>树状数组(BIT)专题 - BlablaWu&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":50,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>BlablaWu の Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/index_bg.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="树状数组(BIT)专题">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2020-03-30 21:29" pubdate>
+        2020年3月30日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      7.9k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      66 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">树状数组(BIT)专题</h1>
+            
+            <div class="markdown-body">
+              <h2 id="Binary-Indexed-Tree"><a href="#Binary-Indexed-Tree" class="headerlink" title="Binary Indexed Tree"></a><center>Binary Indexed Tree</center></h2><span id="more"></span>
+<p>参考blog：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/xenny/p/9739600.html">树状数组详解</a></li>
+</ul>
+<p>写的真是太好啦！！！</p>
+<p>树状数组是一个比线段树常数小，码量小的数据结构，可在$O(logn)$时间内解决一写简单的<strong>单点/区间修改 和 单点/区间查询</strong>的问题</p>
+<p>树状数组里最核心的操作：<code>lowbit</code>操作，作用是求出一个数最低位的1，即从右往左数第一个1所对应的二进制数，也即<code>2^k</code>其中k为从右往左数碰到第一个1之前的连续0的个数，那么它可以用一下操作实现</p>
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-title">lowbit</span><span class="hljs-params">(<span class="hljs-type">int</span> x)</span></span>&#123;<br>    <span class="hljs-keyword">return</span> x&amp;-x;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+<h3 id="单点更新-单点查询"><a href="#单点更新-单点查询" class="headerlink" title="单点更新+单点查询"></a>单点更新+单点查询</h3><p><del>啊、这。。。</del>传统数组不就行了嘛</p>
+<h3 id="单点更新-区间查询"><a href="#单点更新-区间查询" class="headerlink" title="单点更新+区间查询"></a>单点更新+区间查询</h3><p><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P3374">【模板】树状数组1</a></p>
+<p>这是最简单的树状数组应用，构建树状数组的方法就是：输入的时候同时<strong>利用原始数组的值完成单点更新</strong></p>
+<details>
+<summary>code</summary>
+
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">int</span> <span class="hljs-title">getsum</span><span class="hljs-params">(<span class="hljs-type">int</span> i)</span></span>&#123;<span class="hljs-comment">//求1~i区间的和</span><br>    <span class="hljs-type">int</span> res=<span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">while</span>(i&gt;<span class="hljs-number">0</span>) res+=c[i],i-=<span class="hljs-built_in">lowbit</span>(i);<br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">update</span><span class="hljs-params">(<span class="hljs-type">int</span> i,<span class="hljs-type">int</span> k)</span></span>&#123;<span class="hljs-comment">//在原数组i位置加上k</span><br>    <span class="hljs-keyword">while</span>(i&lt;=n) c[i]+=k,i+=<span class="hljs-built_in">lowbit</span>(i);<br>&#125;<br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++)<br>        <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>,&amp;a[i]),<span class="hljs-built_in">update</span>(i,a[i]);<span class="hljs-comment">//输入时同时更新</span><br>&#125;<br></code></pre></div></td></tr></table></figure>
+
+</details>
+
+<p>除此之外，单点更新+区间查询的<strong>异或和</strong>、<strong>乘积</strong>也是可以维护的，这里就不贴代码了（注意乘积的区间查询和单点更新需要把<strong>除法转换成乘法逆元</strong>）</p>
+<p><a target="_blank" rel="noopener" href="https://ac.nowcoder.com/acm/problem/17507">【模板题】单点更新+区间乘积查询</a></p>
+<h3 id="区间更新-单点查询"><a href="#区间更新-单点查询" class="headerlink" title="区间更新+单点查询"></a>区间更新+单点查询</h3><p><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P3368">【模板】树状数组2</a></p>
+<p>这是一个简单的变式，只需要利用原数组的<strong>差分</strong>构建树状数组，这样一来对于区间<code>[l,r]</code>的更新就只需要<code>update(l,k),update(r+1,-k)</code>就行了（类似于前缀和差分），而单点查询就是求一次和啦~</p>
+<p>只需要把上面的输入时更新换为：<code>update(i,a[i]-a[i-1])</code></p>
+<p>更新时，区间<code>[l,r]+k</code>：<code>update(l,k),update(r+1,-k)</code></p>
+<p>查询<code>x</code>点的值：<code>getsum(x)</code></p>
+<h3 id="区间更新-区间查询"><a href="#区间更新-区间查询" class="headerlink" title="区间更新+区间查询"></a>区间更新+区间查询</h3><p>可以很快地过了这道弱化的线段树模板题：<a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P3372">【模板】线段树1</a></p>
+<p>这是进阶版的变式，根据blog里面的推算公式，我们需要维护两个由差分构成的树状数组，满足下面的关系式，最后的答案就是<code>x*getsum1(x)-getsum2(x)</code></p>
+<script type="math/tex; mode=display">
+\sum_{i=1}^nA[i]=n*\sum_{i=1}^nD[i]-\sum_{i=1}^n\left(D[i]*(i-1)\right)</script><details>
+<summary>code</summary>
+
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">update</span><span class="hljs-params">(<span class="hljs-type">int</span> i,<span class="hljs-type">int</span> k)</span></span>&#123;<span class="hljs-comment">//单点更新</span><br>    <span class="hljs-type">int</span> x=i;<br>    <span class="hljs-comment">//这里需要维护两个树状数组</span><br>    <span class="hljs-keyword">while</span>(i&lt;=n) c1[i]+=k,c2[i]+=k*(x<span class="hljs-number">-1</span>),i+=<span class="hljs-built_in">lowbit</span>(i);<br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">inline</span> ll <span class="hljs-title">getsum</span><span class="hljs-params">(<span class="hljs-type">int</span> i)</span></span>&#123;<span class="hljs-comment">//前缀和</span><br>    ll res=<span class="hljs-number">0</span>;<br>    <span class="hljs-type">int</span> x=i;<br>    <span class="hljs-keyword">while</span>(i&gt;<span class="hljs-number">0</span>) res+=x*c1[i]-c2[i],i-=<span class="hljs-built_in">lowbit</span>(i);<br>    <span class="hljs-keyword">return</span> res;<br>&#125;<br><br><span class="hljs-built_in">update</span>(l,k),<span class="hljs-built_in">update</span>(r+<span class="hljs-number">1</span>,-k);<span class="hljs-comment">//区间更新</span><br><span class="hljs-built_in">getsum</span>(r)-<span class="hljs-built_in">getsum</span>(l<span class="hljs-number">-1</span>);<span class="hljs-comment">//区间查询</span><br></code></pre></div></td></tr></table></figure>
+
+</details>
+
+<h3 id="括号法维护种类数"><a href="#括号法维护种类数" class="headerlink" title="括号法维护种类数"></a>括号法维护种类数</h3><p>例题：<a target="_blank" rel="noopener" href="https://vijos.org/p/1448">校门外的树</a></p>
+<p>题意：</p>
+<p>区间更新：使<code>[l,r]</code>区间内增加一种新品种</p>
+<p>区间查询：询问<code>[l,r]</code>区间内种类总数</p>
+<p>所谓括号法，就是使用一个BIT维护区间更新时的左端点（称为左括号）个数，另一个BIT维护右端点（称为右括号）个数，这样一来上面的区间更新就变为单点更新（更新左右括号），区间查询时就是<strong>右端点左侧（包括右端点）的左括号总数-左端点左侧（不包括左端点）的右括号总数</strong>（因为只要左端点左侧的左括号没有右括号匹配，就说明匹配他的右括号在左端点右边，那么种类数+1）</p>
+<details>
+<summary>code</summary>
+
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-built_in">update</span>(c1,l,<span class="hljs-number">1</span>),<span class="hljs-built_in">update</span>(c2,r,<span class="hljs-number">1</span>);<span class="hljs-comment">//c1维护左括号，c2维护右括号</span><br>ans=<span class="hljs-built_in">getsum</span>(c1,r)-<span class="hljs-built_in">getsum</span>(c2,l<span class="hljs-number">-1</span>);<span class="hljs-comment">//得到[l,r]区间种类总数</span><br></code></pre></div></td></tr></table></figure>
+
+</details>
+
+<h3 id="树状数组求逆序对"><a href="#树状数组求逆序对" class="headerlink" title="树状数组求逆序对"></a>树状数组求逆序对</h3><p>模板题：<a target="_blank" rel="noopener" href="https://vjudge.net/problem/POJ-2299">POJ 2299 Ultra-QuickSort</a></p>
+<p>首先是离散化操作三部曲：排序、去重、二分查找更新原数组</p>
+<p>离散化之后，我们就得到了<strong>每个数的相对大小位置</strong>，从1~n遍历整个数组，利用一个<strong>树状数组存储每个数出现的次数</strong>，每次利用<code>i-getsum(a[i])</code>更新答案（其中<code>getsum(a[i])</code>是从<code>1</code>到<code>a[i]</code>中的数出现的次数，即小于等于<code>a[i]</code>的数出现的次数，<code>i</code>是当前取出的数的个数，那么<code>i-getsum(a[i])</code>就是到目前为止大于<code>a[i]</code>的数出现的次数，当然这里的<code>a[i]</code>是已经离散化过后的，只保留了相对大小）</p>
+<details>
+<summary>code</summary>
+
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;cstdio&gt;</span> </span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;cstring&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;vector&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;algorithm&gt;</span> </span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><span class="hljs-keyword">typedef</span> <span class="hljs-type">long</span> <span class="hljs-type">long</span> ll;<br><span class="hljs-type">int</span> n;<br>ll a[<span class="hljs-number">500005</span>],c[<span class="hljs-number">500005</span>];<br><span class="hljs-function"><span class="hljs-keyword">inline</span> ll <span class="hljs-title">lowbit</span><span class="hljs-params">(ll x)</span></span>&#123;<span class="hljs-keyword">return</span> x&amp;-x;&#125;<br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">update</span><span class="hljs-params">(<span class="hljs-type">int</span> i,ll k)</span></span>&#123;<br>	<span class="hljs-keyword">while</span>(i&lt;=n) c[i]+=k,i+=<span class="hljs-built_in">lowbit</span>(i);<br>&#125; <br><span class="hljs-function"><span class="hljs-keyword">inline</span> ll <span class="hljs-title">getsum</span><span class="hljs-params">(<span class="hljs-type">int</span> i)</span></span>&#123;<br>	ll res=<span class="hljs-number">0</span>;<br>	<span class="hljs-keyword">while</span>(i&gt;<span class="hljs-number">0</span>) res+=c[i],i-=<span class="hljs-built_in">lowbit</span>(i);<br>	<span class="hljs-keyword">return</span> res;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	<span class="hljs-keyword">while</span>(~<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>,&amp;n))&#123;<br>		<span class="hljs-built_in">memset</span>(c,<span class="hljs-number">0</span>,<span class="hljs-built_in">sizeof</span>(c));<br>		<span class="hljs-keyword">if</span>(n==<span class="hljs-number">0</span>) <span class="hljs-keyword">break</span>;<br>		ll ans=<span class="hljs-number">0</span>;<br>		vector&lt;ll&gt; vec;<br>		<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++)<br>            <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%lld&quot;</span>,&amp;a[i]),vec.<span class="hljs-built_in">push_back</span>(a[i]);<br>		<span class="hljs-built_in">sort</span>(vec.<span class="hljs-built_in">begin</span>(),vec.<span class="hljs-built_in">end</span>());<span class="hljs-comment">//离散化三部曲</span><br>		vec.<span class="hljs-built_in">erase</span>(<span class="hljs-built_in">unique</span>(vec.<span class="hljs-built_in">begin</span>(),vec.<span class="hljs-built_in">end</span>()),vec.<span class="hljs-built_in">end</span>());<br>		<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++)&#123;<br>			<span class="hljs-type">int</span> pos=<span class="hljs-built_in">lower_bound</span>(vec.<span class="hljs-built_in">begin</span>(),vec.<span class="hljs-built_in">end</span>(),a[i])-vec.<span class="hljs-built_in">begin</span>();<br>			<span class="hljs-built_in">update</span>(pos+<span class="hljs-number">1</span>,<span class="hljs-number">1</span>);<br>			ans+=i-<span class="hljs-built_in">getsum</span>(pos+<span class="hljs-number">1</span>);<span class="hljs-comment">//更新答案</span><br>		&#125;<br>		<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%lld\n&quot;</span>,ans);<br>	&#125;<br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+
+</details>
+
+<p><strong>练习题</strong>：</p>
+<p><a target="_blank" rel="noopener" href="https://vjudge.net/problem/POJ-3067">POJ 3067 Japan</a>（结构体排序+逆序对）</p>
+<details>
+<summary>code</summary>
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;cstring&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;cstdio&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;algorithm&gt;</span> </span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><span class="hljs-keyword">typedef</span> <span class="hljs-type">long</span> <span class="hljs-type">long</span> ll;<br><span class="hljs-type">int</span> n,m,k;<br>ll c[<span class="hljs-number">500005</span>];<br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">node</span>&#123;<br>	<span class="hljs-type">int</span> x,y;<br>&#125;a[<span class="hljs-number">500005</span>];<br><span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">cmp</span><span class="hljs-params">(node x1,node x2)</span></span>&#123;<br>	<span class="hljs-keyword">if</span>(x1.x==x2.x) <span class="hljs-keyword">return</span> x1.y&lt;x2.y;<br>	<span class="hljs-keyword">return</span> x1.x&lt;x2.x;<br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">update</span><span class="hljs-params">(<span class="hljs-type">int</span> i)</span></span>&#123;<br>	<span class="hljs-keyword">while</span>(i&lt;=m) c[i]++,i+=i&amp;-i;<br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">inline</span> ll <span class="hljs-title">getsum</span><span class="hljs-params">(<span class="hljs-type">int</span> i)</span></span>&#123;<br>	ll res=<span class="hljs-number">0</span>;<br>	<span class="hljs-keyword">while</span>(i&gt;<span class="hljs-number">0</span>) res+=c[i],i-=i&amp;-i;<br>	<span class="hljs-keyword">return</span> res;<br>&#125;<br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	<span class="hljs-type">int</span> t;<br>	<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>,&amp;t);<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> o=<span class="hljs-number">1</span>;o&lt;=t;o++)&#123;<br>		<span class="hljs-built_in">memset</span>(c,<span class="hljs-number">0</span>,<span class="hljs-built_in">sizeof</span>(c));<br>		<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d%d&quot;</span>,&amp;n,&amp;m,&amp;k);<br>		<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=k;i++)&#123;<br>			<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>,&amp;a[i].x,&amp;a[i].y);<br>		&#125;<br>		<span class="hljs-built_in">sort</span>(a+<span class="hljs-number">1</span>,a+<span class="hljs-number">1</span>+k,cmp);<br>		ll ans=<span class="hljs-number">0</span>;<br>		<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=k;i++)&#123;<br>			<span class="hljs-built_in">update</span>(a[i].y);<br>			ans+=i-<span class="hljs-built_in">getsum</span>(a[i].y);<br>		&#125;<br>		<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Test case %d: %lld\n&quot;</span>,o,ans);<br>	&#125;<br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+
+</details>
+
+<p><a target="_blank" rel="noopener" href="https://vjudge.net/problem/POJ-2352">POJ 2352 Stars</a>（裸逆序对）</p>
+<details>
+<summary>code</summary>
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;cstdio&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><span class="hljs-keyword">typedef</span> <span class="hljs-type">long</span> <span class="hljs-type">long</span> ll;<br><span class="hljs-type">int</span> n,maxh;<br><span class="hljs-type">int</span> a[<span class="hljs-number">20005</span>],c[<span class="hljs-number">50005</span>];<br>ll ans[<span class="hljs-number">20005</span>];<br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">int</span> <span class="hljs-title">lowbit</span><span class="hljs-params">(<span class="hljs-type">int</span> i)</span></span>&#123;<br>	<span class="hljs-keyword">return</span> i&amp;-i;<br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">update</span><span class="hljs-params">(<span class="hljs-type">int</span> i)</span></span>&#123;<br>	<span class="hljs-keyword">while</span>(i&lt;=maxh) c[i]++,i+=<span class="hljs-built_in">lowbit</span>(i);<br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">inline</span> ll <span class="hljs-title">getsum</span><span class="hljs-params">(<span class="hljs-type">int</span> i)</span></span>&#123;<br>	ll res=<span class="hljs-number">0</span>;<br>	<span class="hljs-keyword">while</span>(i) res+=c[i],i-=<span class="hljs-built_in">lowbit</span>(i);<br>	<span class="hljs-keyword">return</span> res;<br>&#125;<br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>,&amp;n);<br>	<span class="hljs-type">int</span> x;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++) <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>,&amp;a[i],&amp;x),a[i]++,maxh=<span class="hljs-built_in">max</span>(maxh,a[i]);<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++)&#123;<br>		ans[<span class="hljs-built_in">getsum</span>(a[i])]++;<br><span class="hljs-comment">//		printf(&quot;%d level:%d\n&quot;,a[i],getsum(a[i]));</span><br>		<span class="hljs-built_in">update</span>(a[i]);<br>	&#125;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;n;i++) <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%lld\n&quot;</span>,ans[i]);<br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+</details>
+
+
+<h3 id="树状数组维护区间最值"><a href="#树状数组维护区间最值" class="headerlink" title="树状数组维护区间最值"></a>树状数组维护区间最值</h3><p>参考blog：</p>
+<ul>
+<li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/u010598215/article/details/48206959?depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-2&amp;utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-2">树状数组求区间最大值</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/mypride/p/5002556.html">【进阶——树状数组】 区间求最值</a></p>
+</li>
+</ul>
+<p>最值<strong>不具有结合律</strong>，因此不能用类似于维护前缀和一样简单的方法，那么该怎么维护区间最值呢？</p>
+<p>首先，介绍一下<strong>单点更新</strong>（直接更改单点的值，同样维护的是单点最值，需配合查询最值使用），由BIT的特性可知，当要更改下标为<code>x</code>的数时，当遍历到<code>i</code>时至多只有<code>i-lowbit(i)+1 ~ i</code>这么多数受到影响，因此只需要修改这么多数即可</p>
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">update</span><span class="hljs-params">(<span class="hljs-type">int</span> x,<span class="hljs-type">int</span> y)</span></span>&#123;<span class="hljs-comment">//将下标为x的值更改为y</span><br>    a[x]=y;<span class="hljs-comment">//原数组也得改</span><br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=x;i&lt;=n;i+=<span class="hljs-built_in">lowbit</span>(i))&#123;<span class="hljs-comment">//枚举所有跟x有关的树状数组</span><br>        c[i]=y;<span class="hljs-comment">//</span><br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j=<span class="hljs-number">1</span>;j&lt;<span class="hljs-built_in">lowbit</span>(i);j&lt;&lt;=<span class="hljs-number">1</span>)&#123;<span class="hljs-comment">//枚举所有当前i值能影响到的所有树状数组</span><br>            c[i]=<span class="hljs-built_in">max</span>(c[i],c[i-j]);<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+<p>接下来是<strong>区间最值查询</strong>：由BIT特性可知，对于要查询的区间<code>[l,r]</code>，我们不能直接用<code>c[r]</code>作为答案，因为<code>c[r]</code>的左端点不一定就恰好是<code>l</code>，因此我们要分类讨论一下：</p>
+<ol>
+<li><code>c[r]</code>左端点<code>i&lt;=r</code>：我们取<code>a[r]</code>更新答案，再令<code>r-=1</code>重复这个讨论过程</li>
+<li><code>c[r]</code>左端点<code>i&gt;r</code>：可以直接用<code>c[r]</code>更新答案，然后用<code>[l,i]</code>区间最值重复这个讨论过程</li>
+</ol>
+<p>上述的<code>c[r]</code>左端点<code>i=r-lowbit(r)</code>，至此，可以得出以下代码：</p>
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">int</span> <span class="hljs-title">getmax</span><span class="hljs-params">(<span class="hljs-type">int</span> x,<span class="hljs-type">int</span> y)</span></span>&#123;<span class="hljs-comment">//求区间[x,y]最值</span><br>    <span class="hljs-type">int</span> ans=<span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">while</span>(x&lt;=y)&#123;<span class="hljs-comment">//直到x==y就退出</span><br>        ans=<span class="hljs-built_in">max</span>(ans,a[y]);<span class="hljs-comment">//拿a[y]更新</span><br>        <span class="hljs-keyword">for</span>(y--;y-<span class="hljs-built_in">lowbit</span>(y)&gt;=x;y-=<span class="hljs-built_in">lowbit</span>(y))&#123;<br>            ans=<span class="hljs-built_in">max</span>(ans,c[y]);<span class="hljs-comment">//拿c[y]更新</span><br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> ans;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+<p>模板题：<a target="_blank" rel="noopener" href="https://vjudge.net/problem/HDU-1754">HDU 1754 I Have It</a></p>
+<details>
+<summary>code</summary>
+
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><span class="hljs-type">int</span> n,m,a[<span class="hljs-number">200005</span>],c[<span class="hljs-number">200005</span>];<br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">int</span> <span class="hljs-title">lowbit</span><span class="hljs-params">(<span class="hljs-type">int</span> x)</span></span>&#123;<span class="hljs-keyword">return</span> x&amp;-x;&#125;<br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">update</span><span class="hljs-params">(<span class="hljs-type">int</span> x,<span class="hljs-type">int</span> y)</span></span>&#123;<br>	a[x]=y;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=x;i&lt;=n;i+=<span class="hljs-built_in">lowbit</span>(i))&#123;<br>		c[i]=y;<br>		<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j=<span class="hljs-number">1</span>;j&lt;<span class="hljs-built_in">lowbit</span>(i);j&lt;&lt;=<span class="hljs-number">1</span>)&#123;<br>			c[i]=<span class="hljs-built_in">max</span>(c[i],c[i-j]);<br>		&#125;<br>	&#125;<br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">int</span> <span class="hljs-title">getmax</span><span class="hljs-params">(<span class="hljs-type">int</span> x,<span class="hljs-type">int</span> y)</span></span>&#123;<br>	<span class="hljs-type">int</span> ans=<span class="hljs-number">0</span>;<br>	<span class="hljs-keyword">while</span>(x&lt;=y)&#123;<br>		ans=<span class="hljs-built_in">max</span>(ans,a[y]);<br>		<span class="hljs-keyword">for</span>(--y;y-<span class="hljs-built_in">lowbit</span>(y)&gt;=x;y-=<span class="hljs-built_in">lowbit</span>(y))&#123;<br>			ans=<span class="hljs-built_in">max</span>(ans,c[y]);<br>		&#125;<br>	&#125;<br>	<span class="hljs-keyword">return</span> ans;<br>&#125;<br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-keyword">while</span>(~<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>,&amp;n,&amp;m))&#123;<br>    	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++)&#123;<br>    		<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>,&amp;a[i]);<br>    		<span class="hljs-built_in">update</span>(i,a[i]);<br>		&#125;<br>		<span class="hljs-type">char</span> c[<span class="hljs-number">2</span>];<span class="hljs-type">int</span> x,y;<br>		<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=m;i++)&#123;<br>			<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%s%d%d&quot;</span>,c,&amp;x,&amp;y);<br>			<span class="hljs-keyword">if</span>(c[<span class="hljs-number">0</span>]==<span class="hljs-string">&#x27;U&#x27;</span>) <span class="hljs-built_in">update</span>(x,y);<br>			<span class="hljs-keyword">else</span> <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>,<span class="hljs-built_in">getmax</span>(x,y));<br>		&#125;<br>	&#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+
+</details>
+
+<hr>
+<h2 id="二维树状数组"><a href="#二维树状数组" class="headerlink" title="二维树状数组"></a><center>二维树状数组</center></h2><p>参考blog：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_35885746/article/details/89247993?depth_1-utm_source=distribute.pc_relevant.none-task&amp;utm_source=distribute.pc_relevant.none-task">二维树状数组</a></li>
+</ul>
+<p>类似于<strong>二维前缀和</strong>，我们可以维护一个二维树状数组来实现<strong>单点更新和区间查询</strong>的操作，同理，可以通过<strong>差分</strong>操作来实现<strong>区间更新和单点查询</strong>操作</p>
+<h3 id="单点更新-区间查询-1"><a href="#单点更新-区间查询-1" class="headerlink" title="单点更新+区间查询"></a>单点更新+区间查询</h3><p>将二维数组中<code>[x,y]</code>的值+k</p>
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">update</span><span class="hljs-params">(<span class="hljs-type">int</span> x,<span class="hljs-type">int</span> y,<span class="hljs-type">int</span> k)</span></span>&#123;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=x;i&lt;=n;i+=<span class="hljs-built_in">lowbit</span>(i))<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j=y;j&lt;=m;j+=<span class="hljs-built_in">lowbit</span>(j))<br>            c[i][j]+=k;<br>&#125;<br><span class="hljs-built_in">update</span>(x,y,k);<br></code></pre></div></td></tr></table></figure>
+<p>求二维数组从<code>[1,1]</code>到<code>[x,y]</code>的元素和</p>
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">int</span> <span class="hljs-title">getsum</span><span class="hljs-params">(<span class="hljs-type">int</span> x,<span class="hljs-type">int</span> y)</span></span>&#123;<br>    <span class="hljs-type">int</span> res=<span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=x;i&gt;<span class="hljs-number">0</span>;i-=<span class="hljs-built_in">lowbit</span>(i))<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j=y;j&gt;<span class="hljs-number">0</span>;j-=<span class="hljs-built_in">lowbit</span>(j))<br>            res+=c[i][j];<br>&#125;<br><span class="hljs-built_in">getsum</span>(x,y);<br></code></pre></div></td></tr></table></figure>
+<p>求二维数组从<code>[x1,y1]</code>到<code>[x2,y2]</code>的和</p>
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-built_in">getsum</span>(x2,y2)-<span class="hljs-built_in">getsum</span>(x2,y1<span class="hljs-number">-1</span>)-<span class="hljs-built_in">getsum</span>(x1<span class="hljs-number">-1</span>,y2)+<span class="hljs-built_in">getsum</span>(x1<span class="hljs-number">-1</span>,y1<span class="hljs-number">-1</span>)<br></code></pre></div></td></tr></table></figure>
+<h3 id="区间更新-单点查询-1"><a href="#区间更新-单点查询-1" class="headerlink" title="区间更新+单点查询"></a>区间更新+单点查询</h3><p>模板题：<a target="_blank" rel="noopener" href="https://vjudge.net/problem/POJ-2155">POJ 2155 Matrix</a></p>
+<p>维护差分数组后：</p>
+<p>将二维数组从<code>[x1,y1]</code>到<code>[x2,y2]</code>的值全部+k</p>
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-built_in">update</span>(x1,y1,k);<br><span class="hljs-built_in">update</span>(x2+<span class="hljs-number">1</span>,y1,-k);<span class="hljs-comment">//注意两负两正</span><br><span class="hljs-built_in">update</span>(x1,y2+<span class="hljs-number">1</span>,-k);<br><span class="hljs-built_in">update</span>(x2+<span class="hljs-number">1</span>,y2+<span class="hljs-number">1</span>,k)<br></code></pre></div></td></tr></table></figure>
+<p>求二维数组在<code>[x,y]</code>处的值</p>
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-built_in">getsum</span>(x,y)<br></code></pre></div></td></tr></table></figure>
+<h3 id="区间更新-区间查询-1"><a href="#区间更新-区间查询-1" class="headerlink" title="区间更新+区间查询"></a>区间更新+区间查询</h3><p>首先放一个很长的公式：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\sum_{i=1}^x\sum_{j=1}^y\sum_{h=1}^i\sum_{k=1}^jD[h][k]=&\sum_{i=1}^x\sum_{j=1}^yD[i][j](x+1-i)(y+1-j)\\
+=&(x+1)(y+1)\sum_{i=1}^x\sum_{j=1}^yD[i][j]\\
+&-(y+1)\sum_{i=1}^x\sum_{j=1}^yD[i][j]*i\\
+&-(x+1)\sum_{i=1}^x\sum_{j=1}^yD[i][j]*j\\
+&+\sum_{i=1}^x\sum_{j=1}^yD[i][j]*i*j
+\end{aligned}</script><p>于是我们需要维护四个树状数组：</p>
+<script type="math/tex; mode=display">
+D[i][j],D[i][j]*i,D[i][j]*j,D[i][j]*i*j</script><details>
+<summary>code</summary>
+
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">update</span><span class="hljs-params">(<span class="hljs-type">int</span> x,<span class="hljs-type">int</span> y,<span class="hljs-type">int</span> k)</span></span>&#123;<span class="hljs-comment">//单点更新</span><br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=x;i&lt;=n;i+=<span class="hljs-built_in">lowbit</span>(i))<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j=y;j&lt;=m;j+=<span class="hljs-built_in">lowbit</span>(j))&#123;<br>            c1[i][j]+=k;<br>            c2[i][j]+=k*x;<br>            c3[i][j]+=k*y;<br>            c4[i][j]+=k*x*y;<br>        &#125;<br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">int</span> <span class="hljs-title">getsum</span><span class="hljs-params">(<span class="hljs-type">int</span> x,<span class="hljs-type">int</span> y)</span></span>&#123;<span class="hljs-comment">//前缀和</span><br>    <span class="hljs-type">int</span> res=<span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=x;i;i-=<span class="hljs-built_in">lowbit</span>(i))<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j=y;j;j-=<span class="hljs-built_in">lowbit</span>(j))<br>            res+=(x+<span class="hljs-number">1</span>)*(y+<span class="hljs-number">1</span>)*c1[i][j]-(y+<span class="hljs-number">1</span>)*c2[i][j]-(x+<span class="hljs-number">1</span>)*c3[i][j]+c4[i][j];<br>    <span class="hljs-keyword">return</span> res;<br>&#125;<br><br><span class="hljs-comment">//区间更新</span><br><span class="hljs-built_in">update</span>(x1,y1,k);<br><span class="hljs-built_in">update</span>(x1,y2+<span class="hljs-number">1</span>,-k);<br><span class="hljs-built_in">update</span>(x2+<span class="hljs-number">1</span>,y1,-k);<br><span class="hljs-built_in">update</span>(x2+<span class="hljs-number">1</span>,y2+<span class="hljs-number">1</span>,k);<br><br><span class="hljs-comment">//区间查询</span><br><span class="hljs-built_in">getsum</span>(x2,y2)-<span class="hljs-built_in">getsum</span>(x1<span class="hljs-number">-1</span>,y2)-<span class="hljs-built_in">getsum</span>(x2,y1<span class="hljs-number">-1</span>)+<span class="hljs-built_in">getsum</span>(x1<span class="hljs-number">-1</span>,y1<span class="hljs-number">-1</span>);<br></code></pre></div></td></tr></table></figure>
+
+</details>
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E6%A0%91%E7%8A%B6%E6%95%B0%E7%BB%84/">树状数组</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/04/08/%E7%BA%BF%E6%AE%B5%E6%A0%91%E4%B8%93%E9%A2%98/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">线段树专题</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/03/29/%E4%BA%8C%E5%88%86%E5%9B%BE%E5%8C%B9%E9%85%8D/">
+                        <span class="hidden-mobile">二分图匹配</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://fastly.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"8WpS33YNRGD4IQNVQgVCmHQy-gzGzoHsz","appKey":"jed4H3219MxS5igBfmfTU81w","path":"window.location.pathname","placeholder":"write something here","avatar":"retro","meta":["nick","mail","link"],"requiredFields":["nick"],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":true},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://fastly.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://fastly.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://fastly.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://fastly.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://fastly.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://fastly.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://fastly.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://fastly.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- MathJax -->
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']]
+        },
+        loader: {
+          load: ['ui/lazy']
+        },
+        options: {
+          renderActions: {
+            findScript: [10, doc => {
+              document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = { node: text, delim: '', n: 0 };
+                math.end = { node: text, delim: '', n: 0 };
+                doc.math.push(math);
+              });
+            }, '', false],
+            insertedScript: [200, () => {
+              document.querySelectorAll('mjx-container').forEach(node => {
+                let target = node.parentNode;
+                if (target.nodeName.toLowerCase() === 'li') {
+                  target.parentNode.classList.add('has-jax');
+                }
+              });
+            }, '', false]
+          }
+        }
+      };
+    </script>
+
+    <script async src="https://fastly.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" ></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+</body>
+</html>

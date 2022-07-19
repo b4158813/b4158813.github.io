@@ -1,0 +1,629 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="琉璃糖">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="树剖专题（长链+重链）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="树链剖分浅析">
+<meta property="og:url" content="http://example.com/2020/05/01/%E6%A0%91%E9%93%BE%E5%89%96%E5%88%86%E6%B5%85%E6%9E%90/index.html">
+<meta property="og:site_name" content="BlablaWu&#39;s Blog">
+<meta property="og:description" content="树剖专题（长链+重链）">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2020/05/12/1Qzx2XeW9UmshA6.png">
+<meta property="article:published_time" content="2020-05-01T04:15:13.000Z">
+<meta property="article:modified_time" content="2020-05-12T15:35:36.000Z">
+<meta property="article:author" content="琉璃糖">
+<meta property="article:tag" content="数据结构">
+<meta property="article:tag" content="树链剖分">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://i.loli.net/2020/05/12/1Qzx2XeW9UmshA6.png">
+  
+  
+  <title>树链剖分浅析 - BlablaWu&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":50,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>BlablaWu の Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/index_bg.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="树链剖分浅析">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2020-05-01 12:15" pubdate>
+        2020年5月1日 中午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      4.1k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      35 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">树链剖分浅析</h1>
+            
+            <div class="markdown-body">
+              <h2 id="树剖专题（长链-重链）"><a href="#树剖专题（长链-重链）" class="headerlink" title="树剖专题（长链+重链）"></a><center>树剖专题（长链+重链）</center></h2><p><img src="https://i.loli.net/2020/05/12/1Qzx2XeW9UmshA6.png" srcset="/img/loading.gif" lazyload alt="1397737-20180510123640544-303874904" style="zoom:67%;" /><br><span id="more"></span></p>
+<p>题目链接：<a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P3384">P3384 轻重链剖分</a></p>
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p><strong>树链剖分</strong>：顾名思义，把一棵树剖分成为一条条的<strong>链</strong>（其实就是序列），保证每个点属于且仅属于一条链，然后再通过数据结构（如：树状数组、线段树 等）来维护每一条链的信息，进而维护这一整棵树的信息 </p>
+<p>那么如何进行剖分呢？ 最常见的剖分方式有两种：<strong>轻重链剖分</strong>和<strong>长链剖分</strong>，其中前者更为常用，后者在一些特殊情况下会更优，这里主要讲解前者（后者的处理方式类似）</p>
+<h2 id="一些黑话（术语）"><a href="#一些黑话（术语）" class="headerlink" title="一些黑话（术语）"></a>一些黑话（术语）</h2><ul>
+<li>重儿子：子树最大的儿子</li>
+<li>轻儿子：除了重儿子以外的儿子</li>
+<li>重边：父节点与重儿子组成的边</li>
+<li>轻边：重边以外的边</li>
+<li>重链：重边链接而成的链</li>
+<li>轻链：轻边链接而成的链</li>
+<li>链的顶部：一条链上深度最小的点</li>
+</ul>
+<h2 id="两次DFS的预处理（复杂度-O-n-）"><a href="#两次DFS的预处理（复杂度-O-n-）" class="headerlink" title="两次DFS的预处理（复杂度$O(n)$）"></a>两次DFS的预处理（复杂度$O(n)$）</h2><p>对于<strong>重链剖分</strong>，最核心的步骤就是需要预处理出一些东西，包括如下几项：</p>
+<ol>
+<li><p>每个节点的深度 <code>csdep[i]</code></p>
+</li>
+<li><p>每个节点的父节点 <code>csfa[i]</code></p>
+</li>
+<li><p>每个节点所在的子树大小 <code>cssize[i]</code>（PS：长链剖分则是 最大深度<code>csmx[i]</code>）</p>
+</li>
+<li><p>每个节点的<strong>重儿子</strong> <code>csson[i]</code></p>
+</li>
+<li><p>每条链的顶部 <code>cstop[i]</code></p>
+</li>
+</ol>
+<p>如果需要用数据结构维护节点对应的信息，则还需要处理：</p>
+<ol>
+<li>每个节点的DFS序 <code>csid[i]</code></li>
+<li>每个DFS序对应节点的需要维护的值 <code>wt[i]</code></li>
+</ol>
+<h3 id="第一次DFS（一次性处理完-1-2-3-4）"><a href="#第一次DFS（一次性处理完-1-2-3-4）" class="headerlink" title="第一次DFS（一次性处理完 1 2 3 4）"></a>第一次DFS（一次性处理完 1 2 3 4）</h3><p>这里直接给出代码（含注释）：</p>
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">dfs1</span><span class="hljs-params">(<span class="hljs-type">int</span> u,<span class="hljs-type">int</span> fath,<span class="hljs-type">int</span> depth)</span></span>&#123;<br>    csfa[u]=fath;<span class="hljs-comment">// u的父亲</span><br>    csdep[u]=depth;<span class="hljs-comment">// u的深度</span><br>    cssize[u]=<span class="hljs-number">1</span>;<span class="hljs-comment">//u子树的大小，初始为1</span><br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=head[u];~i;i=e[i].next)&#123;<br>        <span class="hljs-type">int</span> v=e[i].v;<br>        <span class="hljs-keyword">if</span>(v!=fath)&#123;<br>            <span class="hljs-built_in">dfs1</span>(v,u,depth+<span class="hljs-number">1</span>);<span class="hljs-comment">//dfs下去，深度+1</span><br>            cssize[u]+=cssize[v];<span class="hljs-comment">//此时v都处理完了，加到u的大小上去</span><br>            <span class="hljs-keyword">if</span>(cssize[v]&gt;cssize[csson[u]])<span class="hljs-comment">//判断v的大小能否更新重儿子</span><br>                csson[u]=v;<span class="hljs-comment">//能就更新重儿子</span><br>        &#125;<br>    &#125;<br>&#125;<br><br><span class="hljs-built_in">dfs1</span>(rt,<span class="hljs-number">-1</span>,<span class="hljs-number">1</span>);<br></code></pre></div></td></tr></table></figure>
+<p>如果是<strong>长链剖分</strong>，这里的<code>csize[i]</code>数组就需要换为<code>csmx[i]</code>数组，也就是<strong>重儿子</strong>的定义从 <strong>子树最大的儿子</strong> 变为 <strong>子树最大深度最深的儿子</strong>，所以对应的dfs1函数需要改为：</p>
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">dfs1</span><span class="hljs-params">(...)</span></span>&#123;<br>    csmx[u]=csdep[u];<span class="hljs-comment">//初始最大深度</span><br>    ...<br>   	csmx[u]=<span class="hljs-built_in">max</span>(csmx[u],csmx[v]);<span class="hljs-comment">//维护子树最大深度</span><br>    <span class="hljs-keyword">if</span>(csmx[v]&gt;csmx[csson[u]])<span class="hljs-comment">//重儿子的定义变了</span><br>        csson[u]=v;<br>    ...<br>&#125;<br></code></pre></div></td></tr></table></figure>
+<h3 id="第二次DFS（处理完剩下的）"><a href="#第二次DFS（处理完剩下的）" class="headerlink" title="第二次DFS（处理完剩下的）"></a>第二次DFS（处理完剩下的）</h3><p>第二次DFS有个关键的地方：</p>
+<ul>
+<li>需要按照先处理重儿子，再处理轻儿子的顺序</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">dfs2</span><span class="hljs-params">(<span class="hljs-type">int</span> u,<span class="hljs-type">int</span> topf)</span></span>&#123;<br>    csid[u]=++dfsx;<span class="hljs-comment">//u的dfs序</span><br>    wt[dfsx]=w[u];<span class="hljs-comment">// 每个dfs序对应节点的需要维护的值（权值、编号 等）</span><br>    cstop][u]=topf;<span class="hljs-comment">//u的顶部</span><br>    <span class="hljs-keyword">if</span>(!csson[u]) <span class="hljs-keyword">return</span>;<span class="hljs-comment">//如果到叶节点了，直接返回</span><br>    <span class="hljs-built_in">dfs2</span>(csson[u],topf);<span class="hljs-comment">//处理重儿子，它的顶部还是当前的顶部</span><br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=head[i];~i;i=e[i].next)&#123;<br>        <span class="hljs-type">int</span> v=e[i].v;<br>        <span class="hljs-keyword">if</span>(v!=csson[u]&amp;&amp;v!=csfa[u])<span class="hljs-comment">//处理轻儿子，即除去重儿子和父亲</span><br>            <span class="hljs-built_in">dfs</span>(v,v);<span class="hljs-comment">//轻儿子本身的顶部节点就是自己</span><br>    &#125;<br>&#125;<br><br><span class="hljs-built_in">dfs2</span>(rt,rt);<br></code></pre></div></td></tr></table></figure>
+<h2 id="一些常用操作"><a href="#一些常用操作" class="headerlink" title="一些常用操作"></a>一些常用操作</h2><p>至此，树链剖分已经完成了，在不使用数据结构的情况下，我们仍然可以做一些常用操作</p>
+<h3 id="求LCA（-O-logn-）"><a href="#求LCA（-O-logn-）" class="headerlink" title="求LCA（$O(logn)$）"></a>求LCA（$O(logn)$）</h3><p>可以看我的 <a target="_blank" rel="noopener" href="https://b4158813.gitee.io/blog/2020/04/28/最近公共祖先LCA/">BlablaWu的blog：最近公共祖先LCA</a></p>
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">int</span> <span class="hljs-title">LCA</span><span class="hljs-params">(<span class="hljs-type">int</span> x,<span class="hljs-type">int</span> y)</span></span>&#123;<br>    <span class="hljs-keyword">while</span>(cstop[x]!=cstop[y])&#123;<span class="hljs-comment">//只要两者处于不同链</span><br>        <span class="hljs-keyword">if</span>(csdep[cstop[x]]&lt;csdep[cstop[y]]) <span class="hljs-built_in">swap</span>(x,y);<br>        x=csfa[cstop[x]];<span class="hljs-comment">//不断把更深的点跳到其链顶端的父亲上</span><br>    &#125;<br>    <span class="hljs-keyword">return</span> csdep[x]&lt;csdep[y]?x:y;<span class="hljs-comment">//返回较浅的点</span><br>&#125;<br></code></pre></div></td></tr></table></figure>
+<h3 id="求树上两点距离（无边权or点权）"><a href="#求树上两点距离（无边权or点权）" class="headerlink" title="求树上两点距离（无边权or点权）"></a>求树上两点距离（无边权or点权）</h3><p>答案就是：$x节点深度+y节点深度-2*LCA(x,y)的深度$</p>
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">int</span> <span class="hljs-title">getroute</span><span class="hljs-params">(<span class="hljs-type">int</span> x,<span class="hljs-type">int</span> y)</span></span>&#123;<br>    <span class="hljs-keyword">return</span> csdep[x]+csdep[y]-csdep[<span class="hljs-built_in">LCA</span>(x,y)]&lt;&lt;<span class="hljs-number">1</span>;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+<h3 id="求树上两点距离（带边权or点权）"><a href="#求树上两点距离（带边权or点权）" class="headerlink" title="求树上两点距离（带边权or点权）"></a>求树上两点距离（带边权or点权）</h3><p>如果是求边权距离的，可以把边权转换为深度较深的节点的点权，并处理出每个节点到根节点的距离，这需要在<strong>dfs1</strong>过程中处理</p>
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">dfs1</span><span class="hljs-params">(...)</span></span>&#123;<br>    ...<br>   	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=head[u];~i;i=e[i].next)&#123;<br>        <span class="hljs-type">int</span> v=e[i].v;<br>        <span class="hljs-keyword">if</span>(v!=fath)&#123;<br>            w[v]=e[i].w;<span class="hljs-comment">//将边权转换为深度较深节点的点权</span><br>            <span class="hljs-comment">// 如果直接给点权了，那就只需要执行下一行</span><br>            wdep[v]+=w[v];<span class="hljs-comment">//处理出每个节点到根节点的距离</span><br>        &#125;<br>    &#125;<br>    ...<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">getroute</span><span class="hljs-params">(<span class="hljs-type">int</span> x,<span class="hljs-type">int</span> y)</span></span>&#123;<span class="hljs-comment">//求两点带权距离</span><br>    <span class="hljs-keyword">return</span> wdep[x]+wdep[y]-wdep[<span class="hljs-built_in">LCA</span>(x,y)]&lt;&lt;<span class="hljs-number">1</span>;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+<h3 id="求树上-k-级祖先"><a href="#求树上-k-级祖先" class="headerlink" title="求树上$k$级祖先"></a>求树上$k$级祖先</h3><p>模板题：<a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P5903">P5903 【模板】树上k级祖先</a></p>
+<p>每次询问给定一个$x$和$k$，求点$x$的$k$级祖先（强制在线）</p>
+<p>算法：可以类比<strong>树剖LCA</strong>的思想，但这里需要求的不是最近的祖先，而是指定的$k$级祖先，因此需要一点思考，对于一个点$x$来说，如果$csdep[x]-k&lt;csdep[cstop[x]]$，也就是说这个$k$级祖先在$x$当前所在链的顶端的上方，那么我们就可以让$x$跳到它所在链顶端的父节点上，然后继续比较，重复上述操作，直到这个$k$级祖先和$x$处在同一条链上，那么又因为同一条链上的节点DFS序是连续增减的，因此可以直接通过作差得出$k$级祖先的DFS序，然后输出这个DFS对应的节点编号就行了</p>
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">int</span> <span class="hljs-title">getkans</span><span class="hljs-params">(<span class="hljs-type">int</span> x,<span class="hljs-type">int</span> k)</span></span>&#123;<br>    <span class="hljs-type">int</span> tp=csdep[x]-k;<br>    <span class="hljs-keyword">while</span>(tp&lt;csdep[cstop[x]]) x=csfa[cstop[x]];<br>    tp=csdep[x]-tp;<br>    <span class="hljs-keyword">return</span> wt[csid[x]-tp];<br>&#125;<br></code></pre></div></td></tr></table></figure>
+<h2 id="数据结构维护链的信息"><a href="#数据结构维护链的信息" class="headerlink" title="数据结构维护链的信息"></a>数据结构维护链的信息</h2><p>如果有的问题是既有<strong>修改</strong>，又有<strong>查询</strong>的操作，那么就只好请出我们的<strong>数据结构</strong>大法了，通常情况下，<strong>线段树</strong>足以胜任这些要求，下面针对模板题的要求，来介绍一下具体操作方法</p>
+<ol>
+<li>将$x$及其子树的所有节点的点权$+k$</li>
+<li>求出$x$及其子树的所有节点的权值和</li>
+<li>将 $x\rightarrow y$ 路径上的所有节点权值$+k$</li>
+<li>求出 $x\rightarrow y$ 路径上所有点权和</li>
+</ol>
+<p>对于 1 2 操作，由于我们维护了每个节点的DFS序以及每个DFS序所对应节点的权值，因此对于一个节点$x$，它所在子树的所有节点的DFS序都比它大，而最大的那个节点的DFS序恰好是<code>csid[x]+cssize[x]-1</code>，中间的所有DFS序就对应了这个子树的所有节点，因此这个操作很简单，如下</p>
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">addtree</span><span class="hljs-params">(<span class="hljs-type">int</span> x,<span class="hljs-type">int</span> k)</span></span>&#123;<span class="hljs-comment">//1操作</span><br>    <span class="hljs-comment">//add是线段树的区间修改操作</span><br>    <span class="hljs-built_in">add</span>(<span class="hljs-number">1</span>,csid[x],csid[x]+cssize[x]<span class="hljs-number">-1</span>,k);<br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">int</span> <span class="hljs-title">gettree</span><span class="hljs-params">(<span class="hljs-type">int</span> x)</span></span>&#123;<span class="hljs-comment">//2操作</span><br>    <span class="hljs-comment">//getsum是线段树区间求和操作</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">getsum</span>(<span class="hljs-number">1</span>,csid[x],csid[x]+cssize[x]<span class="hljs-number">-1</span>);<br>&#125;<br></code></pre></div></td></tr></table></figure>
+<p>对于 3 4 操作，稍微复杂一些，我们可以类比<strong>树剖求LCA</strong>的思想，先不断跳动链顶较深的节点，期间同时对跳过的每一条链进行更新或求和操作，直到两点在同一条链上，最后再对这一条链上以这两点为端点的区间进行一次操作，具体实现如下</p>
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">addroute</span><span class="hljs-params">(<span class="hljs-type">int</span> x,<span class="hljs-type">int</span> y,<span class="hljs-type">int</span> k)</span></span>&#123;<span class="hljs-comment">//3操作</span><br>    <span class="hljs-keyword">while</span>(cstop[x]!=cstop[y])&#123;<br>        <span class="hljs-keyword">if</span>(csdep[cstop[x]]&lt;csdep[cstop[y]]) <span class="hljs-built_in">swap</span>(x,y);<br>        <span class="hljs-built_in">add</span>(<span class="hljs-number">1</span>,csid[cstop[x]],csid[x],k);<span class="hljs-comment">//更新跳过的这条链</span><br>        x=csfa[cstop[x]];<br>    &#125;<br>    <span class="hljs-keyword">if</span>(csdep[x]&gt;csdep[y]) <span class="hljs-built_in">swap</span>(x,y);<br>    <span class="hljs-built_in">add</span>(<span class="hljs-number">1</span>,csid[x],csid[y],k);<span class="hljs-comment">//更新x,y这条链上的xy区间值</span><br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">int</span> <span class="hljs-title">getroute</span><span class="hljs-params">(<span class="hljs-type">int</span> x,<span class="hljs-type">int</span> y)</span></span>&#123;<span class="hljs-comment">//4操作 原理同上</span><br>    <span class="hljs-type">int</span> res=<span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">while</span>(cstop[x]!=cstop[y])&#123;<br>        <span class="hljs-keyword">if</span>(csdep[cstop[x]]&lt;csdep[cstop[y]]) <span class="hljs-built_in">swap</span>(x,y);<br>        res+=<span class="hljs-built_in">getsum</span>(<span class="hljs-number">1</span>,csid[cstop[x]],csid[x]);<br>        x=csfa[cstop[x]];<br>    &#125;<br>    <span class="hljs-keyword">if</span>(csdep[x]&gt;csdep[y]) <span class="hljs-built_in">swap</span>(x,y);<br>    res+=<span class="hljs-built_in">getsum</span>(<span class="hljs-number">1</span>,csid[x],csid[y]);<br>    <span class="hljs-keyword">return</span> res;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+<hr>
+<p>至此，树链剖分的基本操作就介绍完毕了，剩下的就是一堆习题了，当然我还没做，等做完了再过来补吧 Orz</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E6%A0%91%E9%93%BE%E5%89%96%E5%88%86/">树链剖分</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/05/01/%E7%8F%82%E6%9C%B5%E8%8E%89%E6%A0%91ODT-%E6%B5%85%E6%9E%90/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">珂朵莉树ODT 浅析</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/04/30/%E7%A7%91%E6%99%AE%E7%9F%A5%E8%AF%86%EF%BC%9A%E5%86%B7%E5%8D%B4%E5%A1%94%E4%B8%BA%E4%BB%80%E4%B9%88%E6%98%AF%E6%9B%B2%E9%9D%A2%E7%9A%84%EF%BC%9F/">
+                        <span class="hidden-mobile">科普知识：冷却塔为什么是曲面的？</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://fastly.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"8WpS33YNRGD4IQNVQgVCmHQy-gzGzoHsz","appKey":"jed4H3219MxS5igBfmfTU81w","path":"window.location.pathname","placeholder":"write something here","avatar":"retro","meta":["nick","mail","link"],"requiredFields":["nick"],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":true},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://fastly.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://fastly.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://fastly.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://fastly.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://fastly.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://fastly.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://fastly.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://fastly.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- MathJax -->
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']]
+        },
+        loader: {
+          load: ['ui/lazy']
+        },
+        options: {
+          renderActions: {
+            findScript: [10, doc => {
+              document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = { node: text, delim: '', n: 0 };
+                math.end = { node: text, delim: '', n: 0 };
+                doc.math.push(math);
+              });
+            }, '', false],
+            insertedScript: [200, () => {
+              document.querySelectorAll('mjx-container').forEach(node => {
+                let target = node.parentNode;
+                if (target.nodeName.toLowerCase() === 'li') {
+                  target.parentNode.classList.add('has-jax');
+                }
+              });
+            }, '', false]
+          }
+        }
+      };
+    </script>
+
+    <script async src="https://fastly.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" ></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+</body>
+</html>

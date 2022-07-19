@@ -1,0 +1,622 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="琉璃糖">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="最近夏令营投递结束了，抽空来学习一波FFT，其中核心内容包括了DFT（离散傅里叶变换）和IDFT（离散傅里叶逆变换），但他们的复杂度都是$O(n^2)$的，我们通过引入单位根及其相关性质将DFT和IDFT优化为FFT和IFFT，实现$O(nlogn)$的复杂度求解多项式卷积系数及相关问题。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="FFT(快速傅里叶变换)及优化">
+<meta property="og:url" content="http://example.com/2020/06/30/FFT-%E5%BF%AB%E9%80%9F%E5%82%85%E9%87%8C%E5%8F%B6%E5%8F%98%E6%8D%A2-%E5%8F%8A%E4%BC%98%E5%8C%96/index.html">
+<meta property="og:site_name" content="BlablaWu&#39;s Blog">
+<meta property="og:description" content="最近夏令营投递结束了，抽空来学习一波FFT，其中核心内容包括了DFT（离散傅里叶变换）和IDFT（离散傅里叶逆变换），但他们的复杂度都是$O(n^2)$的，我们通过引入单位根及其相关性质将DFT和IDFT优化为FFT和IFFT，实现$O(nlogn)$的复杂度求解多项式卷积系数及相关问题。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/imag/23925.png">
+<meta property="og:image" content="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/imag/image-20200630204330210.png">
+<meta property="og:image" content="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/imag/1101696-20180212074250859-1560811086.png">
+<meta property="article:published_time" content="2020-06-30T11:50:25.000Z">
+<meta property="article:modified_time" content="2022-05-17T10:58:40.000Z">
+<meta property="article:author" content="琉璃糖">
+<meta property="article:tag" content="分治">
+<meta property="article:tag" content="FFT">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/imag/23925.png">
+  
+  
+  <title>FFT(快速傅里叶变换)及优化 - BlablaWu&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":50,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>BlablaWu の Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/index_bg.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="FFT(快速傅里叶变换)及优化">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2020-06-30 19:50" pubdate>
+        2020年6月30日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      4.1k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      35 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">FFT(快速傅里叶变换)及优化</h1>
+            
+            <div class="markdown-body">
+              <p>最近夏令营投递结束了，抽空来学习一波FFT，其中核心内容包括了DFT（离散傅里叶变换）和IDFT（离散傅里叶逆变换），但他们的复杂度都是$O(n^2)$的，我们通过引入单位根及其相关性质将DFT和IDFT优化为FFT和IFFT，实现$O(nlogn)$的复杂度求解多项式卷积系数及相关问题。<br><span id="more"></span></p>
+<p>参考blog：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/solution/P3803">洛谷P3803 【模板】多项式乘法（FFT）</a> 的所有题解</li>
+</ul>
+<h2 id="前置姿势"><a href="#前置姿势" class="headerlink" title="前置姿势"></a>前置姿势</h2><h3 id="欧拉公式"><a href="#欧拉公式" class="headerlink" title="欧拉公式"></a>欧拉公式</h3><script type="math/tex; mode=display">
+e^{ix}=\cos{x}+i\cdot \sin{x}</script><h3 id="单位根"><a href="#单位根" class="headerlink" title="单位根"></a>单位根</h3><p>满足$w^n=1$的复数$w$的<strong>集合</strong>称为$n$次单位根，通常写作$w_n$</p>
+<p><img src="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/imag/23925.png" srcset="/img/loading.gif" lazyload alt="23925" style="zoom:67%;" /></p>
+<p>根据欧拉公式，令$x=2\pi$，得到$e^{2\pi i}=1=w_n^n$，得到$w_n=e^{\frac{2\pi i}{n}}$，称为<strong>本原单位根</strong>，显然</p>
+<script type="math/tex; mode=display">
+w_n=e^{\frac{2\pi i}{n}}=\cos{\frac{2\pi}{n}}+i\cdot \sin{\frac{2\pi}{n}}</script><h4 id="单位根的一些性质（可以用欧拉公式轻松证得）"><a href="#单位根的一些性质（可以用欧拉公式轻松证得）" class="headerlink" title="单位根的一些性质（可以用欧拉公式轻松证得）"></a>单位根的一些性质（可以用欧拉公式轻松证得）</h4><ul>
+<li><p>$w<em>n^k=w</em>{2n}^{2k}$</p>
+</li>
+<li><p>$w_n^{n+k}=w_n^k$</p>
+</li>
+<li><p>$w_n^{k+\frac{n}{2}}=-w_n^k$</p>
+</li>
+<li><p>$w_n^{\frac{n}{2}}=-1$</p>
+</li>
+<li><p>$w_n^0=w_n^n=1$</p>
+</li>
+</ul>
+<h3 id="多项式的系数表达法"><a href="#多项式的系数表达法" class="headerlink" title="多项式的系数表达法"></a>多项式的系数表达法</h3><p>通常情况下，通过多项式方程来表示多项式的方法就是系数表达法，可以直观的看到每项的系数，如$f(x)=3x^3+2x+5$，但如果要通过系数表达法求解两多项式的卷积，显然需要$O(n^2)$的复杂度，不能接受，因此需要考虑换一种方式求解</p>
+<h3 id="多项式的点值表达法"><a href="#多项式的点值表达法" class="headerlink" title="多项式的点值表达法"></a>多项式的点值表达法</h3><p>众所周知，一个$n$次多项式可以用$n-1$个互不相同的点的坐标来表示，这就是点值表达法，它没有系数表达法那么直观，但显然，如果我们知道两个多项式的系数表达法$(x_0,y0),(x_1,y_1),…$和$(x_0,y_0’),(x_1,y_1’),…$，则可以在$O(n)$的时间内求出$(x_0,y_0y_0’),(x_1,y_1y_1’),…$，即他们卷积的点值表达法</p>
+<p>因此，FFT就是通过将多项式的系数表达法转化为点值表达法（DFT），再通过点值表达法求解卷积，再转换回系数表达法（IDFT）的一个计算过程，这个过程乍一看是$o(n^2)$的，因为找出多项式的$n$个点就已经需要$O(n^2)$的时间了（找n个点$O(n)$，计算对应函数值$O(n)$），因此就出现了著名的$FFT$算法</p>
+<h2 id="FFT（Fast-Fourier-Transform）"><a href="#FFT（Fast-Fourier-Transform）" class="headerlink" title="FFT（Fast Fourier Transform）"></a>FFT（Fast Fourier Transform）</h2><p>设$n-1$次多项式$A(x)$的系数为</p>
+<script type="math/tex; mode=display">
+(a_0,a_1,a_2,...,a_{n-1})\\即
+A(x)=a_0+a_1x+a_2x^2+...+a_{n-1}x^{n-1}</script><p>将下标按照奇偶性分类，得到</p>
+<script type="math/tex; mode=display">
+A(x)=(a_0+a_2x^2+a_4x^4+...+a_{n-2}x^{n-2})\\
++(a_1+a_3x^3+a_5x^5+...+a_{n-1}x^{n-1})</script><p>设</p>
+<script type="math/tex; mode=display">
+A_1(x)=(a_0+a_2x+a_4x^2+...+a_{n-2}x^{\frac{n}{2}-1})\\
+A_2(x)=(a_1+a_3x+a_5x^2+...+a_{n-1}x^{\frac{n}{2}-1})</script><p>显然可以得到</p>
+<script type="math/tex; mode=display">
+A(x)=A_1(x^2)+xA_2(x^2)</script><p>此时，将单位根$w_n^k(k&lt;\frac{n}{2})$代入得到</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+A(w_n^k)&=A_1(w_n^{2k})+w_n^kA_2(w_n^{2k})\\
+&=A_1(w_{\frac{n}{2}}^{k})+w_n^kA_2(w_{\frac{n}{2}}^{k})
+\end{aligned}</script><p><img src="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/imag/image-20200630204330210.png" srcset="/img/loading.gif" lazyload alt="image-20200630204330210"></p>
+<p>可以惊奇地发现这两个式子就只差了中间一个负号，并且表达式中的$A_1,A_2$规模为$A$的一半，且计算方法相同，因此可以递归<strong>分治</strong>计算这个式子，递归边界就是仅剩一个项的时候，此时直接返回即可</p>
+<p>关于逆变换，先抛出结论：<strong>一个多项式在反分治的过程中乘上单位根的共轭复数，分治完的每一项 $/n$即为原多项式的每一项系数</strong></p>
+<p>复杂度：$O(nlogn)$，但由于需要递归动态开数组，因此常数较大，但时间复杂度正确</p>
+<h3 id="代码（递归版）"><a href="#代码（递归版）" class="headerlink" title="代码（递归版）"></a>代码（递归版）</h3><figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-type">int</span> n,m;<br>complex&lt;<span class="hljs-type">double</span>&gt; f[maxn],g[maxn],ans[maxn];<br><br><span class="hljs-comment">// 递归FFT，type = 1 : DFT ; type = -1 : IDFT</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">FFT</span><span class="hljs-params">(complex&lt;<span class="hljs-type">double</span>&gt; *a,<span class="hljs-type">int</span> n,<span class="hljs-type">int</span> type)</span></span>&#123;<br>	<span class="hljs-keyword">if</span>(n&lt;=<span class="hljs-number">1</span>) <span class="hljs-keyword">return</span>;<br>	<span class="hljs-type">int</span> mid=n&gt;&gt;<span class="hljs-number">1</span>;<br>	complex&lt;<span class="hljs-type">double</span>&gt; a1[mid],a2[mid];<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;mid;i++)<br>		a1[i]=a[i&lt;&lt;<span class="hljs-number">1</span>],a2[i]=a[i&lt;&lt;<span class="hljs-number">1</span>|<span class="hljs-number">1</span>];<br>	<span class="hljs-built_in">FFT</span>(a1,mid,type),<span class="hljs-built_in">FFT</span>(a2,mid,type);<br>	<span class="hljs-function">complex&lt;<span class="hljs-type">double</span>&gt; <span class="hljs-title">w1</span><span class="hljs-params">(cos(PI/mid),type*sin(PI/mid))</span>,<span class="hljs-title">w</span><span class="hljs-params">(<span class="hljs-number">1</span>,<span class="hljs-number">0</span>)</span>,x</span>;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;mid;i++)&#123;<br>		x=w*a2[i];<br>		a[i]=a1[i]+x;<br>		a[i+mid]=a1[i]-x;<br>		w*=w1;<br>	&#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	<span class="hljs-built_in">read</span>(n),<span class="hljs-built_in">read</span>(m);<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>,x;i&lt;=n;i++) <span class="hljs-built_in">read</span>(x),f[i]=x;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>,x;i&lt;=m;i++) <span class="hljs-built_in">read</span>(x),g[i]=x;<br>	<span class="hljs-type">int</span> tot=<span class="hljs-number">1</span>;<br>	<span class="hljs-keyword">while</span>(tot&lt;=n+m) tot&lt;&lt;=<span class="hljs-number">1</span>;<br>	<span class="hljs-built_in">FFT</span>(f,tot,<span class="hljs-number">1</span>),<span class="hljs-built_in">FFT</span>(g,tot,<span class="hljs-number">1</span>);<br>	<span class="hljs-built_in">rep</span>(i,<span class="hljs-number">0</span>,tot) ans[i]=f[i]*g[i];<br>	<span class="hljs-built_in">FFT</span>(ans,tot,<span class="hljs-number">-1</span>);<br>	<span class="hljs-built_in">rep</span>(i,<span class="hljs-number">0</span>,n+m) <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d &quot;</span>,(<span class="hljs-type">int</span>)(ans[i].<span class="hljs-built_in">real</span>()/tot+<span class="hljs-number">0.5</span>));<span class="hljs-comment">//记得除以tot</span><br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+<h3 id="优化为迭代版本"><a href="#优化为迭代版本" class="headerlink" title="优化为迭代版本"></a>优化为迭代版本</h3><p>到洛谷模板一交，由于它时限定在了2s，因此可以通过（最慢的点要1.8s左右），但是我们能够做得更优，为了解决常数较大的问题，我们需要把<strong>递归写法改为迭代写法</strong></p>
+<p>我们通过将奇偶分治的最终序列手写出来，可以发现一个规律：<strong>原序列和分治到最后的序列的对应二进制表示数互为翻转关系</strong>，这样一来，从最终分治的结果，我们先计算$a_0/a_2;a_4/a_6;a_1/a_3;a_5/a_7$，然后计算$a_0/a_1;a_2/a_3;a_4/a_5;a_6/a_7$，得到最终结果</p>
+<p><img src="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/imag/1101696-20180212074250859-1560811086.png" srcset="/img/loading.gif" lazyload alt="1101696-20180212074250859-1560811086" style="zoom:67%;" /></p>
+<p>对于二进制翻转的操作，可以使用如下的方法获得，即 得到原序列中的数$i$在翻转序列中的位置$rev[i]$</p>
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;tot;i++)<br>		rev[i]=(rev[i&gt;&gt;<span class="hljs-number">1</span>]&gt;&gt;<span class="hljs-number">1</span>)|((i&amp;<span class="hljs-number">1</span>)&lt;&lt;(bi<span class="hljs-number">-1</span>));<br>\*<br>基本原理：<br>    原数组的第i位为第i/<span class="hljs-number">2</span>位左移得到，则翻转数组就为右移得到<br>    奇数情况下，原数组+<span class="hljs-number">1</span>，翻转数组需要倒着+<span class="hljs-number">1</span><br>*\<br></code></pre></div></td></tr></table></figure>
+<p>而求出这个$rev[]$数组还不够，我们还需要将原数组重新排列成为翻转序列的顺序，操作如下</p>
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;n;i++)<br>		<span class="hljs-keyword">if</span>(i&lt;rev[i]) <span class="hljs-built_in">swap</span>(a[i],a[rev[i]]);<br></code></pre></div></td></tr></table></figure>
+<p>这样一来，我们就可以通过枚举递归分治的区间大小，再枚举区间个数，再枚举区间中每一个数来实现迭代版的FFT</p>
+<h3 id="代码（迭代版）"><a href="#代码（迭代版）" class="headerlink" title="代码（迭代版）"></a>代码（迭代版）</h3><figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-type">int</span> n,m;<br><span class="hljs-type">int</span> bi,rev[maxn];<br>complex&lt;<span class="hljs-type">double</span>&gt; f[maxn],g[maxn],ans[maxn];<br><br><span class="hljs-comment">// 迭代FFT，type = 1 : DFT ; type = -1 : IDFT</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">FFT</span><span class="hljs-params">(complex&lt;<span class="hljs-type">double</span>&gt; *a,<span class="hljs-type">int</span> n,<span class="hljs-type">int</span> type)</span></span>&#123;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;n;i++)<br>		<span class="hljs-keyword">if</span>(i&lt;rev[i]) <span class="hljs-built_in">swap</span>(a[i],a[rev[i]]);<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> len=<span class="hljs-number">1</span>;len&lt;=(n&gt;&gt;<span class="hljs-number">1</span>);len&lt;&lt;=<span class="hljs-number">1</span>)&#123;<br>		<span class="hljs-function">complex&lt;<span class="hljs-type">double</span>&gt; <span class="hljs-title">w1</span><span class="hljs-params">(cos(PI/len),type*sin(PI/len))</span></span>;<br>		<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;=n-(len&lt;&lt;<span class="hljs-number">1</span>);i+=len&lt;&lt;<span class="hljs-number">1</span>)&#123;<br>			<span class="hljs-function">complex&lt;<span class="hljs-type">double</span>&gt; <span class="hljs-title">w</span><span class="hljs-params">(<span class="hljs-number">1</span>,<span class="hljs-number">0</span>)</span>,x,y</span>;<br>			<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j=<span class="hljs-number">0</span>;j&lt;len;j++)&#123;<br>				x=a[i+j],y=w*a[i+j+len];<br>				a[i+j]=x+y,a[i+j+len]=x-y;<br>				w*=w1;<br>			&#125;<br>		&#125;<br>	&#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	<span class="hljs-built_in">read</span>(n),<span class="hljs-built_in">read</span>(m);<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>,x;i&lt;=n;i++) <span class="hljs-built_in">read</span>(x),f[i]=x;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>,x;i&lt;=m;i++) <span class="hljs-built_in">read</span>(x),g[i]=x;<br>	<span class="hljs-type">int</span> tot=<span class="hljs-number">1</span>;<br>	<span class="hljs-keyword">while</span>(tot&lt;=n+m) tot&lt;&lt;=<span class="hljs-number">1</span>,bi++;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;tot;i++)<br>		rev[i]=(rev[i&gt;&gt;<span class="hljs-number">1</span>]&gt;&gt;<span class="hljs-number">1</span>)|((i&amp;<span class="hljs-number">1</span>)&lt;&lt;(bi<span class="hljs-number">-1</span>));<br>	<span class="hljs-built_in">FFT</span>(f,tot,<span class="hljs-number">1</span>),<span class="hljs-built_in">FFT</span>(g,tot,<span class="hljs-number">1</span>);<br>	<span class="hljs-built_in">rep</span>(i,<span class="hljs-number">0</span>,tot) ans[i]=f[i]*g[i];<br>	<span class="hljs-built_in">FFT</span>(ans,tot,<span class="hljs-number">-1</span>);<br>	<span class="hljs-built_in">rep</span>(i,<span class="hljs-number">0</span>,n+m) <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d &quot;</span>,(<span class="hljs-type">int</span>)(ans[i].<span class="hljs-built_in">real</span>()/tot+<span class="hljs-number">0.5</span>));<br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E5%88%86%E6%B2%BB/">分治</a>
+                    
+                      <a class="hover-with-bg" href="/tags/FFT/">FFT</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/07/02/temp-%E9%A2%84%E6%B5%8B%E6%83%85%E5%86%B5%E6%B1%87%E6%8A%A52/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">[temp]预测情况汇报2</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/06/18/%E5%AD%97%E5%85%B8%E6%A0%91%E4%B8%8EAC%E8%87%AA%E5%8A%A8%E6%9C%BA/">
+                        <span class="hidden-mobile">字典树与AC自动机</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://fastly.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"8WpS33YNRGD4IQNVQgVCmHQy-gzGzoHsz","appKey":"jed4H3219MxS5igBfmfTU81w","path":"window.location.pathname","placeholder":"write something here","avatar":"retro","meta":["nick","mail","link"],"requiredFields":["nick"],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":true},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://fastly.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://fastly.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://fastly.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://fastly.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://fastly.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://fastly.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://fastly.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://fastly.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- MathJax -->
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']]
+        },
+        loader: {
+          load: ['ui/lazy']
+        },
+        options: {
+          renderActions: {
+            findScript: [10, doc => {
+              document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = { node: text, delim: '', n: 0 };
+                math.end = { node: text, delim: '', n: 0 };
+                doc.math.push(math);
+              });
+            }, '', false],
+            insertedScript: [200, () => {
+              document.querySelectorAll('mjx-container').forEach(node => {
+                let target = node.parentNode;
+                if (target.nodeName.toLowerCase() === 'li') {
+                  target.parentNode.classList.add('has-jax');
+                }
+              });
+            }, '', false]
+          }
+        }
+      };
+    </script>
+
+    <script async src="https://fastly.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" ></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+</body>
+</html>

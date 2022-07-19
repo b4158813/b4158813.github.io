@@ -1,0 +1,647 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="琉璃糖">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="二分图最大匹配">
+<meta property="og:type" content="article">
+<meta property="og:title" content="二分图匹配">
+<meta property="og:url" content="http://example.com/2020/03/29/%E4%BA%8C%E5%88%86%E5%9B%BE%E5%8C%B9%E9%85%8D/index.html">
+<meta property="og:site_name" content="BlablaWu&#39;s Blog">
+<meta property="og:description" content="二分图最大匹配">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/imag/u=702466903,2349702842&amp;fm=11&amp;gp=0.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/03/29/x8zrCILmJ4lfvwk.png">
+<meta property="og:image" content="https://i.loli.net/2020/03/29/kGsKi62Behf1pol.png">
+<meta property="article:published_time" content="2020-03-29T10:52:02.000Z">
+<meta property="article:modified_time" content="2022-05-17T10:58:44.000Z">
+<meta property="article:author" content="琉璃糖">
+<meta property="article:tag" content="图论">
+<meta property="article:tag" content="二分图匹配">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/imag/u=702466903,2349702842&amp;fm=11&amp;gp=0.jpg">
+  
+  
+  <title>二分图匹配 - BlablaWu&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":50,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>BlablaWu の Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/index_bg.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="二分图匹配">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2020-03-29 18:52" pubdate>
+        2020年3月29日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      5.2k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      44 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">二分图匹配</h1>
+            
+            <div class="markdown-body">
+              <h2 id="二分图最大匹配"><a href="#二分图最大匹配" class="headerlink" title="二分图最大匹配"></a><center>二分图最大匹配</center></h2><p><img src="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/imag/u=702466903,2349702842&amp;fm=11&amp;gp=0.jpg" srcset="/img/loading.gif" lazyload alt="u=702466903,2349702842&amp;fm=11&amp;gp=0"></p>
+<span id="more"></span>
+<p>参考blog：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/u013384984/article/details/90718287">匈牙利算法</a></li>
+</ul>
+<p>PS：这里只放匈牙利找增广路径的算法，关于网络流请出门左拐网络流专题</p>
+<h3 id="一些定义"><a href="#一些定义" class="headerlink" title="一些定义"></a>一些定义</h3><p><strong>二分图</strong>：一个图的节点可以被分为两个互不相交的子集，且对于所有的边，其中一端的节点属于一个集合，另一端的节点属于另一个集合</p>
+<p><strong>匹配</strong>：图G的一个匹配是一组没有公共端点的不是圈的边构成的集合（重点：边的集合、任意两条边不能有公共顶点）</p>
+<p>那么<strong>最大匹配</strong>就顾名思义了：匹配数最大的一个匹配<del>（好像是废话）</del></p>
+<p><strong>完美匹配</strong>：若二分图X部的每一个顶点都与Y中的一个顶点匹配，<strong>并且</strong>Y部中的每一个顶点也与X部中的一个顶点匹配，则该匹配为完美匹配</p>
+<p>因此，完美匹配一定是最大匹配，但最大匹配不一定是完美匹配（可以有点没有匹配）</p>
+<p><strong>完备匹配</strong>：一个二分图X部中的每一个顶点都与Y部中的一个顶点匹配，<strong>或者</strong>Y部中的每一个顶点也与X部中的一个顶点匹配，则该匹配为完备匹配</p>
+<p><strong>最佳匹配</strong>：<strong>带权</strong>二分图的<strong>权值最大</strong>的<strong>完备匹配</strong>称为最佳匹配（因此：最佳匹配不一定是最大匹配）</p>
+<h3 id="二分图判定"><a href="#二分图判定" class="headerlink" title="二分图判定"></a>二分图判定</h3><p><a target="_blank" rel="noopener" href="https://vjudge.net/problem/HihoCoder-1121">【模板题】二分图判定</a></p>
+<p>染色法：从任意一个点开始DFS，将这个点标记为1，把连到的点标记为2（也可标记为别的），如果出现了当前点和相连点标记相同，则该图不是二分图</p>
+<h4 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h4><details>
+<summary>code</summary>
+
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">judge</span><span class="hljs-params">(<span class="hljs-type">int</span> u,<span class="hljs-type">int</span> c)</span></span>&#123;<br>    col[u]=c;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=head[u];~i;i=e[i].next)&#123;<br>        <span class="hljs-type">int</span> v=e[i].v;<br>        <span class="hljs-keyword">if</span>(col[v]==col[u]) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<span class="hljs-comment">//不是二分图</span><br>        <span class="hljs-keyword">if</span>(col[v]==<span class="hljs-number">0</span>&amp;&amp;!<span class="hljs-built_in">judge</span>(v,<span class="hljs-number">3</span>-c)) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<span class="hljs-comment">//不是二分图</span><br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<span class="hljs-comment">//这个点合格</span><br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++)<br>        <span class="hljs-keyword">if</span>(col[i]==<span class="hljs-number">0</span>)<br>            <span class="hljs-keyword">if</span>(!<span class="hljs-built_in">judge</span>(i))<br>                f=<span class="hljs-literal">false</span>;<span class="hljs-comment">//不是二分图</span><br>                <span class="hljs-keyword">break</span>;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+
+</details>
+
+<h3 id="匈牙利算法"><a href="#匈牙利算法" class="headerlink" title="匈牙利算法"></a>匈牙利算法</h3><p><a target="_blank" rel="noopener" href="https://vjudge.net/problem/HihoCoder-1122">【模板题】二分图最大匹配</a></p>
+<p>由于上面的blog已经讲得很详细了，我就不再赘述，这里总结一下核心步骤</p>
+<p>核心步骤（<strong>找增广路径，找到则匹配数+1</strong>）：</p>
+<p>给一个点找匹配点，找到的另一个点有两种情况：</p>
+<ol>
+<li>没有被匹配：那么就匹配上去</li>
+<li>有其他点跟他匹配了：把那个其他点踹掉，<strong>递归地</strong>让他也执行这个点同样的操作，如果最后的点能回到情况1，就说明找到一条<strong>增广路径</strong>了（匹配数+1）；否则当期点就无法匹配，跳过</li>
+</ol>
+<p>时间复杂度：邻接表$O(n*m)$，邻接矩阵$O(n^3)$</p>
+<p>注意事项：</p>
+<ul>
+<li>记得要遍历二分图一侧的每一个点，每次都<strong>需要将<code>used</code>数组重置为<code>0</code></strong></li>
+<li>匹配找到之后，可根据题目要求选择是否要记录一下<strong>每个点匹配到的点的编号</strong></li>
+<li>如果给<strong>一般图</strong>做二分图最大匹配，由于双向边的存在，最终答案是<code>ans/2</code></li>
+</ul>
+<h4 id="代码-1"><a href="#代码-1" class="headerlink" title="代码"></a>代码</h4><details>
+<summary>code</summary>
+
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-type">void</span> <span class="hljs-title">Hungary</span><span class="hljs-params">(<span class="hljs-type">int</span> x)</span></span>&#123; <span class="hljs-comment">//邻接矩阵版</span><br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=m;i++)&#123;<span class="hljs-comment">//遍历另一个点集找匹配</span><br>        <span class="hljs-keyword">if</span>(!used[i]&amp;&amp;gg[x][i])&#123;<span class="hljs-comment">//如果没被安排过且有连边</span><br>            used[i]=<span class="hljs-number">1</span>;<br>            <span class="hljs-keyword">if</span>(!have[i]||<span class="hljs-built_in">Hungary</span>(have[i]))&#123;<br>            <span class="hljs-comment">//如果本身没匹配or能找到另一个匹配</span><br>                have[i]=x;<span class="hljs-comment">//标记每个点的匹配点编号</span><br>                have[x]=i;<span class="hljs-comment">//如果是一般的无向图，这行就不要写了</span><br>                <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<span class="hljs-comment">//如果能匹配到，返回true</span><br>            &#125;<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<span class="hljs-comment">//如果没匹配到，返回false</span><br>&#125;<br><span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">Hungary</span><span class="hljs-params">(<span class="hljs-type">int</span> u)</span></span>&#123;<span class="hljs-comment">//邻接表版</span><br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=head[u];~i;i=e[i].next)&#123;<br>        <span class="hljs-type">int</span> v=e[i].v;<br>        <span class="hljs-keyword">if</span>(!used[v])&#123;<br>            uesd[v]=<span class="hljs-number">1</span>;<br>            <span class="hljs-keyword">if</span>(!have[v]||<span class="hljs-built_in">Hungary</span>(have[v]))&#123;<br>                have[v]=u;<br>                <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>            &#125;<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>&#125;<br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++)&#123;<span class="hljs-comment">//遍历一个点集</span><br>        <span class="hljs-built_in">memset</span>(used,<span class="hljs-number">0</span>,<span class="hljs-built_in">sizeof</span>(used));<span class="hljs-comment">//每次都要置零</span><br>        <span class="hljs-keyword">if</span>(<span class="hljs-built_in">Hungary</span>(i)) ans++;<span class="hljs-comment">//如果匹配到了，匹配数+1</span><br>    &#125;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+
+</details>
+
+<h4 id="新姿势"><a href="#新姿势" class="headerlink" title="新姿势"></a>新姿势</h4><p>如果你用上面的板子去搞这道题 <a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P1640">洛谷 P1640 [SCOI2010]连续攻击游戏</a>，你就会被无情地扣掉50分（TLE），原因：<strong>memset复杂度为O(n)，太慢了！！！</strong></p>
+<p>因此，这里需要优化，我们考虑使用<strong>时间戳</strong>进行优化：</p>
+<p>设置一个时间戳<code>id</code>，每次匹配时<code>id++</code>，在判断是否访问过时，改为<code>used[v]!=id</code>，下方也对应改为<code>used[v]=id</code>，然后就完工啦~</p>
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++">...<br>    <span class="hljs-keyword">if</span>(used[v]!=id)&#123;<br>        used[v]=id;<br>        ...<br>    &#125;<br>...<br><span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++)&#123;<br>    id++;<br>    <span class="hljs-keyword">if</span>(<span class="hljs-built_in">Hungary</span>(i)) ans++;<br>    ...<br>&#125;<br></code></pre></div></td></tr></table></figure>
+<h3 id="两个重要结论"><a href="#两个重要结论" class="headerlink" title="两个重要结论"></a>两个重要结论</h3><p><a target="_blank" rel="noopener" href="https://vjudge.net/problem/HihoCoder-1127">【模板题】二分图最小点覆盖+最大独立集</a></p>
+<ol>
+<li><strong>二分图最小点覆盖</strong></li>
+</ol>
+<p><img src="https://i.loli.net/2020/03/29/x8zrCILmJ4lfvwk.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<ol>
+<li><strong>二分图最大独立集</strong></li>
+</ol>
+<p><img src="https://i.loli.net/2020/03/29/kGsKi62Behf1pol.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<ol>
+<li><strong>DAG图的最小路径覆盖数</strong></li>
+</ol>
+<p>DAG图的最小路径覆盖：用尽量少的不相交简单路径覆盖DAG的所有顶点</p>
+<p><strong>引理：DAG图的最小路径覆盖数=节点数(n)-最大匹配数(m)</strong></p>
+<h2 id="二分图最大权匹配"><a href="#二分图最大权匹配" class="headerlink" title="二分图最大权匹配"></a><center>二分图最大权匹配</center></h2><p>参考bolg：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/chenshibo17/article/details/79933191">KM算法详解+模板</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/c20180630/article/details/71080521">KM算法</a></li>
+</ul>
+<h3 id="KM算法"><a href="#KM算法" class="headerlink" title="KM算法"></a>KM算法</h3><p>KM算法的正确性基于以下定理：<br>        <strong>若由二分图中所有满足A[i]+B[j]=w[i,j]的边(i,j)构成的子图（称做相等子图）有完备匹配，那么这个完备匹配就是二分图的最大权匹配</strong></p>
+<p>它是一个不断扩大<strong>相等子图</strong>的算法，只不过会将一侧点（通常为左侧）设立一个<strong>点标</strong>（权值为连出边的最大权值），在匹配的过程中如果无法增加匹配边了，就会尝试修改点标（左侧点减去，右侧点加上）来扩大相等子图，最后得到的一个完备匹配就是最佳匹配</p>
+<p>时间复杂度：邻接矩阵$O(n^3)$</p>
+<h4 id="代码（板子）"><a href="#代码（板子）" class="headerlink" title="代码（板子）"></a>代码（板子）</h4><p><a target="_blank" rel="noopener" href="http://uoj.ac/problem/80">【模板题】UOJ 二分图最大权匹配</a></p>
+<p>上面是板子题，这里摘抄了一个UOJ里面的BFS板子（据说DFS会TLE）</p>
+<details>
+<summary>code</summary>
+
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;algorithm&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;cstring&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;cstdio&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;cmath&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;vector&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> LL long long</span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><span class="hljs-type">const</span> <span class="hljs-type">int</span> INF=<span class="hljs-number">0x3f3f3f3f</span>;<br><span class="hljs-type">const</span> <span class="hljs-type">int</span> mxn=<span class="hljs-number">411</span>;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">read</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-type">int</span> x=<span class="hljs-number">0</span>,f=<span class="hljs-number">1</span>;<span class="hljs-type">char</span> ch=<span class="hljs-built_in">getchar</span>();<br>    <span class="hljs-keyword">while</span>(ch&lt;<span class="hljs-string">&#x27;0&#x27;</span> || ch&gt;<span class="hljs-string">&#x27;9&#x27;</span>)&#123;<span class="hljs-keyword">if</span>(ch==<span class="hljs-string">&#x27;-&#x27;</span>)f=<span class="hljs-number">-1</span>;ch=<span class="hljs-built_in">getchar</span>();&#125;<br>    <span class="hljs-keyword">while</span>(ch&gt;=<span class="hljs-string">&#x27;0&#x27;</span> &amp;&amp; ch&lt;=<span class="hljs-string">&#x27;9&#x27;</span>)&#123;x=x*<span class="hljs-number">10</span>+ch-<span class="hljs-string">&#x27;0&#x27;</span>;ch=<span class="hljs-built_in">getchar</span>();&#125;<br>    <span class="hljs-keyword">return</span> x*f;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">write</span><span class="hljs-params">(LL x)</span></span>&#123;<br>    <span class="hljs-keyword">if</span>(x&gt;<span class="hljs-number">9</span>)<span class="hljs-built_in">write</span>(x/<span class="hljs-number">10</span>);<br>    <span class="hljs-built_in">putchar</span>(x%<span class="hljs-number">10</span>+<span class="hljs-string">&#x27;0&#x27;</span>);<br>    <span class="hljs-keyword">return</span>;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">int</span> <span class="hljs-title">mini</span><span class="hljs-params">(<span class="hljs-type">int</span> a,<span class="hljs-type">int</span> b)</span></span>&#123;<span class="hljs-keyword">return</span> a&lt;b?a:b;&#125;<br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">int</span> <span class="hljs-title">maxi</span><span class="hljs-params">(<span class="hljs-type">int</span> a,<span class="hljs-type">int</span> b)</span></span>&#123;<span class="hljs-keyword">return</span> a&gt;b?a:b;&#125;<br><span class="hljs-type">int</span> nL,nR,bl,br,m;<br><span class="hljs-type">int</span> visL[mxn],visR[mxn];<br><span class="hljs-type">int</span> exL[mxn],exR[mxn];<br><span class="hljs-type">int</span> link[mxn],pre[mxn],lx[mxn];<br><span class="hljs-type">int</span> slack[mxn];<br><span class="hljs-type">int</span> mp[mxn][mxn];<br><span class="hljs-comment">//</span><br>LL ans=<span class="hljs-number">0</span>;<br><span class="hljs-type">int</span> a[mxn];<br><span class="hljs-type">int</span> dtime=<span class="hljs-number">0</span>;<br><span class="hljs-type">int</span> q[mxn&lt;&lt;<span class="hljs-number">1</span>],hd,tl;<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Aug</span><span class="hljs-params">(<span class="hljs-type">int</span> rt)</span></span>&#123;<br>    <span class="hljs-keyword">if</span>(!rt)<span class="hljs-keyword">return</span>;<br>    link[rt]=pre[rt];<br>    <span class="hljs-built_in">Aug</span>(lx[pre[rt]]);<br>    lx[pre[rt]]=rt;<br>    <span class="hljs-keyword">return</span>;<br>&#125;<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">BFS</span><span class="hljs-params">(<span class="hljs-type">int</span> S)</span></span>&#123;<br>    <span class="hljs-type">int</span> i,j,tmp;++dtime;<br>    <span class="hljs-built_in">memset</span>(slack,<span class="hljs-number">0x3f</span>,<span class="hljs-keyword">sizeof</span> slack);<br>    hd=tl=<span class="hljs-number">1</span>;q[tl]=S;<br>    <span class="hljs-keyword">while</span>(<span class="hljs-number">1</span>)&#123;<br>        <span class="hljs-keyword">while</span>(hd&lt;=tl)&#123;<br>            <span class="hljs-type">int</span> u=q[hd];++hd;<br>            visL[u]=dtime;<br>            <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=nR;i++)&#123;<br>                <span class="hljs-keyword">if</span>(visR[i]^dtime)&#123;<br>                    tmp=exL[u]+exR[i]-mp[u][i];<br>                    <span class="hljs-keyword">if</span>(!tmp)&#123;<br>                        visR[i]=dtime;pre[i]=u;<br>                        <span class="hljs-keyword">if</span>(!link[i])&#123;<br>                            <span class="hljs-built_in">Aug</span>(i);<br>                            <span class="hljs-keyword">return</span>;<br>                        &#125;<br>                        q[++tl]=link[i];<br>                        <span class="hljs-comment">//</span><br>                    &#125;<br>                    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(tmp&lt;slack[i])slack[i]=tmp,pre[i]=u;<br>                &#125;<br>            &#125;<br>        &#125;<br>        tmp=INF;<br>        <span class="hljs-keyword">for</span>(i=<span class="hljs-number">1</span>;i&lt;=nR;i++)<span class="hljs-keyword">if</span>(visR[i]^dtime)tmp=<span class="hljs-built_in">mini</span>(tmp,slack[i]);<br>        <span class="hljs-keyword">for</span>(i=<span class="hljs-number">1</span>;i&lt;=nL;i++)&#123;<br>            <span class="hljs-keyword">if</span>(visL[i]==dtime)exL[i]-=tmp;<br>            <span class="hljs-keyword">if</span>(visR[i]==dtime)exR[i]+=tmp;<br>            <span class="hljs-keyword">else</span> slack[i]-=tmp;<br>        &#125;<br>        <span class="hljs-keyword">for</span>(i=<span class="hljs-number">1</span>;i&lt;=nR;i++)&#123;<br>            <span class="hljs-keyword">if</span>(visR[i]^dtime &amp;&amp; !slack[i])&#123;<br>                visR[i]=dtime;<br>                <span class="hljs-keyword">if</span>(!link[i])&#123;<br><span class="hljs-comment">//                    link[i]=pre[i];</span><br>                    <span class="hljs-built_in">Aug</span>(i);<br>                    <span class="hljs-keyword">return</span>;<br>                &#125;<br>                q[++tl]=link[i];<br>            &#125;<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span>;<br>&#125;<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">KM</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=nL;i++)&#123;<br>        exL[i]=<span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j=<span class="hljs-number">1</span>;j&lt;=nR;j++)<br>            exL[i]=<span class="hljs-built_in">max</span>(exL[i],mp[i][j]); <span class="hljs-comment">//点标</span><br>    &#125;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=nL;i++) <span class="hljs-built_in">BFS</span>(i); <span class="hljs-comment">//给每个左边点匹配</span><br>    ans=<span class="hljs-number">0</span>;<br>    nL=bl;nR=br;<br>    <span class="hljs-comment">//下面是输出答案</span><br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=nR;i++)&#123;<br>        <span class="hljs-keyword">if</span>(mp[link[i]][i])&#123;<br>            a[link[i]]=i;<br>            ans+=mp[link[i]][i]; <span class="hljs-comment">//找到左边点匹配的右边点</span><br>        &#125;<br>    &#125;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%lld\n&quot;</span>,ans);<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=nL;i++)&#123;<br>        <span class="hljs-built_in">write</span>(a[i]);<br>        <span class="hljs-built_in">putchar</span>(<span class="hljs-string">&#x27; &#x27;</span>);<br>    &#125;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;\n&quot;</span>);<br>    <span class="hljs-keyword">return</span>;<br>&#125;<br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-type">int</span> i,j;<br>    nL=<span class="hljs-built_in">read</span>();<br>    nR=<span class="hljs-built_in">read</span>();<br>    bl=nL;br=nR;<br>    nL=<span class="hljs-built_in">max</span>(nL,nR);<br>    nR=nL;<br>    m=<span class="hljs-built_in">read</span>();<br>    <span class="hljs-type">int</span> u,v,w;<br>    <span class="hljs-keyword">for</span>(i=<span class="hljs-number">1</span>;i&lt;=m;i++)&#123;<br>        u=<span class="hljs-built_in">read</span>();v=<span class="hljs-built_in">read</span>();w=<span class="hljs-built_in">read</span>();<br>        mp[u][v]=w;<br>    &#125;<br>    <span class="hljs-built_in">KM</span>();<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+
+</details>
+
+<h2 id="习题"><a href="#习题" class="headerlink" title="习题"></a>习题</h2><h3 id=""><a href="#" class="headerlink" title=""></a><a href=""></a></h3>
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E5%9B%BE%E8%AE%BA/">图论</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E4%BA%8C%E5%88%86%E5%9B%BE%E5%8C%B9%E9%85%8D/">二分图匹配</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/03/30/%E6%A0%91%E7%8A%B6%E6%95%B0%E7%BB%84-BIT-%E4%B8%93%E9%A2%98/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">树状数组(BIT)专题</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/03/24/%E6%B5%85%E6%9E%90Tarjan%E7%AE%97%E6%B3%95&amp;%E5%B8%B8%E8%A7%81%E5%BA%94%E7%94%A8/">
+                        <span class="hidden-mobile">浅析Tarjan算法&常见应用</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://fastly.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"8WpS33YNRGD4IQNVQgVCmHQy-gzGzoHsz","appKey":"jed4H3219MxS5igBfmfTU81w","path":"window.location.pathname","placeholder":"write something here","avatar":"retro","meta":["nick","mail","link"],"requiredFields":["nick"],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":true},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://fastly.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://fastly.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://fastly.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://fastly.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://fastly.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://fastly.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://fastly.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://fastly.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- MathJax -->
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']]
+        },
+        loader: {
+          load: ['ui/lazy']
+        },
+        options: {
+          renderActions: {
+            findScript: [10, doc => {
+              document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = { node: text, delim: '', n: 0 };
+                math.end = { node: text, delim: '', n: 0 };
+                doc.math.push(math);
+              });
+            }, '', false],
+            insertedScript: [200, () => {
+              document.querySelectorAll('mjx-container').forEach(node => {
+                let target = node.parentNode;
+                if (target.nodeName.toLowerCase() === 'li') {
+                  target.parentNode.classList.add('has-jax');
+                }
+              });
+            }, '', false]
+          }
+        }
+      };
+    </script>
+
+    <script async src="https://fastly.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" ></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+</body>
+</html>

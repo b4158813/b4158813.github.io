@@ -1,0 +1,673 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="琉璃糖">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="前几天“衣 紧 还 乡”，今天还是得把滤波算法补一下了">
+<meta property="og:type" content="article">
+<meta property="og:title" content="图像处理の各种滤波方法">
+<meta property="og:url" content="http://example.com/2020/08/07/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E3%81%AE%E5%90%84%E7%A7%8D%E6%BB%A4%E6%B3%A2%E6%96%B9%E6%B3%95/index.html">
+<meta property="og:site_name" content="BlablaWu&#39;s Blog">
+<meta property="og:description" content="前几天“衣 紧 还 乡”，今天还是得把滤波算法补一下了">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/imag/image-20200809183530008.png">
+<meta property="og:image" content="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/imag/image-20200809183820910.png">
+<meta property="og:image" content="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/imag/image-20200809184308820.png">
+<meta property="og:image" content="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/imag/image-20200809184201428.png">
+<meta property="og:image" content="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/imag/image-20200809191738889.png">
+<meta property="og:image" content="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/imag/image-20200809192454076.png">
+<meta property="og:image" content="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/imag/image-20200809192939813.png">
+<meta property="og:image" content="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/imag/image-20200809193112759.png">
+<meta property="og:image" content="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/imag/image-20200809193417506.png">
+<meta property="og:image" content="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/imag/image-20200809193610956.png">
+<meta property="og:image" content="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/imag/image-20200809194231934.png">
+<meta property="article:published_time" content="2020-08-07T13:38:59.000Z">
+<meta property="article:modified_time" content="2022-05-17T10:58:46.000Z">
+<meta property="article:author" content="琉璃糖">
+<meta property="article:tag" content="滤波算法">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/imag/image-20200809183530008.png">
+  
+  
+  <title>图像处理の各种滤波方法 - BlablaWu&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":50,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>BlablaWu の Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/index_bg.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="图像处理の各种滤波方法">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2020-08-07 21:38" pubdate>
+        2020年8月7日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      7.2k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      61 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">图像处理の各种滤波方法</h1>
+            
+            <div class="markdown-body">
+              <p>前几天“衣 紧 还 乡”，今天还是得把滤波算法补一下了<br><span id="more"></span></p>
+<h2 id="高斯滤波"><a href="#高斯滤波" class="headerlink" title="高斯滤波"></a>高斯滤波</h2><p>参考blog：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/jiandanjinxin/article/details/51281828">CSDN 高斯模糊算法（高斯权重）</a></li>
+</ul>
+<p>小学的时候看我妈搞PS，有个叫“高斯模糊”的东西，今天终于明白了，这个高斯模糊，其实学名叫“高斯滤波”，是一种图像滤波算法，好神奇诶~</p>
+<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>对于通常的二维图像，高斯滤波使用<strong>二维正态分布函数（高斯函数）</strong>作为权重分配，函数形式如下</p>
+<script type="math/tex; mode=display">
+f(x,y) = \frac{1}{2\pi\sigma^2} e^{-\frac{x^2+y^2}{2\sigma^2}}</script><p>其实这就是之前在学CNN时的<strong>图像卷积</strong>操作（所以滤波器也叫做<strong>卷积核</strong>），通过构造一个卷积核，不断对原图的每个像素点进行卷积计算，对于一个<code>3*3</code>的滤波器来说，就是<strong>将指定像素与周围8个像素点乘以<code>3*3</code>的高斯权重分布再求和</strong>得到该像素点的输出值</p>
+<ul>
+<li>求高斯权重分布的方法：将滤波器中心点视为原点<code>(0,0)</code>，可以得到滤波器函数值的分布，最后一定要再<strong>除以矩阵所有值之和</strong>，因为需要满足权重和为1，这是归一化操作所必需要有的步骤</li>
+</ul>
+<p>PS：由于要保持滤波后的图像尺寸与原图相同，需要有$zero-padding$，即在矩阵周围补零，经过简单的数学推导，容易得出，在滤波器步长为1且滤波器为方阵的情况下，$pad$大小与滤波器尺寸$size$须满足如下关系：</p>
+<script type="math/tex; mode=display">
+size = 2\cdot pad+1</script><h3 id="效果"><a href="#效果" class="headerlink" title="效果"></a>效果</h3><p><img referrer="no-referrer" src="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/imag/image-20200809183530008.png" srcset="/img/loading.gif" lazyload alt="image-20200809183530008"  /></p>
+<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><details>
+    <summary>code</summary>
+
+<figure class="highlight python"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs python"><span class="hljs-keyword">import</span> cv2<br><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">gauss_func</span>(<span class="hljs-params">x,y,sigma</span>): <span class="hljs-comment"># 高斯函数计算</span><br>	<span class="hljs-keyword">return</span> np.exp(-(x*x+y*y)/(<span class="hljs-number">2</span>*sigma*sigma))/(<span class="hljs-number">2</span>*np.pi*sigma*sigma)<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">gauss_filter</span>(<span class="hljs-params">image,Size=<span class="hljs-number">3</span>,sigma=<span class="hljs-number">1.3</span></span>):<br>	img = image.copy()<br>	H,W,C = image.shape<br>	pad = Size//<span class="hljs-number">2</span> <span class="hljs-comment"># pad大小</span><br>	pad_img = np.zeros((H+pad*<span class="hljs-number">2</span>,W+pad*<span class="hljs-number">2</span>,C),dtype=np.<span class="hljs-built_in">float</span>)<br>	pad_img[pad:pad+H,pad:pad+W] = img.copy().astype(np.<span class="hljs-built_in">float</span>)<br><br>	Filter = np.zeros((Size,Size),dtype=np.<span class="hljs-built_in">float</span>)<br>	<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(-pad,-pad+Size):<br>		<span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(-pad,-pad+Size):<br>			Filter[i+pad,j+pad] = gauss_func(j,i,sigma)<br>	Filter /= Filter.<span class="hljs-built_in">sum</span>() <span class="hljs-comment"># 切记</span><br><br>	out = np.zeros_like(img,dtype=np.<span class="hljs-built_in">float</span>)<br>	<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(H):<br>		<span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(W):<br>			<span class="hljs-keyword">for</span> c <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(C):<br>				out[i,j,c] = np.<span class="hljs-built_in">sum</span>(Filter * pad_img[i:i+Size,j:j+Size,c])<br><br>	out = np.clip(out,<span class="hljs-number">0</span>,<span class="hljs-number">255</span>)<br>	out = out.astype(np.uint8)<br><br>	<span class="hljs-keyword">return</span> out<br><br><br>img = cv2.imread(<span class="hljs-string">&quot;test.jpg&quot;</span>)<br>img2 = gauss_filter(img,Size=<span class="hljs-number">13</span>,sigma=<span class="hljs-number">3</span>)<br><br><span class="hljs-built_in">print</span>(img.shape)<br>cv2.imshow(<span class="hljs-string">&quot;img2&quot;</span>, img2)<br>cv2.imshow(<span class="hljs-string">&quot;img1&quot;</span>, img)<br>cv2.waitKey(<span class="hljs-number">0</span>)<br></code></pre></div></td></tr></table></figure>
+
+</details>
+
+<h2 id="中值滤波"><a href="#中值滤波" class="headerlink" title="中值滤波"></a>中值滤波</h2><p>其实就是利用滤波器大小区域的原图对应元素的<strong>中位数</strong>作为该像素点的输出值，那么代码只需要把高斯滤波模板稍微改改就行了（利用<code>np.median()</code>）求中位数</p>
+<h3 id="效果-1"><a href="#效果-1" class="headerlink" title="效果"></a>效果</h3><p><img src="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/imag/image-20200809183820910.png" srcset="/img/loading.gif" lazyload alt="image-20200809183820910"></p>
+<h3 id="代码-1"><a href="#代码-1" class="headerlink" title="代码"></a>代码</h3><details>
+    <summary>code</summary>
+
+<figure class="highlight python"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs python"><span class="hljs-keyword">import</span> cv2<br><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">mid_filter</span>(<span class="hljs-params">image,Size=<span class="hljs-number">3</span></span>):<br>	img = image.copy()<br>	H,W,C = image.shape<br>	pad = Size//<span class="hljs-number">2</span><br>	pad_img = np.zeros((H+pad*<span class="hljs-number">2</span>,W+pad*<span class="hljs-number">2</span>,C),dtype=np.<span class="hljs-built_in">float</span>)<br>	pad_img[pad:pad+H,pad:pad+W] = img.copy().astype(np.<span class="hljs-built_in">float</span>)<br><br>	out = np.zeros_like(img,dtype=np.<span class="hljs-built_in">float</span>)<br>	<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(H):<br>		<span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(W):<br>			<span class="hljs-keyword">for</span> c <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(C):<br>				out[i,j,c] = np.median(pad_img[i:i+Size,j:j+Size,c])<br><br>	out = np.clip(out,<span class="hljs-number">0</span>,<span class="hljs-number">255</span>)<br>	out = out.astype(np.uint8)<br><br>	<span class="hljs-keyword">return</span> out<br><br><br>img = cv2.imread(<span class="hljs-string">&quot;test.jpg&quot;</span>)<br>img2 = mid_filter(img,Size=<span class="hljs-number">13</span>)<br><br><span class="hljs-built_in">print</span>(img.shape)<br>cv2.imshow(<span class="hljs-string">&quot;img2&quot;</span>, img2)<br>cv2.imshow(<span class="hljs-string">&quot;img1&quot;</span>, img)<br>cv2.waitKey(<span class="hljs-number">0</span>)<br></code></pre></div></td></tr></table></figure>
+
+</details>
+
+<h2 id="均值滤波"><a href="#均值滤波" class="headerlink" title="均值滤波"></a>均值滤波</h2><p>同上，不过这次是<strong>均值</strong>，代码就不放了</p>
+<h3 id="效果-2"><a href="#效果-2" class="headerlink" title="效果"></a>效果</h3><p><img src="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/imag/image-20200809184308820.png" srcset="/img/loading.gif" lazyload alt="image-20200809184308820"></p>
+<h2 id="Motion-滤波"><a href="#Motion-滤波" class="headerlink" title="Motion 滤波"></a>Motion 滤波</h2><p>取对角线方向像素的平均值作为输出，即 滤波器矩阵为（以3阶为例）:</p>
+<script type="math/tex; mode=display">
+\frac{1}{3}\pmatrix{1 \ 0 \ 0\\0 \ 1 \ 0\\0 \ 0 \ 1}</script><h3 id="效果-3"><a href="#效果-3" class="headerlink" title="效果"></a>效果</h3><p><img src="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/imag/image-20200809184201428.png" srcset="/img/loading.gif" lazyload alt="image-20200809184201428"></p>
+<h3 id="代码-2"><a href="#代码-2" class="headerlink" title="代码"></a>代码</h3><ul>
+<li>用<code>np.diag()</code>方法生成对角阵，传入对角元素值作为参数即可</li>
+</ul>
+<details>
+    <summary>code</summary>
+
+<figure class="highlight python"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs python"><span class="hljs-keyword">import</span> cv2<br><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">motion_filter</span>(<span class="hljs-params">image,Size=<span class="hljs-number">3</span></span>):<br>	img = image.copy()<br>	H,W,C = image.shape<br>	pad = Size//<span class="hljs-number">2</span><br>	pad_img = np.zeros((H+pad*<span class="hljs-number">2</span>,W+pad*<span class="hljs-number">2</span>,C),dtype=np.<span class="hljs-built_in">float</span>)<br>	pad_img[pad:pad+H,pad:pad+W] = img.copy().astype(np.<span class="hljs-built_in">float</span>)<br><br>	Filter = np.diag([<span class="hljs-number">1</span>] * Size).astype(np.<span class="hljs-built_in">float</span>)<br>	Filter /= Size<br><br>	out = np.zeros_like(img,dtype=np.<span class="hljs-built_in">float</span>)<br>	<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(H):<br>		<span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(W):<br>			<span class="hljs-keyword">for</span> c <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(C):<br>				out[i,j,c] = np.<span class="hljs-built_in">sum</span>(Filter * pad_img[i:i+Size,j:j+Size,c])<br><br>	out = np.clip(out,<span class="hljs-number">0</span>,<span class="hljs-number">255</span>)<br>	out = out.astype(np.uint8)<br><br>	<span class="hljs-keyword">return</span> out<br><br><br>img = cv2.imread(<span class="hljs-string">&quot;test.jpg&quot;</span>)<br>img2 = motion_filter(img,Size=<span class="hljs-number">5</span>)<br><br><span class="hljs-built_in">print</span>(img.shape)<br>cv2.imshow(<span class="hljs-string">&quot;img2&quot;</span>, img2)<br>cv2.imshow(<span class="hljs-string">&quot;img1&quot;</span>, img)<br>cv2.waitKey(<span class="hljs-number">0</span>)<br></code></pre></div></td></tr></table></figure>
+
+</details>
+
+<h2 id="MIN-MAX-滤波"><a href="#MIN-MAX-滤波" class="headerlink" title="MIN-MAX 滤波"></a>MIN-MAX 滤波</h2><p>MAX-MIN滤波器使用网格内像素的<strong>最大值和最小值的差值</strong>对网格内像素重新赋值。通常用于<strong>边缘检测</strong>。</p>
+<p>边缘检测用于检测图像中的线。像这样提取图像中的信息的操作被称为<strong>特征提取</strong>。</p>
+<p>边缘检测通常在灰度图像上进行。</p>
+<h3 id="效果-4"><a href="#效果-4" class="headerlink" title="效果"></a>效果</h3><p>这里用<code>filter_size = 3</code>的滤波器进行特征提取</p>
+<p><img src="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/imag/image-20200809191738889.png" srcset="/img/loading.gif" lazyload alt="image-20200809191738889"></p>
+<h3 id="代码-3"><a href="#代码-3" class="headerlink" title="代码"></a>代码</h3><details>
+    <summary>code</summary>
+
+<figure class="highlight python"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs python"><span class="hljs-keyword">import</span> cv2<br><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">minmax_filter</span>(<span class="hljs-params">image,Size=<span class="hljs-number">3</span></span>):<br>	img = image.copy()<br>	H,W,C = image.shape<br>	pad = Size//<span class="hljs-number">2</span><br>	pad_img = np.zeros((H+pad*<span class="hljs-number">2</span>,W+pad*<span class="hljs-number">2</span>,C),dtype=np.<span class="hljs-built_in">float</span>)<br>	pad_img[pad:pad+H,pad:pad+W] = img.copy().astype(np.<span class="hljs-built_in">float</span>)<br><br>	out = np.zeros_like(img,dtype=np.<span class="hljs-built_in">float</span>)<br>	<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(H):<br>		<span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(W):<br>			<span class="hljs-keyword">for</span> c <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(C):<br>				out[i,j,c] = np.<span class="hljs-built_in">max</span>(pad_img[i:i+Size,j:j+Size,c])-np.<span class="hljs-built_in">min</span>(pad_img[i:i+Size,j:j+Size,c])<br><br>	out = np.clip(out,<span class="hljs-number">0</span>,<span class="hljs-number">255</span>)<br>	out = out.astype(np.uint8)<br><br>	<span class="hljs-keyword">return</span> out<br><br><br>img = cv2.imread(<span class="hljs-string">&quot;test.jpg&quot;</span>)<br>img2 = minmax_filter(img,Size=<span class="hljs-number">5</span>)<br><br><span class="hljs-built_in">print</span>(img.shape)<br>cv2.imshow(<span class="hljs-string">&quot;img2&quot;</span>, img2)<br>cv2.imshow(<span class="hljs-string">&quot;img1&quot;</span>, img)<br>cv2.waitKey(<span class="hljs-number">0</span>)<br></code></pre></div></td></tr></table></figure>
+
+</details>
+
+<h2 id="差分滤波"><a href="#差分滤波" class="headerlink" title="差分滤波"></a>差分滤波</h2><p>差分滤波器对图像亮度急剧变化的边缘有提取效果，可以获得邻接像素的差值。</p>
+<p>纵向： <script type="math/tex">K=\left[ \begin{matrix} 0&-1&0\\ 0&1&0\\ 0&0&0 \end{matrix} \right]</script> 横向： <script type="math/tex">K=\left[ \begin{matrix} 0&0&0\\ -1&1&0\\ 0&0&0 \end{matrix} \right]</script></p>
+<p>因此，差分滤波有横向和纵向两种方式，分别能提取对应的边缘特征</p>
+<h3 id="效果-5"><a href="#效果-5" class="headerlink" title="效果"></a>效果</h3><p><code>vout</code>为纵向，<code>hout</code>为横向</p>
+<p><img src="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/imag/image-20200809192454076.png" srcset="/img/loading.gif" lazyload alt="image-20200809192454076"></p>
+<h3 id="代码-4"><a href="#代码-4" class="headerlink" title="代码"></a>代码</h3><details>
+    <summary>code</summary>
+
+<figure class="highlight python"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs python"><span class="hljs-keyword">import</span> cv2<br><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">differential_filter</span>(<span class="hljs-params">image,Size=<span class="hljs-number">3</span></span>):<br>	img = image.copy()<br>	H,W,C = image.shape<br>	pad = Size//<span class="hljs-number">2</span><br>	pad_img = np.zeros((H+pad*<span class="hljs-number">2</span>,W+pad*<span class="hljs-number">2</span>,C),dtype=np.<span class="hljs-built_in">float</span>)<br>	pad_img[pad:pad+H,pad:pad+W] = img.copy().astype(np.<span class="hljs-built_in">float</span>)<br><br>	vFilter = np.array([[<span class="hljs-number">0</span>,-<span class="hljs-number">1</span>,<span class="hljs-number">0</span>],[<span class="hljs-number">0</span>,<span class="hljs-number">1</span>,<span class="hljs-number">0</span>],[<span class="hljs-number">0</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>]])<br>	hFilter = np.array([[<span class="hljs-number">0</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>],[-<span class="hljs-number">1</span>,<span class="hljs-number">1</span>,<span class="hljs-number">0</span>],[<span class="hljs-number">0</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>]])<br><br>	vout = np.zeros_like(img,dtype=np.<span class="hljs-built_in">float</span>)<br>	hout = vout.copy()<br><br>	<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(H):<br>		<span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(W):<br>			<span class="hljs-keyword">for</span> c <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(C):<br>				vout[i,j,c] = np.<span class="hljs-built_in">sum</span>(vFilter * pad_img[i:i+Size,j:j+Size,c])<br>				hout[i,j,c] = np.<span class="hljs-built_in">sum</span>(hFilter * pad_img[i:i+Size,j:j+Size,c])<br><br>	vout = np.clip(vout,<span class="hljs-number">0</span>,<span class="hljs-number">255</span>)<br>	vout = vout.astype(np.uint8)<br>	hout = np.clip(hout,<span class="hljs-number">0</span>,<span class="hljs-number">255</span>)<br>	hout = hout.astype(np.uint8)<br><br>	<span class="hljs-keyword">return</span> hout,vout<br><br><br>img = cv2.imread(<span class="hljs-string">&quot;test2.jpg&quot;</span>)<br>hout,vout = differential_filter(img,Size=<span class="hljs-number">3</span>)<br>out = hout+vout<br><br>cv2.imshow(<span class="hljs-string">&quot;vout&quot;</span>, vout)<br>cv2.imshow(<span class="hljs-string">&quot;hout&quot;</span>, hout)<br>cv2.imshow(<span class="hljs-string">&quot;out&quot;</span>, out)<br>cv2.imshow(<span class="hljs-string">&quot;img&quot;</span>, img)<br>cv2.waitKey(<span class="hljs-number">0</span>)<br></code></pre></div></td></tr></table></figure>
+
+</details>
+
+<h2 id="Sobel-滤波"><a href="#Sobel-滤波" class="headerlink" title="Sobel 滤波"></a>Sobel 滤波</h2><p>Sobel滤波器可以提取特定方向（纵向或横向）的边缘，滤波器按下式定义：</p>
+<p>纵向： <script type="math/tex">K=\left[ \begin{matrix} 1&2&1\\ 0&0&0\\ -1&-2&-1 \end{matrix} \right]</script> 横向： <script type="math/tex">K=\left[ \begin{matrix} 1&0&-1\\ 2&0&-2\\ 1&0&-1 \end{matrix} \right]</script></p>
+<p>PS：从矩阵就可以看出来，这其实就是类似于差分滤波的一种滤波方式，加剧图像差别大的边缘的差别，从而达到特征提取的效果。代码实现上，只要把差分滤波的滤波器矩阵换掉就行了</p>
+<h3 id="效果-6"><a href="#效果-6" class="headerlink" title="效果"></a>效果</h3><p><img src="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/imag/image-20200809192939813.png" srcset="/img/loading.gif" lazyload alt="image-20200809192939813"></p>
+<h2 id="Prewitt-滤波"><a href="#Prewitt-滤波" class="headerlink" title="Prewitt 滤波"></a>Prewitt 滤波</h2><p>Prewitt滤波器是用于边缘检测的一种滤波器，使用下式定义：</p>
+<p>纵向： <script type="math/tex">K=\left[ \begin{matrix} -1&-1&-1\\ 0&0&0\\ 1&1&1 \end{matrix} \right]</script> 横向： <script type="math/tex">K=\left[ \begin{matrix} -1&0&-1\\ -1&0&1\\ -1&0&1 \end{matrix} \right]</script></p>
+<p>PS：也类似于上面两种</p>
+<h3 id="效果-7"><a href="#效果-7" class="headerlink" title="效果"></a>效果</h3><p><img src="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/imag/image-20200809193112759.png" srcset="/img/loading.gif" lazyload alt="image-20200809193112759"></p>
+<h2 id="Laplacian-滤波"><a href="#Laplacian-滤波" class="headerlink" title="Laplacian 滤波"></a>Laplacian 滤波</h2><p>Laplacian滤波器是对图像亮度进行二次微分从而检测边缘的滤波器。由于数字图像是离散的，$x$方向和$y$方向的一次微分分别按照以下式子计算：</p>
+<script type="math/tex; mode=display">
+I_x(x,y)=\frac{I(x+1,y)-I(x,y)}{(x+1)-x}=I(x+1,y)-I(x,y)\\I_y(x,y) =\frac{I(x, y+1) - I(x,y)}{(y+1)-y}= I(x, y+1) - I(x,y)</script><p> 因此二次微分按照以下式子计算： </p>
+<script type="math/tex; mode=display">
+\begin{align*} &I_{xx}(x,y) \\ =& \frac{I_x(x,y) - I_x(x-1,y)}{(x+1)-x} \\ =& I_x(x,y) - I_x(x-1,y)\\ =&[I(x+1, y) - I(x,y)] - [I(x, y) - I(x-1,y)]\\ =& I(x+1,y) - 2\ I(x,y) + I(x-1,y) \end{align*}</script><p>同理： <script type="math/tex">I_{yy}(x,y)=I(x,y+1)-2\ I(x,y)+I(x,y-1)</script> </p>
+<p>特此，Laplacian 表达式如下：</p>
+<script type="math/tex; mode=display">
+\begin{align*} &\nabla^2\ I(x,y)\\ =&I_{xx}(x,y)+I_{yy}(x,y)\\ =&I(x-1,y) + I(x,y-1) - 4 * I(x,y) + I(x+1,y) + I(x,y+1) \end{align*}</script><p>如果把这个式子表示为卷积核是下面这样的： <script type="math/tex">K= \left[ \begin{matrix} 0&1&0\\ 1&-4&1\\ 0&1&0 \end{matrix} \right]</script></p>
+<p>PS：代码其实也就是把上面的矩阵换掉即可</p>
+<h3 id="效果-8"><a href="#效果-8" class="headerlink" title="效果"></a>效果</h3><p><img src="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/imag/image-20200809193417506.png" srcset="/img/loading.gif" lazyload alt="image-20200809193417506"></p>
+<h2 id="Emboss-滤波"><a href="#Emboss-滤波" class="headerlink" title="Emboss 滤波"></a>Emboss 滤波</h2><p>Emboss滤波器可以使物体轮廓更加清晰，按照以下式子定义： <script type="math/tex">K= \left[ \begin{matrix} -2&-1&0\\ -1&1&1\\ 0&1&2 \end{matrix} \right]</script></p>
+<p>PS：类似PS里面的浮雕效果，</p>
+<h3 id="效果-9"><a href="#效果-9" class="headerlink" title="效果"></a>效果</h3><p><img src="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/imag/image-20200809193610956.png" srcset="/img/loading.gif" lazyload alt="image-20200809193610956"></p>
+<h2 id="LoG滤波"><a href="#LoG滤波" class="headerlink" title="LoG滤波"></a>LoG滤波</h2><p>LoG即高斯-拉普拉斯（Laplacian of Gaussian）的缩写，使用高斯滤波器使图像平滑化之后再使用拉普拉斯滤波器使图像的轮廓更加清晰。</p>
+<p>为了防止拉普拉斯滤波器计算二次微分会使得图像噪声更加明显，所以我们首先使用高斯滤波器来抑制噪声。</p>
+<p>LoG 滤波器使用以下式子定义： <script type="math/tex">\text{LoG}(x,y)=\frac{x^2 + y^2 - s^2}{2 \ \pi \ s^6} \ e^{-\frac{x^2+y^2}{2\ s^2}}</script></p>
+<p>PS：即 先降噪，再提取轮廓特征</p>
+<h3 id="效果-10"><a href="#效果-10" class="headerlink" title="效果"></a>效果</h3><p><img src="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/imag/image-20200809194231934.png" srcset="/img/loading.gif" lazyload alt="image-20200809194231934"></p>
+<h3 id="代码-5"><a href="#代码-5" class="headerlink" title="代码"></a>代码</h3><details>
+    <summary>code</summary>
+
+<figure class="highlight python"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs python"><span class="hljs-keyword">import</span> cv2<br><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">LoG_func</span>(<span class="hljs-params">x,y,sigma=<span class="hljs-number">1.3</span></span>):<br>	<span class="hljs-keyword">return</span> (x*x+y*y-sigma*sigma)/(<span class="hljs-number">2</span>*np.pi*sigma**<span class="hljs-number">6</span>)*np.exp(-(x*x+y*y)/(<span class="hljs-number">2</span>*sigma*sigma))<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">LoG_filter</span>(<span class="hljs-params">image,Size=<span class="hljs-number">3</span>,sigma=<span class="hljs-number">1.3</span></span>):<br>	img = image.copy()<br>	H,W,C = image.shape<br>	pad = Size//<span class="hljs-number">2</span><br>	pad_img = np.zeros((H+pad*<span class="hljs-number">2</span>,W+pad*<span class="hljs-number">2</span>,C),dtype=np.<span class="hljs-built_in">float</span>)<br>	pad_img[pad:pad+H,pad:pad+W] = img.copy().astype(np.<span class="hljs-built_in">float</span>)<br><br>	Filter = np.zeros((Size,Size), dtype=np.<span class="hljs-built_in">float</span>)<br>	<span class="hljs-keyword">for</span> y <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(-pad,-pad+Size):<br>		<span class="hljs-keyword">for</span> x <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(-pad,-pad+Size):<br>			Filter[y+pad,x+pad] = LoG_func(x,y,sigma)<br>	Filter /= Filter.<span class="hljs-built_in">sum</span>()<br><br>	out = np.zeros_like(img,dtype=np.<span class="hljs-built_in">float</span>)<br><br>	<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(H):<br>		<span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(W):<br>			<span class="hljs-keyword">for</span> c <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(C):<br>				out[i,j,c] = np.<span class="hljs-built_in">sum</span>(Filter * pad_img[i:i+Size,j:j+Size,c])<br>				<br>	out = np.clip(out,<span class="hljs-number">0</span>,<span class="hljs-number">255</span>)<br>	out = out.astype(np.uint8)<br>	<span class="hljs-keyword">return</span> out<br><br><br>img = cv2.imread(<span class="hljs-string">&quot;test2.jpg&quot;</span>)<br>out = LoG_filter(img)<br><br>cv2.imshow(<span class="hljs-string">&quot;out&quot;</span>, out)<br>cv2.imshow(<span class="hljs-string">&quot;img&quot;</span>, img)<br>cv2.waitKey(<span class="hljs-number">0</span>)<br></code></pre></div></td></tr></table></figure>
+
+</details>
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/opencv/">opencv</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E6%BB%A4%E6%B3%A2%E7%AE%97%E6%B3%95/">滤波算法</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/10/17/%E7%AC%AC%E5%8D%81%E4%B8%80%E5%B1%8A%E8%93%9D%E6%A1%A5%E6%9D%AF%E7%9C%81%E8%B5%9BB%E7%BB%84%E7%AC%AC%E4%BA%8C%E5%9C%BA%EF%BC%88%E6%AF%94%E8%B5%9B%E8%AE%B0%E5%BD%95%EF%BC%89/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">第十一届蓝桥杯省赛B组第二场（比赛记录）</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/08/03/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E3%81%AEHSV%E5%8F%98%E6%8D%A2%E5%8E%9F%E7%90%86%E5%8F%8A%E5%AE%9E%E7%8E%B0/">
+                        <span class="hidden-mobile">图像处理のHSV变换原理及实现</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://fastly.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"8WpS33YNRGD4IQNVQgVCmHQy-gzGzoHsz","appKey":"jed4H3219MxS5igBfmfTU81w","path":"window.location.pathname","placeholder":"write something here","avatar":"retro","meta":["nick","mail","link"],"requiredFields":["nick"],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":true},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://fastly.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://fastly.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://fastly.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://fastly.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://fastly.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://fastly.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://fastly.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://fastly.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- MathJax -->
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']]
+        },
+        loader: {
+          load: ['ui/lazy']
+        },
+        options: {
+          renderActions: {
+            findScript: [10, doc => {
+              document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = { node: text, delim: '', n: 0 };
+                math.end = { node: text, delim: '', n: 0 };
+                doc.math.push(math);
+              });
+            }, '', false],
+            insertedScript: [200, () => {
+              document.querySelectorAll('mjx-container').forEach(node => {
+                let target = node.parentNode;
+                if (target.nodeName.toLowerCase() === 'li') {
+                  target.parentNode.classList.add('has-jax');
+                }
+              });
+            }, '', false]
+          }
+        }
+      };
+    </script>
+
+    <script async src="https://fastly.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" ></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+</body>
+</html>

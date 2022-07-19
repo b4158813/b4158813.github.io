@@ -1,0 +1,818 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="琉璃糖">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="《计算流体力学基础及其应用》第二章笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[CFD笔记1] 流体力学控制方程组">
+<meta property="og:url" content="http://example.com/2020/02/05/CFD%E7%AC%94%E8%AE%B0-%E6%B5%81%E4%BD%93%E5%8A%9B%E5%AD%A6%E6%8E%A7%E5%88%B6%E6%96%B9%E7%A8%8B%E7%BB%84/index.html">
+<meta property="og:site_name" content="BlablaWu&#39;s Blog">
+<meta property="og:description" content="《计算流体力学基础及其应用》第二章笔记">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-02-05T07:24:33.000Z">
+<meta property="article:modified_time" content="2020-02-15T14:41:48.000Z">
+<meta property="article:author" content="琉璃糖">
+<meta property="article:tag" content="流体力学">
+<meta property="article:tag" content="CFD">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  <title>[CFD笔记1] 流体力学控制方程组 - BlablaWu&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":50,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>BlablaWu の Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/index_bg.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="[CFD笔记1] 流体力学控制方程组">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2020-02-05 15:24" pubdate>
+        2020年2月5日 下午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      11k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      95 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">[CFD笔记1] 流体力学控制方程组</h1>
+            
+            <div class="markdown-body">
+              <h2 id="《计算流体力学基础及其应用》第二章笔记"><a href="#《计算流体力学基础及其应用》第二章笔记" class="headerlink" title="《计算流体力学基础及其应用》第二章笔记"></a><center>《计算流体力学基础及其应用》第二章笔记</center></h2><span id="more"></span>
+<ul>
+<li>最近开始学CFD了，先入个门，看的书是<a target="_blank" rel="noopener" href="https://book.douban.com/subject/2180067/">《计算流体力学基础及其应用》</a>，通俗易懂，今天看完了<strong>第二章</strong>，做个记录；</li>
+<li>包含了一些核心知识点和<del>简陋的</del>推导过程（自我理解），便于自己复习。</li>
+</ul>
+<hr>
+<h2 id="流体力学的控制方程组"><a href="#流体力学的控制方程组" class="headerlink" title="流体力学的控制方程组"></a>流体力学的控制方程组</h2><h3 id="两个概念"><a href="#两个概念" class="headerlink" title="两个概念"></a>两个概念</h3><h4 id="1-物质导数"><a href="#1-物质导数" class="headerlink" title="1. 物质导数"></a>1. 物质导数</h4><p>假设一<strong>运动的流体微团</strong>在<strong>笛卡尔坐标系</strong>下的某一个状态$(x<em>{1},y</em>{1},z<em>{1},t</em>{1})$，速度满足</p>
+<script type="math/tex; mode=display">
+\overrightarrow{V}=u\overrightarrow{i}+v\overrightarrow{j}+w\overrightarrow{k}</script><p>密度满足</p>
+<script type="math/tex; mode=display">
+\rho_{1} = \rho\left(x_1,y_1,z_1,t_1\right)</script><p>则在另一个状态$(x<em>{2},y</em>{2},z<em>{2},t</em>{2})$下，有：</p>
+<script type="math/tex; mode=display">
+\rho_{2} = \rho\left(x_2,y_2,z_2,t_2\right)</script><p>在$1$处使用<strong>泰勒展开</strong>，得到：</p>
+<script type="math/tex; mode=display">
+\rho_2-\rho_1=\frac{\partial \rho}{\partial t}(t_2-t_1)+\frac{\partial \rho}{\partial x}(x_2-x_1)+\frac{\partial \rho}{\partial y}(y_2-y_1)+\frac{\partial \rho}{\partial z}(z_2-z_1)</script><p>两边同时除以$(t_2-t_1)$，得到：</p>
+<script type="math/tex; mode=display">
+\frac{\rho_2-\rho_1}{t_2-t_1}=\frac{\partial \rho}{\partial t}+\frac{\partial \rho}{\partial x}\frac{(x_2-x_1)}{t_2-t_1}+\frac{\partial \rho}{\partial y}\frac{(y_2-y_1)}{t_2-t_1}+\frac{\partial \rho}{\partial z}\frac{(z_2-z_1)}{t_2-t_1}</script><p>当$t_2\rightarrow t_1$时，化简上式，得到：</p>
+<script type="math/tex; mode=display">
+\frac{D\rho}{Dt}=\frac{\partial\rho}{\partial t}+u\frac{\partial\rho}{\partial x}+v\frac{\partial\rho}{\partial y}+w\frac{\partial\rho}{\partial z}</script><p>其中$\frac{D\rho}{Dt}$为密度的<strong>物质导数</strong>，它等于密度的<strong>当地导数</strong>$\frac{\partial\rho}{\partial t}$和<strong>迁移导数</strong>$u\frac{\partial\rho}{\partial x}+v\frac{\partial\rho}{\partial y}+w\frac{\partial\rho}{\partial z}$（即$\overrightarrow{V}\cdot \overrightarrow{\nabla \rho}$）之和。</p>
+<p>因此规定<strong>物质导数</strong>为$\frac{D}{Dt}$，<strong>当地导数</strong>为$\frac{\partial}{\partial t}$，<strong>迁移导数</strong>为$\overrightarrow{V}\cdot \overrightarrow{\nabla}$</p>
+<p>有：</p>
+<script type="math/tex; mode=display">
+\frac{D}{Dt}=\frac{\partial}{\partial t}+\overrightarrow{V}\cdot \overrightarrow{\nabla}</script><ul>
+<li><p><strong>当地导数的物理意义</strong>：流体微团在<strong>空间静止（不运动）</strong>时所对应的物理量的时间变化率，在数学上就表示为该物理量对时间$t$的偏导数；</p>
+</li>
+<li><p><strong>迁移导数的物理意义</strong>：流体微团由于处于<strong>运动的状态</strong>（流畅空间的不均匀性）所导致的对应物理量的时间变化率。</p>
+</li>
+</ul>
+<h4 id="2-速度散度"><a href="#2-速度散度" class="headerlink" title="2. 速度散度"></a>2. 速度散度</h4><p>场论里面，我们学过散度$div$或直接使用$\overrightarrow \nabla$算子点乘，而速度散度即</p>
+<script type="math/tex; mode=display">
+\overrightarrow{\nabla}\cdot\overrightarrow{V}=\frac{\partial u}{\partial x}+\frac{\partial v}{\partial y}+\frac{\partial w}{\partial z}</script><p>考虑使用<strong>随流体运动的流体微团</strong>模型的性质（<strong>质量恒定</strong>），导出如下关系式：</p>
+<script type="math/tex; mode=display">
+\overrightarrow{\nabla}\cdot\overrightarrow{V}=\frac{1}{\delta\mathscr{V}}\frac{D(\delta\mathscr{V})}{Dt}</script><p>此式为速度散度赋予了<strong>物理意义</strong>：<strong>单位体积运动着的流体微团，体积变化的时间变化率</strong>。</p>
+<h3 id="质量守恒方程（连续性方程）"><a href="#质量守恒方程（连续性方程）" class="headerlink" title="质量守恒方程（连续性方程）"></a>质量守恒方程（连续性方程）</h3><h4 id="模型1：空间位置固定的有限控制体模型"><a href="#模型1：空间位置固定的有限控制体模型" class="headerlink" title="模型1：空间位置固定的有限控制体模型"></a>模型1：空间位置固定的有限控制体模型</h4><ul>
+<li><p>核心原理：流体流入（出）控制体的净质量流量 = 流体质量的增加（减少）率</p>
+</li>
+<li><p>方程（积分形式/守恒形式）：</p>
+</li>
+</ul>
+<script type="math/tex; mode=display">
+\frac{\partial}{\partial t}\iiint_{\mathscr{V}}\rho d\mathscr{V}+\iint_S\rho \overrightarrow{V}\cdot d\overrightarrow{S}=0</script><h4 id="模型2：随流体流动的有限控制体模型"><a href="#模型2：随流体流动的有限控制体模型" class="headerlink" title="模型2：随流体流动的有限控制体模型"></a>模型2：随流体流动的有限控制体模型</h4><ul>
+<li>核心原理：控制体质量恒定</li>
+<li>方程（积分形式/非守恒形式）：</li>
+</ul>
+<script type="math/tex; mode=display">
+\frac{D}{Dt}\iiint_{\mathscr{V}}\rho d\mathscr{V}=0</script><h4 id="模型3：空间位置固定的无穷小微团模型"><a href="#模型3：空间位置固定的无穷小微团模型" class="headerlink" title="模型3：空间位置固定的无穷小微团模型"></a>模型3：空间位置固定的无穷小微团模型</h4><ul>
+<li>核心原理：流体流入（出）流体微团的净质量流量 = 流体质量的增加（减少）率</li>
+<li>方程（微分形式/守恒形式）：</li>
+</ul>
+<script type="math/tex; mode=display">
+\frac{\partial \rho}{\partial t}+\overrightarrow{\nabla}\cdot (\rho \overrightarrow{V})=0</script><h4 id="模型4：随流体流动的无穷小微团模型"><a href="#模型4：随流体流动的无穷小微团模型" class="headerlink" title="模型4：随流体流动的无穷小微团模型"></a>模型4：随流体流动的无穷小微团模型</h4><ul>
+<li>核心原理：控制体质量恒定</li>
+<li>推导过程中使用了<strong>速度散度物理意义</strong>的公式</li>
+<li>方程（微分形式/非守恒形式）：</li>
+</ul>
+<script type="math/tex; mode=display">
+\frac{D\rho}{Dt}+\rho\overrightarrow{\nabla}\cdot\overrightarrow{V}=0</script><h4 id="四种模型的转换"><a href="#四种模型的转换" class="headerlink" title="四种模型的转换"></a>四种模型的转换</h4><ul>
+<li><p>首先只需要掌握两个公式（场论课都学过）：</p>
+<ol>
+<li><p>散度定理：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}\iint_{S}\overrightarrow{V}\cdot d\overrightarrow{S}=\iiint_{\Omega}\left(\overrightarrow{\nabla}\cdot \overrightarrow{V}\right)d{\Omega}\end{aligned}</script></li>
+<li><p>向量恒等式：</p>
+<script type="math/tex; mode=display">
+\overrightarrow{\nabla}\cdot\left(\rho \overrightarrow{V}\right)=\rho \overrightarrow{\nabla}\cdot \overrightarrow{V}+\overrightarrow{V}\cdot \overrightarrow{\nabla}\rho</script></li>
+</ol>
+</li>
+</ul>
+<ul>
+<li>对于<strong>积分守恒形式</strong>方程，控制体空间位置固定，有</li>
+</ul>
+<script type="math/tex; mode=display">
+\begin{aligned}&\frac{\partial}{\partial t}\iiint_{\mathscr{V}}\rho d\mathscr{V}+\iint_S\rho \overrightarrow{V}\cdot d\overrightarrow{S}\\&=\iiint_{\mathscr{V}}\frac{\partial\rho}{\partial t} d\mathscr{V}+\iiint_\mathscr{V}\overrightarrow{\nabla}\cdot(\rho\overrightarrow{V}) d{\mathscr{V}}\\&=\iiint_\mathscr{V}\left(\frac{\partial\rho}{\partial t}+\overrightarrow{\nabla}\cdot(\rho\overrightarrow{V})\right)d\mathscr{V}\\&=0\end{aligned}</script><p>由于控制体是任取的，所以被积函数恒为零，导出<strong>微分守恒形式</strong>方程：</p>
+<script type="math/tex; mode=display">
+\frac{\partial \rho}{\partial t}+\overrightarrow{\nabla}\cdot (\rho \overrightarrow{V})=0</script><ul>
+<li>对于<strong>微分守恒形式</strong>方程，可通过如下方式导出<strong>微分非守恒形式</strong>方程：</li>
+</ul>
+<script type="math/tex; mode=display">
+\begin{aligned}
+&\frac{\partial \rho}{\partial t}+\overrightarrow{\nabla}\cdot (\rho \overrightarrow{V})\\&=\frac{\partial \rho}{\partial t}+\rho\overrightarrow{\nabla}\cdot \overrightarrow{V}+\overrightarrow{V}\cdot\overrightarrow{\nabla}\rho\\
+&=\left(\frac{\partial \rho}{\partial t}+\overrightarrow{V}\cdot\overrightarrow{\nabla}\rho\right)+\rho\overrightarrow{\nabla}\cdot \overrightarrow{V}\\
+&=\frac{D\rho}{Dt}+\rho\overrightarrow{\nabla}\cdot \overrightarrow{V}
+\end{aligned}</script><ul>
+<li>对于<strong>积分非守恒形式</strong>方程，可通过如下方法导出<strong>积分守恒形式</strong>方程</li>
+</ul>
+<script type="math/tex; mode=display">
+\begin{aligned}\frac{D}{Dt}\iiint_{\mathscr{V}}\rho d\mathscr{V}&=\iiint_{\mathscr{V}}\frac{D\left(\rho d\mathscr{V}\right)}{Dt}\\&=\iiint_{\mathscr{V}}\left[\rho\frac{D(d\mathscr{V})}{Dt}+d\mathscr{V}\frac{D\rho}{Dt}\right]\\&=\iiint_{\mathscr{V}}\rho\frac{D(d\mathscr{V})}{Dt}\frac{1}{d\mathscr{V}}d\mathscr{V}+\iiint_{\mathscr{V}}\frac{D\rho}{Dt}d\mathscr{V}\\&=\iiint_{\mathscr{V}}\left(\rho\overrightarrow{\nabla}\cdot \overrightarrow{V}\right)d\mathscr{V}+\iiint_{\mathscr{V}}\left(\frac{\partial \rho}{\partial t}+\overrightarrow{V}\cdot \overrightarrow{\nabla}\rho\right)d\mathscr{V}\\&=\iiint_{\mathscr{V}}\left(\rho\overrightarrow{\nabla}\cdot \overrightarrow{V}+\overrightarrow{V}\cdot \overrightarrow{\nabla}\rho\right)d\mathscr{V}+\iiint_{\mathscr{V}}\frac{\partial \rho}{\partial t}d\mathscr{V}\\&=\iiint_{\mathscr{V}}\frac{\partial \rho}{\partial t}d\mathscr{V}+\iiint_\mathscr{V}\overrightarrow{\nabla}\cdot(\rho\overrightarrow{V}) d{\mathscr{V}}\\&=\frac{\partial}{\partial t}\iiint_{\mathscr{V}}d{\mathscr{V}}+\iint_{S}\rho \overrightarrow{V}\cdot d\overrightarrow{S}\end{aligned}</script><ul>
+<li>至此，所有四种模型的方程（积分/微分/守恒/非守恒 形式）可以<strong>互相转换</strong>，所以他们本质上就是<strong>一个方程：质量守恒方程</strong></li>
+</ul>
+<h3 id="动量方程"><a href="#动量方程" class="headerlink" title="动量方程"></a>动量方程</h3><h3 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h3><ul>
+<li><p>采用<strong>模型4：随流体运动的无穷小微团</strong>，利用牛顿第二定律：</p>
+<script type="math/tex; mode=display">
+\overrightarrow{F}=m\overrightarrow{a}</script></li>
+<li><p>此处略去推导过程，只记录公式</p>
+</li>
+</ul>
+<h4 id="动量方程式"><a href="#动量方程式" class="headerlink" title="动量方程式"></a>动量方程式</h4><ul>
+<li>非守恒形式 $x、y、z$方向：</li>
+</ul>
+<script type="math/tex; mode=display">
+\begin{aligned}
+  \rho\frac{Du}{Dt}&=-\frac{\partial p}{\partial x}+\frac{\partial \tau_{xx}}{\partial x}+\frac{\partial \tau_{yx}}{\partial y}+\frac{\partial \tau_{zx}}{\partial z}+\rho f_x\\
+  \rho\frac{Dv}{Dt}&=-\frac{\partial p}{\partial y}+\frac{\partial \tau_{xy}}{\partial x}+\frac{\partial \tau_{yy}}{\partial y}+\frac{\partial \tau_{zy}}{\partial z}+\rho f_y\\
+  \rho\frac{Dw}{Dt}&=-\frac{\partial p}{\partial z}+\frac{\partial \tau_{xz}}{\partial x}+\frac{\partial \tau_{yz}}{\partial y}+\frac{\partial \tau_{zz}}{\partial z}+\rho f_z
+  \end{aligned}</script><ul>
+<li><p>守恒形式 $x、y、z$方向：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\frac{\partial(\rho u)}{\partial t}+\overrightarrow{\nabla}\cdot\left(\rho u \overrightarrow{V}\right)&=-\frac{\partial p}{\partial x}+\frac{\partial \tau_{xx}}{\partial x}+\frac{\partial \tau_{yx}}{\partial y}+\frac{\partial \tau_{zx}}{\partial z}+\rho f_x\\
+\frac{\partial(\rho v)}{\partial t}+\overrightarrow{\nabla}\cdot\left(\rho v \overrightarrow{V}\right)&=-\frac{\partial p}{\partial y}+\frac{\partial \tau_{xy}}{\partial x}+\frac{\partial \tau_{yy}}{\partial y}+\frac{\partial \tau_{zy}}{\partial z}+\rho f_y\\
+\frac{\partial(\rho w)}{\partial t}+\overrightarrow{\nabla}\cdot\left(\rho w \overrightarrow{V}\right)&=-\frac{\partial p}{\partial z}+\frac{\partial \tau_{xz}}{\partial x}+\frac{\partial \tau_{yz}}{\partial y}+\frac{\partial \tau_{zz}}{\partial z}+\rho f_z
+\end{aligned}</script></li>
+<li><p>注：关注到等号右边的几项，分别代表了流体微团所受的力，它包含：</p>
+<ul>
+<li><strong>表面力</strong>：压力 + 粘性力（正应力+切应力）</li>
+<li><strong>体积力</strong></li>
+</ul>
+</li>
+</ul>
+<h3 id="能量守恒方程"><a href="#能量守恒方程" class="headerlink" title="能量守恒方程"></a>能量守恒方程</h3><h4 id="模型-1"><a href="#模型-1" class="headerlink" title="模型"></a>模型</h4><ul>
+<li><p>采用<strong>模型4：随流体运动的无穷小微团</strong>，利用<strong>热力学第一定律</strong>：</p>
+<p><strong>微团总能量的变化率 = 流入的净热流率 + 体积力和表面力对微团做功的功率</strong></p>
+</li>
+<li><p>注：此处<strong>总能量</strong>包括了分子和原子的<strong>所有能量</strong>（内能+动能），前者对于原子来说有<strong>平动能</strong>和<strong>电子能</strong>，对于分子（双原子及以上）来说又多出了<strong>转动能</strong>和<strong>振动能</strong></p>
+</li>
+<li><p>此处略去推导过程，只记录公式</p>
+</li>
+</ul>
+<h4 id="能量守恒方程式"><a href="#能量守恒方程式" class="headerlink" title="能量守恒方程式"></a>能量守恒方程式</h4><ul>
+<li><p>非守恒形式：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\rho \frac{D}{Dt}\left(e+\frac{V^2}{2}\right)&=\rho\dot{q}+\frac{\partial}{\partial x}\left(k\frac{\partial T}{\partial x}\right)+\frac{\partial}{\partial y}\left(k\frac{\partial T}{\partial y}\right)+\frac{\partial}{\partial z}\left(k\frac{\partial T}{\partial z}\right)\\
+&-\frac{\partial (up)}{\partial x}-\frac{\partial (vp)}{\partial y}-\frac{\partial (wp)}{\partial z}\\
+&+\frac{\partial (u\tau_{xx})}{\partial x}+\frac{\partial (u\tau_{yx})}{\partial y}+\frac{\partial (u\tau_{zx})}{\partial z}\\
+&+\frac{\partial (v\tau_{xy})}{\partial x}+\frac{\partial (v\tau_{yy})}{\partial y}+\frac{\partial (v\tau_{zy})}{\partial z}\\
+&+\frac{\partial (w\tau_{xz})}{\partial x}+\frac{\partial (w\tau_{yz})}{\partial y}+\frac{\partial (w\tau_{zz})}{\partial z}\\
+&+\rho\overrightarrow{f}\cdot\overrightarrow{V}
+\end{aligned}</script></li>
+<li><p>守恒形式：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+&\frac{\partial}{\partial t}\left[\rho\left(e+\frac{V^2}{2}\right)\right]+\overrightarrow{\nabla}\cdot\left[\rho\left(e+\frac{V^2}{2}\right)\overrightarrow{V}\right]
+\\
+&=\rho\dot{q}+\frac{\partial}{\partial x}\left(k\frac{\partial T}{\partial x}\right)+\frac{\partial}{\partial y}\left(k\frac{\partial T}{\partial y}\right)+\frac{\partial}{\partial z}\left(k\frac{\partial T}{\partial z}\right)\\
+&-\frac{\partial (up)}{\partial x}-\frac{\partial (vp)}{\partial y}-\frac{\partial (wp)}{\partial z}\\
+&+\frac{\partial (u\tau_{xx})}{\partial x}+\frac{\partial (u\tau_{yx})}{\partial y}+\frac{\partial (u\tau_{zx})}{\partial z}\\
+&+\frac{\partial (v\tau_{xy})}{\partial x}+\frac{\partial (v\tau_{yy})}{\partial y}+\frac{\partial (v\tau_{zy})}{\partial z}\\
+&+\frac{\partial (w\tau_{xz})}{\partial x}+\frac{\partial (w\tau_{yz})}{\partial y}+\frac{\partial (w\tau_{zz})}{\partial z}\\
+&+\rho\overrightarrow{f}\cdot\overrightarrow{V}
+\end{aligned}</script></li>
+<li><p>可以发现，能量方程和动量方程（守恒和非守恒形式）的等号左边各式的形式是一致的，而从非守恒形式转化到守恒形式时之后，仅仅是等号左边有变化而已。其转化的核心步骤如下：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\rho \frac{Du}{Dt}&=\rho \frac{\partial u}{\partial t}+\rho\overrightarrow{V}\cdot \overrightarrow{\nabla}u\\
+&=\frac{\partial (up)}{\partial t}-u\frac{\partial \rho}{\partial t}+\overrightarrow{\nabla}(\rho u\overrightarrow{V})-u\overrightarrow{\nabla}\cdot(\rho\overrightarrow{V})\\
+&=\frac{\partial(\rho u)}{\partial t}+\overrightarrow{\nabla}(\rho u \overrightarrow{V})-\left[u\frac{\partial \rho}{\partial t}+u\overrightarrow{\nabla}\cdot(\rho\overrightarrow{V})\right]
+\end{aligned}</script><p>注意到中括号内为<strong>空间位置固定的流体微团模型</strong>的质量守恒方程，故有：</p>
+<script type="math/tex; mode=display">
+\rho \frac{Du}{Dt}=\frac{\partial(\rho u)}{\partial t}+\overrightarrow{\nabla}(\rho u \overrightarrow{V})</script><p>同样的，能量方程的守恒和非守恒式之间的关系也可由此导出。</p>
+</li>
+</ul>
+<h3 id="无粘流的欧拉方程（Euler-Equation）"><a href="#无粘流的欧拉方程（Euler-Equation）" class="headerlink" title="无粘流的欧拉方程（Euler Equation）"></a>无粘流的欧拉方程（Euler Equation）</h3><h4 id="要点"><a href="#要点" class="headerlink" title="要点"></a>要点</h4><ul>
+<li>忽略了<strong>耗散、粘性输运、质量扩散以及热传导</strong>的流动</li>
+</ul>
+<h4 id="方程式"><a href="#方程式" class="headerlink" title="方程式"></a>方程式</h4><ul>
+<li><p>连续性方程</p>
+<p>非守恒式：</p>
+<script type="math/tex; mode=display">
+\frac{D\rho}{Dt}+\rho\overrightarrow{\nabla}\cdot\overrightarrow{V}=0</script><p>守恒式：</p>
+<script type="math/tex; mode=display">
+\frac{\partial \rho}{\partial t}+\overrightarrow{\nabla}\cdot (\rho \overrightarrow{V})=0</script></li>
+<li><p>动量方程</p>
+<p>非守恒式：</p>
+<script type="math/tex; mode=display">
+\rho\frac{Du/v/w}{Dt}=-\frac{\partial p}{\partial x/y/z}+\rho f_{x/y/z}</script><p>守恒式：</p>
+<script type="math/tex; mode=display">
+\frac{\partial(\rho u/v/w)}{\partial t}+\overrightarrow{\nabla}\cdot\left(\rho u/v/w \overrightarrow{V}\right)=-\frac{\partial p}{\partial x/y/z}+\rho f_{x/y/z}\\</script></li>
+<li><p>能量方程</p>
+<p>非守恒式：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\rho \frac{D}{Dt}\left(e+\frac{V^2}{2}\right)=\rho\dot{q}
+-\frac{\partial (up)}{\partial x}-\frac{\partial (vp)}{\partial y}-\frac{\partial (wp)}{\partial z}+\rho\overrightarrow{f}\cdot\overrightarrow{V}
+\end{aligned}</script><p>守恒形式：</p>
+<script type="math/tex; mode=display">
+\frac{\partial}{\partial t}\left[\rho\left(e+\frac{V^2}{2}\right)\right]+\overrightarrow{\nabla}\cdot\left[\rho\left(e+\frac{V^2}{2}\right)\overrightarrow{V}\right]
+\\=\rho\dot{q}
+-\frac{\partial (up)}{\partial x}-\frac{\partial (vp)}{\partial y}-\frac{\partial (wp)}{\partial z}+\rho\overrightarrow{f}\cdot\overrightarrow{V}</script></li>
+</ul>
+<h3 id="附加方程"><a href="#附加方程" class="headerlink" title="附加方程"></a>附加方程</h3><ul>
+<li><p>我们发现，无论是$NS$方程还是$Euler$方程，都只有<strong>5个方程式</strong>（质量守恒1个、动量守恒3个、能量守恒1个），而其中却有<strong>6个未知数</strong>（$p、u、v、w、\rho、e$）</p>
+</li>
+<li><p>因此，我们需要补充方程，在空气动力学中，假设气体是<strong>完全气体</strong>（理想气体），则有状态方程：</p>
+<script type="math/tex; mode=display">
+p=\rho RT</script><p>但此方程又引入了新变量$T$，因此还需要补充状态参量间的热力学关系（<strong>量热状态方程</strong>），比如对定比热容的完全气体，有：</p>
+<script type="math/tex; mode=display">
+e=c_vT</script><p>其中$c_v$是比定容热容。</p>
+</li>
+</ul>
+<h3 id="边界条件"><a href="#边界条件" class="headerlink" title="边界条件"></a>边界条件</h3><ul>
+<li>对于任意特定的流动情况，其控制方程是相同的，而决定他们之间不同的因素便是<strong>边界条件</strong>（包括<strong>初始条件</strong>）</li>
+</ul>
+<h4 id="适合粘性流动的边界条件"><a href="#适合粘性流动的边界条件" class="headerlink" title="适合粘性流动的边界条件"></a>适合粘性流动的边界条件</h4><ul>
+<li><p>无滑移条件</p>
+<p>在物面处，有：</p>
+<script type="math/tex; mode=display">
+u=v=w=0</script><p>若壁面温度已知，则有：</p>
+<script type="math/tex; mode=display">
+T=T_w</script><p>若未知，由傅里叶导热定律，有：</p>
+<script type="math/tex; mode=display">
+\dot{q_w}=-\left(k\frac{\partial T}{\partial n}\right)_w</script><p>若为绝热壁面，有：</p>
+<script type="math/tex; mode=display">
+\left(\frac{\partial T}{\partial n}\right)_w=0</script></li>
+<li><p>等等……</p>
+</li>
+</ul>
+<h4 id="适合无粘流动的边界条件"><a href="#适合无粘流动的边界条件" class="headerlink" title="适合无粘流动的边界条件"></a>适合无粘流动的边界条件</h4><ul>
+<li><p>无滑移条件</p>
+<p>在物面处，有：</p>
+<script type="math/tex; mode=display">
+\overrightarrow{V}\cdot\overrightarrow{n}=0</script></li>
+<li><p>等等……</p>
+</li>
+</ul>
+<h3 id="适合CFD的控制方程"><a href="#适合CFD的控制方程" class="headerlink" title="适合CFD的控制方程"></a>适合CFD的控制方程</h3><ul>
+<li><p>那必须是<strong>守恒式</strong>，其实理论上控制方程的<strong>守恒式</strong>与<strong>非守恒式</strong>是无差别的，但由于CFD的出现，导致这两者出现了区分，<strong>非守恒式</strong>所求出的解往往不尽如人意（会出现震荡or跑偏），而守恒式得出的解则较为合理。</p>
+</li>
+<li><p>观察$NS$方程，发现五个方程有共通的地方，可以归结为如下形式：</p>
+<script type="math/tex; mode=display">
+\frac{\partial U}{\partial t}+\frac{\partial F}{\partial x}+\frac{\partial G}{\partial y}+\frac{\partial H}{\partial z}=J</script><p>而其中的$U、F、G、H、J$可以从$NS$方程中得出并以<strong>列向量</strong>的形式给出</p>
+</li>
+<li><p>通常情况采用<strong>时间推进算法</strong>解方程（后面会学到）</p>
+</li>
+<li><p>通常我们把$U$命名为<strong>解向量</strong>，因为该项的分量通常就是每一时间步中直接被求解的未知函数，而$F G H$为<strong>通量项</strong>，当然我们也可以自己指定解向量</p>
+</li>
+</ul>
+<h4 id="弱守恒-amp-强守恒"><a href="#弱守恒-amp-强守恒" class="headerlink" title="弱守恒&amp;强守恒"></a>弱守恒&amp;强守恒</h4><ul>
+<li>强守恒：所有东西都写进了导数里面，没有任何流动变量单独留在导数之外（如上式）</li>
+<li>弱守恒：出现了有流动变量单独留在导数之外的情形</li>
+</ul>
+<h4 id="激波装配法-amp-激波捕捉法"><a href="#激波装配法-amp-激波捕捉法" class="headerlink" title="激波装配法&amp;激波捕捉法"></a>激波装配法&amp;激波捕捉法</h4><ul>
+<li><p>激波捕捉法：将激波作为CFD方程的计算结果，直接计算出激波的流场</p>
+<p>优点：不需要事先知道激波位置，以及激波的边界条件</p>
+<p>缺点：可能会与真实情况相差甚远，误差起伏大</p>
+</li>
+<li><p>激波装配法：利用<em>兰金-许贡钮</em>关系式，将激波人为引入到流场解中，而流动控制方程只用来解除激波之外的解</p>
+<p>优点：与真实情况接近，激波位置确定</p>
+<p>缺点：需要事先知道激波位置，并利用斜激波关系式引入</p>
+</li>
+</ul>
+<hr>
+<ul>
+<li>心得：orz这一章的东西真TM硬核啊，看了一整天，算是把大二下的工流没弄明白的东西全给整明白了，<del>我吐了</del>。</li>
+</ul>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E7%89%A9%E7%90%86/">物理</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E6%B5%81%E4%BD%93%E5%8A%9B%E5%AD%A6/">流体力学</a>
+                    
+                      <a class="hover-with-bg" href="/tags/CFD/">CFD</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/02/06/%E5%BF%AB%E9%80%9F%E5%B9%82&amp;%E7%9F%A9%E9%98%B5%E5%BF%AB%E9%80%9F%E5%B9%82/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">快速幂&矩阵快速幂</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/02/04/%E9%93%BE%E5%BC%8F%E5%89%8D%E5%90%91%E6%98%9F/">
+                        <span class="hidden-mobile">链式前向星解释</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://fastly.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"8WpS33YNRGD4IQNVQgVCmHQy-gzGzoHsz","appKey":"jed4H3219MxS5igBfmfTU81w","path":"window.location.pathname","placeholder":"write something here","avatar":"retro","meta":["nick","mail","link"],"requiredFields":["nick"],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":true},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://fastly.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://fastly.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://fastly.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://fastly.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://fastly.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://fastly.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://fastly.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://fastly.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- MathJax -->
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']]
+        },
+        loader: {
+          load: ['ui/lazy']
+        },
+        options: {
+          renderActions: {
+            findScript: [10, doc => {
+              document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = { node: text, delim: '', n: 0 };
+                math.end = { node: text, delim: '', n: 0 };
+                doc.math.push(math);
+              });
+            }, '', false],
+            insertedScript: [200, () => {
+              document.querySelectorAll('mjx-container').forEach(node => {
+                let target = node.parentNode;
+                if (target.nodeName.toLowerCase() === 'li') {
+                  target.parentNode.classList.add('has-jax');
+                }
+              });
+            }, '', false]
+          }
+        }
+      };
+    </script>
+
+    <script async src="https://fastly.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" ></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+</body>
+</html>

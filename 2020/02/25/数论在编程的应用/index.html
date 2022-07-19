@@ -1,0 +1,869 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="琉璃糖">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="数论基础">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数论在算法方面的基础应用">
+<meta property="og:url" content="http://example.com/2020/02/25/%E6%95%B0%E8%AE%BA%E5%9C%A8%E7%BC%96%E7%A8%8B%E7%9A%84%E5%BA%94%E7%94%A8/index.html">
+<meta property="og:site_name" content="BlablaWu&#39;s Blog">
+<meta property="og:description" content="数论基础">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/imag/image-20200612112612672.png">
+<meta property="og:image" content="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/imag/image-20200612132505697.png">
+<meta property="og:image" content="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/imag/image-20200612133108360.png">
+<meta property="og:image" content="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/imag/image-20200612135223242.png">
+<meta property="article:published_time" content="2020-02-25T03:15:41.000Z">
+<meta property="article:modified_time" content="2022-05-17T10:58:48.000Z">
+<meta property="article:author" content="琉璃糖">
+<meta property="article:tag" content="刷题">
+<meta property="article:tag" content="数论">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/imag/image-20200612112612672.png">
+  
+  
+  <title>数论在算法方面的基础应用 - BlablaWu&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":50,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>BlablaWu の Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/index_bg.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="数论在算法方面的基础应用">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2020-02-25 11:15" pubdate>
+        2020年2月25日 上午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      418 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      4 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">数论在算法方面的基础应用</h1>
+            
+            <div class="markdown-body">
+              <h2 id="数论基础"><a href="#数论基础" class="headerlink" title="数论基础"></a><center>数论基础</center></h2><span id="more"></span>
+<h2 id="模运算-amp-算数基本定理"><a href="#模运算-amp-算数基本定理" class="headerlink" title="模运算&amp;算数基本定理"></a>模运算&amp;算数基本定理</h2><h3 id="模运算常用恒等式-amp-符号"><a href="#模运算常用恒等式-amp-符号" class="headerlink" title="模运算常用恒等式&amp;符号"></a>模运算常用恒等式&amp;符号</h3><script type="math/tex; mode=display">
+\begin{aligned}
+&a\%b=a-[\frac{a}{b}]\cdot b\\
+&a\%b=0\rightarrow b|a\\\\
+&(a+b)\%c=(a\%c+b\%c)\%c\\
+&(a*b)\%c=(a\%c*b\%c)\%c\\
+&(a-b)\%c=((a\%c-b\%c)\%c+c)\%c
+\end{aligned}</script><p>注：除法取模要使用逆元</p>
+<h4 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h4><figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-type">int</span> a,b,c;<br>a %= c,b %= c;<br><span class="hljs-type">int</span> ans1 = (a + b) % c;<br><span class="hljs-type">int</span> ans2 = ((a - b) % c + c) % c; <span class="hljs-comment">//三步走：模 加 模</span><br><span class="hljs-type">int</span> ans3 = ((<span class="hljs-type">long</span> <span class="hljs-type">long</span>) a * b) % c; <span class="hljs-comment">//一定要记得开成longlong</span><br></code></pre></div></td></tr></table></figure>
+<h3 id="算数基本定理"><a href="#算数基本定理" class="headerlink" title="算数基本定理"></a>算数基本定理</h3><p>任何一个大于$1$的自然数$N$，如果$N$不是质数，那么它一定可以<strong>唯一分解</strong>成有限个质数，即</p>
+<script type="math/tex; mode=display">
+N=P_1^{a_1}P_2^{a_2}...P_n^{a_n}\\
+其中P_1<P_2<...<P_n,P_i均为质数,a_i均为正整数</script><h4 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h4><ul>
+<li><p><strong>约数倍数的特征</strong>：如果一个数字$x=P_1^{b_1}P_2^{b_2}…P_n^{b_n}$是N的约数，那么一定有$\forall b_i\leq a_1$，同理如果x是N的倍数，那么一定有$\forall b_i\geq a_i$</p>
+</li>
+<li><p><strong>素因数求法</strong>：模拟短除法</p>
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-title">prime_factor</span><span class="hljs-params">(<span class="hljs-type">int</span> n)</span></span>&#123;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">2</span>;i*i&lt;=n;i++)&#123;<br>        <span class="hljs-keyword">if</span>(n%i==<span class="hljs-number">0</span>)&#123;<br>            ++cnt;<br>            prime_fac[cnt]=i;<br>        &#125;<br>        <span class="hljs-keyword">while</span>(n%i==<span class="hljs-number">0</span>) n/=i;<br>    &#125;<br>    <span class="hljs-keyword">if</span>(n!=<span class="hljs-number">1</span>)&#123;<br>        ++cnt;<br>        prime_fac[++cnt]=n;<br>    &#125;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+</li>
+</ul>
+<p>关于<strong>快速分解质因数</strong>，见<strong>欧拉函数</strong>部分</p>
+<h2 id="同余"><a href="#同余" class="headerlink" title="同余"></a>同余</h2><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>如果对于两个数字$a,b$，对于一个数字$m$的余数相等，则这两个数对于$m$同余</p>
+<p>在数学上的标准定义：设$m$施给定的一个正整数，$a,b$是整数，若满足$m|(a-b)$，则称$a$与$b$对模$m$同余，记作$a\equiv b(mod\ m)$</p>
+<h2 id="逆元"><a href="#逆元" class="headerlink" title="逆元"></a>逆元</h2><ul>
+<li>对于$\frac{7}{3} \% 2$的结果怎么求呢？（注意：这里不是整除）</li>
+</ul>
+<h3 id="定义-1"><a href="#定义-1" class="headerlink" title="定义"></a>定义</h3><p>乘法逆元：对于一个数字$a$，在膜$p$意义下如果存在一个数字$b$，满足$a*b\equiv 1(mod\ p)$，我们就称$b$是模$p$意义下$a$的乘法逆元，记作$a^{-1}$。容易发现</p>
+<script type="math/tex; mode=display">
+a^{-1}=(a+p)^{-1}\\
+\frac{a}{b}=a*b^{-1}</script><p>于是，我们就可以把除法取模转换成乘法取模啦！</p>
+<p>接下来就是各种<strong>求逆元</strong>的方法</p>
+<h3 id="欧拉定理"><a href="#欧拉定理" class="headerlink" title="欧拉定理"></a>欧拉定理</h3><h4 id="前置知识："><a href="#前置知识：" class="headerlink" title="前置知识："></a>前置知识：</h4><p>欧拉函数（在下方素数筛法里面有讲）</p>
+<h4 id="定理："><a href="#定理：" class="headerlink" title="定理："></a>定理：</h4><p>如果$gcd(a,p)=1$，即$a,p$互质，则有$a^{\varphi (p)}\equiv 1(mod\ p)$</p>
+<h4 id="求逆元："><a href="#求逆元：" class="headerlink" title="求逆元："></a>求逆元：</h4><p>对于数字$a$，我所需要寻找的$a^{-1}$需要满足$a*a^{-1}\equiv 1(mod\ p)$，而$a^{\varphi (p)}\equiv 1(mod\ p)$，因此有$a* a^{\varphi (p)-1}\equiv 1(mod\ p)$，因此，$a^{-1}=a^{\varphi (p)-1}$，因此只要用一次快速幂求出逆元就可以了</p>
+<h4 id="费马小定理："><a href="#费马小定理：" class="headerlink" title="费马小定理："></a>费马小定理：</h4><p>如果$p$是一个质数，则一定有$a^{p-1}\equiv 1(mod\ p)$</p>
+<h4 id="其他用法："><a href="#其他用法：" class="headerlink" title="其他用法："></a>其他用法：</h4><p>在$a,p$互质的前提下，计算$a^b(mod\ p)$，其中$b$可以大到$10^{10^7}$级别</p>
+<p>方法：令$b=k*\varphi (p)+m$，原式转化为$a^b(mod\ p)=(a^{\varphi (p)})^k*a^m$，由欧拉定理得$a^{\varphi (p)}\equiv 1(mod\ p)$，因此原式转化为$a^b(mod\ p)=a^m$，而$m=b\% \varphi (p)$，所以最后答案就是$a^b\equiv a^{b\% \varphi (p)}(mod\ p)$</p>
+<p><u>UPD 2020.6.12</u></p>
+<h3 id="扩展欧拉定理"><a href="#扩展欧拉定理" class="headerlink" title="扩展欧拉定理"></a>扩展欧拉定理</h3><p><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P5091">洛谷P5091 【模板】扩展欧拉定理</a></p>
+<p>题意：若$a,p$不互质，计算$a^b(mod\ p)$，其中$b$可以大到$10^{10^7}$级别</p>
+<p>此时，欧拉定理就不适用了，我们需要找到一个更为广泛的解法，即 对欧拉定理进行扩展，先给出结论：</p>
+<script type="math/tex; mode=display">
+b\ge \varphi(p)时，a^b\equiv a^{(b\mod\varphi(p))+\varphi(p)}(\mod p )\\
+b<\varphi(p)时，a^b直接快速幂计算即可</script><h4 id="证明"><a href="#证明" class="headerlink" title="证明"></a>证明</h4><p><img src="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/imag/image-20200612112612672.png" srcset="/img/loading.gif" lazyload alt="image-20200612112612672"></p>
+<h4 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h4><figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++">ll a,m,b,phim;<br><span class="hljs-type">bool</span> flag=<span class="hljs-literal">false</span>;<br><br><span class="hljs-comment">// a^b mod m = a^(b mod phi[m] + phi[m]) mod m &#123;if b&gt;=phi[m]&#125;</span><br><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">T</span>&gt;<br><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> _read(T &amp;x) &#123;<br>	x=<span class="hljs-number">0</span>;<span class="hljs-type">int</span> f=<span class="hljs-number">0</span>;<span class="hljs-type">char</span> ch=<span class="hljs-built_in">getchar</span>();<br>	<span class="hljs-keyword">while</span>(ch&lt;<span class="hljs-number">48</span>||ch&gt;<span class="hljs-number">57</span>)&#123;f|=(ch==<span class="hljs-string">&#x27;-&#x27;</span>);ch=<span class="hljs-built_in">getchar</span>();&#125;<br>	<span class="hljs-keyword">while</span>(ch&gt;=<span class="hljs-number">48</span>&amp;&amp;ch&lt;=<span class="hljs-number">57</span>)&#123;<br>		x=(x&lt;&lt;<span class="hljs-number">1</span>)+(x&lt;&lt;<span class="hljs-number">3</span>)+(ch^<span class="hljs-number">48</span>);<br>		<span class="hljs-keyword">if</span>(x&gt;=phim) flag=<span class="hljs-literal">true</span>,x%=phim;<span class="hljs-comment">// 边读入边取模，并标记是否有x&gt;=phi[m]</span><br>		ch=<span class="hljs-built_in">getchar</span>();<br>	&#125;<br>	x=f?-x:x;<br>	<span class="hljs-keyword">return</span>;<br>&#125;<br><br><span class="hljs-comment">// get phi[n]</span><br><span class="hljs-function"><span class="hljs-keyword">inline</span> ll <span class="hljs-title">getphi</span><span class="hljs-params">(ll n)</span></span>&#123;<br>	ll res=n;<br>	<span class="hljs-keyword">for</span>(ll i=<span class="hljs-number">2</span>;i*i&lt;=n;i++)&#123;<br>		<span class="hljs-keyword">if</span>(n%i==<span class="hljs-number">0</span>) res=res/i*(i<span class="hljs-number">-1</span>);<br>		<span class="hljs-keyword">while</span>(n%i==<span class="hljs-number">0</span>) n/=i;<br>	&#125;<br>	<span class="hljs-keyword">if</span>(n&gt;<span class="hljs-number">1</span>) res=res/n*(n<span class="hljs-number">-1</span>);<br>	<span class="hljs-keyword">return</span> res;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	<span class="hljs-built_in">read</span>(a),<span class="hljs-built_in">read</span>(m);<br>	phim=<span class="hljs-built_in">getphi</span>(m);<span class="hljs-comment">// 求m欧拉函数</span><br>	_read(b);<br>	<span class="hljs-comment">// get a^b mod m</span><br>	ll ans=<span class="hljs-built_in">qpow</span>(a,b+(flag?phim:<span class="hljs-number">0</span>),m);<br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%lld\n&quot;</span>,ans);<br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+<h3 id="扩展欧几里得算法"><a href="#扩展欧几里得算法" class="headerlink" title="扩展欧几里得算法"></a>扩展欧几里得算法</h3><h4 id="前置知识：-1"><a href="#前置知识：-1" class="headerlink" title="前置知识："></a>前置知识：</h4><p>裴蜀定理：对于方程$ax+by=c$有整数解当且仅当$c$是$gcd(a,b)$的倍数，即$(gcd(a,b)|c)$</p>
+<h4 id="扩欧算法："><a href="#扩欧算法：" class="headerlink" title="扩欧算法："></a>扩欧算法：</h4><p>通常写作$exgcd$算法，它是用来求下面这个同余方程的一组解的</p>
+<script type="math/tex; mode=display">
+ax+by=gcd(a,b)</script><p>于是我们从另一个角度看逆元方程</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+&aa^{-1}\equiv 1(mod\ p)\\&\Rightarrow ax\equiv 1(mod\ p)\\&\Rightarrow ax-py=1
+\end{aligned}</script><p>因此，<strong>现在只需要找出一组$x,y$使得上式成立即可</strong>（为简单起见，可以把上式的减号换成加号），这个式子同样也印证了欧拉定理中如果想要存在$a$对$p$的逆元，必须要$gcd(a,p)=1$</p>
+<p>如何找出一组解？</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+&考虑b\neq0\Rightarrow gcd(a,b)=gcd(b,a\%b)\\
+&假设有x',y'满足bx'+(a\%b)y'=gcd(b,a\%b)\\
+&那么显然有ax+by=bx'+(a\%b)y'\\
+&注意到a\%b=a-[\frac{a}{b}]*b\\
+&所以也就有ax+by=bx'+(a-[\frac{a}{b}]*b)y'\\
+&两个未知数x,y，因此这个方程显然有无穷多组解，不妨找一组特解\\
+&将等号右侧的东西按照a,b分类，有\\
+&ax+by=ay'+b(x'+[\frac{a}{b}]y')\\
+&此时，令x=y',y=x'-[\frac{a}{b}]y'即可
+\end{aligned}</script><h4 id="代码-1"><a href="#代码-1" class="headerlink" title="代码"></a>代码</h4><figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++">ll x,y;<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">exgcd</span><span class="hljs-params">(ll a,ll b)</span></span>&#123;<br>    <span class="hljs-keyword">if</span>(b==<span class="hljs-number">0</span>)&#123;<br>        x=<span class="hljs-number">1</span>,y=<span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">return</span>;<br>    &#125;<br>    <span class="hljs-built_in">exgcd</span>(b,a%b);<br>    ll tx=x;<br>    ll ty=y;<br>    x=ty;<br>    y=tx-a/b*ty;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+<p>因此，求一个数$a$的逆元也可以转化为求解上述$x$的过程</p>
+<p>那么，如果对于一个一般形式的二元一次不定方程（如下）</p>
+<script type="math/tex; mode=display">
+ax+by=c</script><p>或者一个一般的同余方程（如下）</p>
+<script type="math/tex; mode=display">
+ax\equiv c(mod\ p)</script><p>该如何求解呢？</p>
+<script type="math/tex; mode=display">
+考虑令c=k*gcd(a,b)\\
+则可以先解出方程ax'+by'=gcd(a,b)\\
+然后令x=kx',y=ky',即可求得ax+by=c的一组解</script><p>代码如下（exgcd的过程中顺便求出gcd(a,b)）</p>
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++">ll x,y;<br><span class="hljs-function">ll <span class="hljs-title">exgcd</span><span class="hljs-params">(ll a,ll b)</span></span>&#123;<br>    <span class="hljs-keyword">if</span>(b==<span class="hljs-number">0</span>)&#123;<br>        x=<span class="hljs-number">1</span>,y=<span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">return</span> a;<br>    &#125;<br>    ll t=<span class="hljs-built_in">exgcd</span>(b,a%b);<br>    ll tx=x;<br>    ll ty=y;<br>    x=ty;<br>    y=tx-a/b*ty;<br>    <span class="hljs-keyword">return</span> t<br>&#125;<span class="hljs-comment">//于是答案就是x*c/exgcd(a,b)</span><br></code></pre></div></td></tr></table></figure>
+<p>除此之外，如果我们又想要所有的解，或者$x$最小或$y$最小的正整数解，这就又涉及到另外一个问题，它所有解的通式要怎么写呢？</p>
+<p>这里直接给出答案（证明太复杂，略）</p>
+<script type="math/tex; mode=display">
+x=x_0+k\cdot\frac{b}{gcd(a,b)}\\
+y=y_0-k\cdot\frac{a}{gcd(a,b)}</script><p>如果再将其转化为一般式，则有</p>
+<script type="math/tex; mode=display">
+x=tx_0+kt\cdot\frac{b}{gcd(a,b)}\\
+y=ty_0-kt\cdot\frac{a}{gcd(a,b)}\\
+其中t=\frac{c}{gcd(a,b)}</script><p>如果要求一个最小的$x$，那么一定要记得把答案$mod\frac{b}{gcd(a,b)}$</p>
+<h4 id="二元一次不定方程"><a href="#二元一次不定方程" class="headerlink" title="二元一次不定方程"></a>二元一次不定方程</h4><p>因此这里有一道模板题<a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P5656">【模板】二元一次不定方程</a>，要求求出一个一般的二元一次不定方程的根，还添加了若干要求：</p>
+<ul>
+<li>如果无整数解，则输出-1</li>
+<li>否则如果没有正整数解，则输出最小的正整数x和最小的正整数y</li>
+<li>否则输出正整数解的数量、最小的x和最小的y、最大的x和最大的y</li>
+</ul>
+<p>题解：</p>
+<p>无整数解很简单，就是不满足裴蜀定理嘛，这里不多说</p>
+<p>如何判断没有正整数解：由上面推出的公式可以发现，解x和y是此消彼长的关系，因此当x取最小正整数时，如果y非正了，那么就没有正整数解，否则就有，同理y也一样</p>
+<p>如何求正整数解的个数：由上面推出的公式可以很容易得出最小的正整数x（即$把exgcd的x解mod\frac{b}{gcd(a,b)}$，但是记得如果得0了要加一个模数把它调正了），而最大正整数x就是y取最小正整数的时候的x，如法炮制一遍就行啦，最后的个数就是$\frac{x<em>{min}-x\</em>{max}}{\frac{b}{gcd(a,b)}}+1$（纸上写写就动了）</p>
+<details>
+    <summary>code</summary>
+
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><span class="hljs-keyword">typedef</span> <span class="hljs-type">long</span> <span class="hljs-type">long</span> ll;<br><span class="hljs-function">ll <span class="hljs-title">gcd</span><span class="hljs-params">(ll a,ll b)</span></span>&#123;<br>	<span class="hljs-keyword">return</span> b==<span class="hljs-number">0</span>?a:<span class="hljs-built_in">gcd</span>(b,a%b);<br>&#125;<br>ll x,y,a,b,c;<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">exgcd</span><span class="hljs-params">(ll a,ll b)</span></span>&#123; <span class="hljs-comment">//exgcd</span><br>	<span class="hljs-keyword">if</span>(b==<span class="hljs-number">0</span>)&#123;<br>		x=<span class="hljs-number">1</span>,y=<span class="hljs-number">0</span>;<br>		<span class="hljs-keyword">return</span>;<br>	&#125;<br>	<span class="hljs-built_in">exgcd</span>(b,a%b);<br>	ll tx=x,ty=y;<br>	x=ty;<br>	y=tx-a/b*ty;<br>&#125;<br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	<span class="hljs-type">int</span> t;<br>	<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>,&amp;t);<br>	<span class="hljs-keyword">while</span>(t--)&#123;<br>		x=<span class="hljs-number">0</span>,y=<span class="hljs-number">0</span>;<br>		<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%lld%lld%lld&quot;</span>,&amp;a,&amp;b,&amp;c);<br>		ll g=<span class="hljs-built_in">gcd</span>(a,b);<br>		<span class="hljs-keyword">if</span>(c%g!=<span class="hljs-number">0</span>)&#123; <span class="hljs-comment">//无解</span><br>			<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;-1\n&quot;</span>);<br>			<span class="hljs-keyword">continue</span>;<br>		&#125;<span class="hljs-keyword">else</span>&#123;<br>		a/=g,b/=g,c/=g;<br>		<span class="hljs-built_in">exgcd</span>(a,b);<br>		x*=c,y*=c; <span class="hljs-comment">//求特解</span><br>		ll minx=(x%b+b)%b;<br>		<span class="hljs-keyword">if</span>(!minx) minx+=b; <span class="hljs-comment">//调正</span><br>		ll miny=(y%a+a)%a;<br>		<span class="hljs-keyword">if</span>(!miny) miny+=a; <span class="hljs-comment">//同上</span><br>		ll maxy=(c-(a*minx))/b;<br>		ll maxx=(c-(b*miny))/a;<br>		ll cnt=(maxx-minx)/b+<span class="hljs-number">1</span>;<br>		<span class="hljs-keyword">if</span>(cnt) <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%lld %lld %lld %lld %lld\n&quot;</span>,cnt,minx,miny,maxx,maxy);<br>		<span class="hljs-keyword">else</span> <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%lld %lld\n&quot;</span>,minx,miny);<br>		&#125;<br>	&#125;<br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+
+</details>
+
+<h3 id="线性求逆元"><a href="#线性求逆元" class="headerlink" title="线性求逆元"></a>线性求逆元</h3><h4 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h4><p>给定$n,p$，求$[1,n]$中所有整数在模$p$意义下的乘法逆元</p>
+<h4 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h4><script type="math/tex; mode=display">
+\begin{aligned}
+&枚举变量i:1\rightarrow n\\
+&利用[1,i-1]的逆元去求i的逆元\\
+&不妨令p=ki+b,\\
+&于是有ki+b\equiv 0(mod\ p)\\
+&移项得-ki\equiv b(mod\ p)\\
+&左右两侧同时乘i^{-1}b^{-1}得\\
+&i^{-1}\equiv -kb^{-1}(mod\ p)\\
+&其中k=[\frac{p}{i}],b=p\%i< i\\
+&因此b^{-1}在之前已经求完了，可以直接使用\\
+&得出i^{-1}=-[\frac{p}{i}]\cdot (p\%i)^{-1}\\
+&由于出现了负号,需要转正\\
+&得出答案i^{-1}=(p-[\frac{p}{i}])\cdot (p\%i)^{-1}
+\end{aligned}</script><h4 id="代码-2"><a href="#代码-2" class="headerlink" title="代码"></a>代码</h4><p>对应题目<a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P3811">【模板】乘法逆元</a></p>
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><span class="hljs-keyword">typedef</span> <span class="hljs-type">long</span> <span class="hljs-type">long</span> ll;<br><span class="hljs-type">int</span> inv[<span class="hljs-number">3000005</span>];<br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	<span class="hljs-type">int</span> n,p;<br>	<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>,&amp;n,&amp;p);<br>	inv[<span class="hljs-number">0</span>]=<span class="hljs-number">0</span>,inv[<span class="hljs-number">1</span>]=<span class="hljs-number">1</span>;<br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;1\n&quot;</span>);<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">2</span>;i&lt;=n;i++)&#123;<br>		inv[i]=(ll)(p-p/i)*inv[p%i]%p;<br>		<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>,inv[i]);<br>	&#125;<br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+<h3 id="阶乘逆元"><a href="#阶乘逆元" class="headerlink" title="阶乘逆元"></a>阶乘逆元</h3><h4 id="问题-1"><a href="#问题-1" class="headerlink" title="问题"></a>问题</h4><p>如何求出$[1,n]$各数阶乘的逆元呢？</p>
+<h4 id="算法-1"><a href="#算法-1" class="headerlink" title="算法"></a>算法</h4><script type="math/tex; mode=display">
+考虑先求出n!的逆元(n!)^{-1},则有\\
+n!\cdot(n!)^{-1}=1\\
+将n!展开,得到(n-1)!\cdot n\cdot(n!)^{-1}=1\\
+则((n-1)!)^{-1}=n\cdot (n!)^{-1}</script><p>这样一来，就可以倒着递推一遍就可以了</p>
+<h4 id="代码-3"><a href="#代码-3" class="headerlink" title="代码"></a>代码</h4><figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">int</span> <span class="hljs-title">get_inv</span><span class="hljs-params">(<span class="hljs-type">int</span> x,<span class="hljs-type">int</span> y)</span></span>&#123;<br>    <span class="hljs-type">int</span> base=x,ans=<span class="hljs-number">1</span>;<br>    y-=<span class="hljs-number">2</span>;<br>    <span class="hljs-keyword">while</span>(y&gt;<span class="hljs-number">0</span>)&#123;<br>        <span class="hljs-keyword">if</span>(y&amp;<span class="hljs-number">1</span>) ans=(ll)ans*base%mod;<br>        base=(ll)base*base%mod;<br>        y&gt;&gt;=<span class="hljs-number">1</span>;<br>    &#125;<br>    <span class="hljs-keyword">return</span> ans;<br>&#125;<br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-type">int</span> ifac[N],fac=<span class="hljs-number">1</span>,mod;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">2</span>;i&lt;=n;i++) <br>        fac=(ll)fac*i % mod;<br>    ifac[n]=<span class="hljs-built_in">get_inv</span>(fac, mod);<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=n<span class="hljs-number">-1</span>;i&gt;=<span class="hljs-number">0</span>;i--) <br>        ifac[i]=(ll)ifac[i+<span class="hljs-number">1</span>]*(i+<span class="hljs-number">1</span>)%mod;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+<h3 id="逆元小结"><a href="#逆元小结" class="headerlink" title="逆元小结"></a>逆元小结</h3><ul>
+<li>欧拉定理法（核心公式$a^{\varphi(p)}\equiv 1(mod\ p)$）<ul>
+<li>衍生：$a^b=a^{b\%\varphi(p)}$（$a,p$互质）</li>
+<li>扩展欧拉定理：在$b\geq \varphi(p)时,$$a^b\equiv a^{b\%\varphi(p)+\varphi(p)}(mod\ p)$</li>
+</ul>
+</li>
+<li>拓展gcd（核心公式$ax+by=bx’+(a\%b)y’$）<ul>
+<li>衍生：对任意不定方程$ax+by=c$的解法</li>
+</ul>
+</li>
+<li>线性求逆元（对固定模p）（核心公式p=ki+b）<ul>
+<li>注意转正</li>
+</ul>
+</li>
+<li>阶乘逆元（核心公式$(n-1)!\cdot n\cdot(n!)^{-1}=1$）</li>
+</ul>
+<h2 id="中国剩余定理及其扩展"><a href="#中国剩余定理及其扩展" class="headerlink" title="中国剩余定理及其扩展"></a>中国剩余定理及其扩展</h2><h3 id="中国剩余定理（CRT）"><a href="#中国剩余定理（CRT）" class="headerlink" title="中国剩余定理（CRT）"></a>中国剩余定理（CRT）</h3><p><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P1495">洛谷P1495 【模板】中国剩余定理(CRT)/曹冲养猪</a></p>
+<h4 id="定义-2"><a href="#定义-2" class="headerlink" title="定义"></a>定义</h4><p>中国剩余定理（孙子定理，Chinese remainder theorem，简称CRT）是中国古代用来求解一次同余式方程组的一种算法，一次同余方程组的数学语言表达如下：</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+    x\equiv a_1(\mod b_1)\\
+    x\equiv a_2(\mod b_2)\\
+    ......\\
+    x\equiv a_n(\mod b_n)\\
+\end{cases}</script><p>中国剩余定理成立的前提是：<strong>$b_i$两两互质</strong>，在满足此条件的前提下，可以通过构造得出该方程的解：</p>
+<script type="math/tex; mode=display">
+x=\left(\sum_{i=1}^{n}{a_it_iM_i}\right)\mod M\\
+其中,M=\prod_{i=1}^{n}{b_i}\\
+M_i=\frac{M}{b_i}\\
+t_i={M_i}^{-1} \mod b_i\\</script><h4 id="证明-1"><a href="#证明-1" class="headerlink" title="证明"></a>证明</h4><p><img src="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/imag/image-20200612132505697.png" srcset="/img/loading.gif" lazyload alt="image-20200612132505697"></p>
+<h4 id="代码-4"><a href="#代码-4" class="headerlink" title="代码"></a>代码</h4><figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-keyword">inline</span> ll <span class="hljs-title">crt</span><span class="hljs-params">()</span></span>&#123;<br>    ll M=<span class="hljs-number">1</span>, res=<span class="hljs-number">0</span>;<br>    <span class="hljs-built_in">rep</span>(i,<span class="hljs-number">1</span>,n) M*=b[i];<br>    <span class="hljs-built_in">rep</span>(i,<span class="hljs-number">1</span>,n)&#123;<br>        ll Mi=M/b[i];<br>        ll x,y;<br>        <span class="hljs-built_in">exgcd</span>(Mi,b[i],x,y);<br>        res=(res+a[i]*Mi*ti)%M;<br>    &#125;<br>    <span class="hljs-keyword">return</span> (res%M+M)%M;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+<h3 id="扩展中国剩余定理（EXCRT）"><a href="#扩展中国剩余定理（EXCRT）" class="headerlink" title="扩展中国剩余定理（EXCRT）"></a>扩展中国剩余定理（EXCRT）</h3><p>CRT只能够解模数两两互质的情形，那么对于一般的模数不互质的情况，又如何求解呢？</p>
+<h4 id="解法思路"><a href="#解法思路" class="headerlink" title="解法思路"></a>解法思路</h4><p><img src="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/imag/image-20200612133108360.png" srcset="/img/loading.gif" lazyload alt="image-20200612133108360"></p>
+<h4 id="代码-5"><a href="#代码-5" class="headerlink" title="代码"></a>代码</h4><figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-comment">// O1快速乘</span><br><span class="hljs-function"><span class="hljs-keyword">inline</span> ll <span class="hljs-title">multi</span><span class="hljs-params">(ll x,ll y,ll Mod)</span></span>&#123;<br>	ll tmp=(x*y-(ll)((<span class="hljs-type">long</span> <span class="hljs-type">double</span>)x/Mod*y+<span class="hljs-number">1.0e-8</span>)*Mod);<br>	<span class="hljs-keyword">return</span> tmp&lt;<span class="hljs-number">0</span> ? tmp+Mod : tmp;<br>&#125;<br><br><span class="hljs-comment">// x = a[i] (mod b[i]) b[i]不互质</span><br><span class="hljs-function"><span class="hljs-keyword">inline</span> ll <span class="hljs-title">excrt</span><span class="hljs-params">()</span></span>&#123;<br>	ll ans=a[<span class="hljs-number">1</span>],M=b[<span class="hljs-number">1</span>];<span class="hljs-comment">// 特判第一个方程</span><br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">2</span>;i&lt;=n;i++)&#123;<br>		ll aa=M,bb=b[i];<br>		ll cc=(a[i]-ans%bb+bb)%bb;<span class="hljs-comment">// aa*x=cc(mod bb)</span><br>		ll x,y;<br>		ll g=<span class="hljs-built_in">exgcd</span>(aa,bb,x,y),bg=bb/g;<br>		<span class="hljs-keyword">if</span>(cc%g) <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<span class="hljs-comment">// 无解</span><br>		x=<span class="hljs-built_in">multi</span>(cc/g,x,bg);<span class="hljs-comment">// 防爆long long</span><br>		ans+=x*M;<br>		M*=bg;<br>		ans=(ans%M+M)%M;<br>	&#125;<br>	<span class="hljs-keyword">return</span> (ans%M+M)%M;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+<h2 id="大步小步算法"><a href="#大步小步算法" class="headerlink" title="大步小步算法"></a>大步小步算法</h2><p>大步小步算法（Baby Step Giant Step，简称BSGS <del>拔山盖世</del>）是用来寻找<strong>离散对数</strong>（即模意义下的对数）的常用算法，具体来说，分为普通的BSGS算法和扩展BSGS，下面一一介绍</p>
+<h3 id="BSGS"><a href="#BSGS" class="headerlink" title="BSGS"></a>BSGS</h3><p>对于形如$ax\equiv b(\mod p)$的同余方程已经有<strong>扩展欧几里得算法</strong>的通用解法了，然而，对于形如$a^x\equiv b(\mod p)$的同余方程又该如何求解呢？</p>
+<p>模板题链接：<a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P3846">洛谷P3846 [TJOI2007] 可爱的质数/【模板】BSGS</a></p>
+<p>题意：求解最小的$x$，满足$a^x\equiv b(\mod p)$，其中，$2\le a,b&lt;p&lt;2^{31}$，<strong>且$p$为质数</strong></p>
+<p>算法思路：看到这样的指数形式同余式，容易联想到欧拉定理，即$a^{\varphi(p)}\equiv 1(\mod p)$，其中$p$为质数，同时，又有$a^0\equiv 1(\mod p)$，因此容易得到 $a^x$ 有一个长度为$a^{\varphi(p)}$的循环节，当$x&gt;\varphi(x)$后，对应的等号右侧开始循环，因此，要求得最小解，只需要暴力枚举$x$到$\varphi(p)$即可，有因为$p$为质数，因此$\varphi(p)=p-1$，枚举范围为$[0,p-2]$，间复杂度$O(p)$，可以得零分（划掉）</p>
+<p>我们发现这个数据范围线性复杂度是不够用的，需要一个根号算法，我们考虑将$x$分解开，令$x=i\cdot m-k$，上式化为$a^{i\cdot m}\equiv ba^k(\mod p)$，这样一来，可以通过预先哈希掉等号右侧的数的可能取值，然后枚举等号左侧的值找哈希表中是否存在过即可，显然这里$m$取$\sqrt p$时能够确保$i\cdot m+k$枚举到所有的$[0,p-2]$的值，因此复杂度为$O(\sqrt p)$</p>
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-comment">// a^x = b (mod p) &lt;=&gt; a^(im) = b * a^k (mod p)</span><br><span class="hljs-function"><span class="hljs-keyword">inline</span> ll <span class="hljs-title">BSGS</span><span class="hljs-params">(ll a,ll b,ll p)</span></span>&#123;<br>	unordered_map&lt;ll,ll&gt; ma;<span class="hljs-comment">// hash table</span><br>	ll m=<span class="hljs-built_in">ceil</span>(<span class="hljs-built_in">sqrt</span>(p));<br>	<span class="hljs-keyword">for</span>(ll i=<span class="hljs-number">0</span>,cur=b%p;i&lt;=m;i++,cur=cur*a%p)<br>		ma[cur]=i;<br>	ll am=<span class="hljs-built_in">qpow</span>(a,m,p);<br>	<span class="hljs-keyword">for</span>(ll i=<span class="hljs-number">1</span>,now=am;i&lt;=m;i++,now=now*am%p)&#123;<br>		<span class="hljs-keyword">if</span>(ma.<span class="hljs-built_in">count</span>(now)) <span class="hljs-keyword">return</span> (i*m-ma[now]+p)%p;<span class="hljs-comment">// x</span><br>	&#125;<br>	<span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<span class="hljs-comment">// no solution</span><br>&#125;<br></code></pre></div></td></tr></table></figure>
+<h3 id="EXBSGS"><a href="#EXBSGS" class="headerlink" title="EXBSGS"></a>EXBSGS</h3><p>我们可以发现，BSGS是基于欧拉定理的暴力算法的优化，因此只能够处理$\gcd(a,p)=1$的情况，对于更加一般的离散对数求法，我们需要将BSGS进行扩展，得到<strong>扩展BSGS算法</strong></p>
+<p>模板题链接：<a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P4195">洛谷P4195 【模板】扩展BSGS</a></p>
+<p>题意：求满足$a^x\equiv b(\mod p)$的最小自然数$x$，其中，$a,p,b\le 10^9$</p>
+<p>算法思路：此时若$\gcd(a,p)\neq 1$，就无法使用BSGS算法了，考虑令$g=\gcd(a,p)$，同时，上式可以转化为 $a\cdot a^{x-1}+p\cdot k\equiv b$，由<strong>裴蜀定理</strong>可知：这个式子有整数解当且仅当$g|b$，若有解，上式又可以转化为$a^{x-1}\cdot \frac{a}{g}+\frac{p}{g}\cdot k\equiv \frac{b}{g}$，即$a^{x-1}\cdot \frac{a}{g}\equiv \frac{b}{g}(\mod \frac{p}{g})$，令$a’=\frac{a}{g},(a’)^{-1}=(\frac{a}{g})^{-1}$，则得出$a^{x-1}\equiv \frac{b}{g}\cdot (a’)^{-1}(\mod \frac{p}{g})$，此时，可以将这个式子作为新的求解方程，用同样的方法求解，这是一个递归的过程，直到$\gcd(a,p)=1$时，就可以使用BSGS求解了</p>
+<p>容易得出，最终的方程是形如下式的同余方程：</p>
+<script type="math/tex; mode=display">
+a^{x-k}\equiv \frac{b}{\prod_{i=1}^k{g_i}}\cdot \left(\prod_{i=1}^k{a_i'}\right)^{-1}(\mod \frac{p}{\prod_{i=1}^k{g_i}})</script><p>在得出可以用BSGS的方程后，先求出$\left(\prod_{i=1}^k{a_i’}\right)^{-1}$，然后BSGS求出对应的解，注意这里求出的解为$x’=x-k$的值，因此，如果有解则最终的解应该为$x’+k$</p>
+<p>注意事项：</p>
+<ul>
+<li><p>在算法开始前，需要注意一下特判$b=1$的情况，直接输出$x=1$即可</p>
+</li>
+<li><p>在EXGSGS中，如果遇到</p>
+<script type="math/tex; mode=display">
+\prod_{i=1}^k{a_i'}=\frac{b}{\prod_{i=1}^k{g_i}}</script><p>则$a^{x-k}=1$，即直接输出$k$即可</p>
+</li>
+<li><p>好事多模（很重要）</p>
+</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-comment">// a^x = b (mod p) &lt;=&gt; a^(x-k) * a/prod(g) = b/prod(g) (mod p/prod(g))</span><br><span class="hljs-function"><span class="hljs-keyword">inline</span> ll <span class="hljs-title">EXBSGS</span><span class="hljs-params">(ll a,ll b,ll p)</span></span>&#123;<br>	<span class="hljs-keyword">if</span>(b==<span class="hljs-number">1</span>) <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<span class="hljs-comment">// a^x = 1 (mod p)</span><br>	ll g,k=<span class="hljs-number">0</span>,ag=<span class="hljs-number">1</span>;<br>	<span class="hljs-keyword">while</span>((g=<span class="hljs-built_in">gcd</span>(a,p))&gt;<span class="hljs-number">1</span>)&#123;<br>		<span class="hljs-keyword">if</span>(b%g) <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<span class="hljs-comment">// no solution</span><br>		k++,b/=g,p/=g,ag=ag*(a/g)%p;<br>		<span class="hljs-keyword">if</span>(ag==b) <span class="hljs-keyword">return</span> k;<span class="hljs-comment">// a^(x-k)=1</span><br>	&#125;<br>	ll inv,y;<br>	<span class="hljs-built_in">exgcd</span>(ag,p,inv,y);<span class="hljs-comment">// get inv of ag</span><br>	inv=(inv+p)%p;<br>	ll res=<span class="hljs-built_in">BSGS</span>(a,b*inv%p,p);<span class="hljs-comment">// BSGS</span><br>	<span class="hljs-keyword">return</span> res==<span class="hljs-number">-1</span>?res:res+k;<span class="hljs-comment">// solution + k</span><br>&#125;<br></code></pre></div></td></tr></table></figure>
+<h2 id="素数筛法"><a href="#素数筛法" class="headerlink" title="素数筛法"></a>素数筛法</h2><h3 id="埃氏筛法"><a href="#埃氏筛法" class="headerlink" title="埃氏筛法"></a>埃氏筛法</h3><h4 id="算法-2"><a href="#算法-2" class="headerlink" title="算法"></a>算法</h4><ul>
+<li>从2开始枚举范围内每一个数，碰到是素数的就把他加入到素数表里，然后从这个素数开始把它的所有在范围内的倍数筛去即可</li>
+<li>优化：每次筛去时可以直接从$i^2$开始枚举，因为之前的数都已经在以前的$i$的循环里被筛去了</li>
+<li>时间复杂度为$O(nlogn)$，不是很给力，但够用了（至少比每次都判一遍素数那个方法靠谱）</li>
+</ul>
+<h4 id="代码-6"><a href="#代码-6" class="headerlink" title="代码"></a>代码</h4><figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++">f[<span class="hljs-number">0</span>]=<span class="hljs-number">1</span>;<br>f[<span class="hljs-number">1</span>]=<span class="hljs-number">1</span>;<span class="hljs-comment">// 0 and 1 is not prime</span><br><span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">2</span>;i&lt;=n;i++)&#123;<br>    <span class="hljs-keyword">if</span>(f[i]==<span class="hljs-number">0</span>)&#123; <span class="hljs-comment">//if i is prime number</span><br>        prime[++cnt]=i; <span class="hljs-comment">// add</span><br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j=i*i;j&lt;=n;j+=i)&#123; <span class="hljs-comment">//filter</span><br>            f[j]=<span class="hljs-number">1</span>;<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+<h3 id="欧拉筛"><a href="#欧拉筛" class="headerlink" title="欧拉筛"></a>欧拉筛</h3><h4 id="算法-3"><a href="#算法-3" class="headerlink" title="算法"></a>算法</h4><ul>
+<li><p>同样从2开始枚举范围内每一个数，碰到素数就加入素数表里，之后再从当前的$i$开始筛去合数，筛掉的每个合数满足的条件为</p>
+<ul>
+<li>最小质因数*最大因数（非自己）=这个合数</li>
+<li>保证每一个合数都只会被这个方法筛掉一次</li>
+</ul>
+</li>
+<li><p>时间复杂度为$O(n)$，非常给力</p>
+</li>
+</ul>
+<h4 id="代码-7"><a href="#代码-7" class="headerlink" title="代码"></a>代码</h4><figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++">f[<span class="hljs-number">0</span>]=f[<span class="hljs-number">1</span>]=<span class="hljs-number">1</span>;<br><span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">2</span>;i&lt;=n;i++)&#123;<br>    <span class="hljs-keyword">if</span>(f[i]==<span class="hljs-number">0</span>)<br>        prime[++cnt]=i;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j=<span class="hljs-number">1</span>;j&lt;=cnt&amp;&amp;i*prime[j]&lt;=n;j++)&#123;<br>        f[i*prime[j]]=<span class="hljs-number">1</span>; <span class="hljs-comment">//保证每个数被自己的最小质因数筛掉</span><br>        <span class="hljs-keyword">if</span>(i%prime[j]==<span class="hljs-number">0</span>) <span class="hljs-comment">//保证线性，保证只被最小质因数筛一次</span><br>            <span class="hljs-keyword">break</span>;<br>    &#125;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+<p>代码中有一个最难理解的部分<code>if(i%prime[j]==0 break;</code>，这一句的意义在于保证了每个合数只被自己最小的质因数筛掉了唯一一次（保证了线性）</p>
+<p>举个例子，设$i=p_1^{k_1}p_2^{k_2}…p_n^{k_n}$，如果上一步中没有及时<code>break</code>，那么<code>j</code>就会在达到$p_1$时继续往后累加，比如说打到了$p_2$，那么此时的合数的最小质因数就是$p_2$了，而$p_2&gt;p_1$，如果在此刻筛掉<code>i*prime[j]</code>，则违背了每个合数只被它的最小质因数筛去一次的原则</p>
+<h3 id="欧拉函数"><a href="#欧拉函数" class="headerlink" title="欧拉函数"></a>欧拉函数</h3><h4 id="定义-3"><a href="#定义-3" class="headerlink" title="定义"></a>定义</h4><p>欧拉函数$\varphi (x)$表示<strong>小于$x$的整数中与$x$互素的数的个数</strong>，特殊的$\varphi (1)=1$</p>
+<h4 id="递推式"><a href="#递推式" class="headerlink" title="递推式"></a>递推式</h4><script type="math/tex; mode=display">
+\varphi (x)=x\cdot\prod_{i=1}^{n}\left({1-\frac{1}{p_i}}\right)\\其中，p_1,p_2,...,p_n为x的所有质因数（不为0的整数）</script><h4 id="一些性质"><a href="#一些性质" class="headerlink" title="一些性质"></a>一些性质</h4><p>（这里只摘取一些比较简单的性质）</p>
+<ol>
+<li><p>如果$p$为素数，则$\varphi (p)=p-1$（很容易理解，素数除了它本身之外小于它的数都与它互素）</p>
+</li>
+<li><p>欧拉函数在满足一定条件下是积性函数：</p>
+<p>当$m$,$n$为素数时，有$\varphi (m * n)=\varphi (m) * \varphi (n)$</p>
+</li>
+</ol>
+<p>等等。。。</p>
+<h4 id="求一个数的欧拉函数值（复杂度-O-sqrt-n-）"><a href="#求一个数的欧拉函数值（复杂度-O-sqrt-n-）" class="headerlink" title="求一个数的欧拉函数值（复杂度$O(\sqrt n)$）"></a>求一个数的欧拉函数值（复杂度$O(\sqrt n)$）</h4><p>直接根据定义求即可，给出代码如下:</p>
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-comment">// get phi[n]</span><br><span class="hljs-function"><span class="hljs-keyword">inline</span> ll <span class="hljs-title">getphi</span><span class="hljs-params">(ll n)</span></span>&#123;<br>	ll res=n;<br>	<span class="hljs-keyword">for</span>(ll i=<span class="hljs-number">2</span>;i*i&lt;=n;i++)&#123;<br>		<span class="hljs-keyword">if</span>(n%i==<span class="hljs-number">0</span>) res=res/i*(i<span class="hljs-number">-1</span>);<br>		<span class="hljs-keyword">while</span>(n%i==<span class="hljs-number">0</span>) n/=i;<br>	&#125;<br>	<span class="hljs-keyword">if</span>(n&gt;<span class="hljs-number">1</span>) res=res/n*(n<span class="hljs-number">-1</span>);<br>	<span class="hljs-keyword">return</span> res;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+<h4 id="利用欧拉筛法筛出区间-1-n-所有数的欧拉函数（复杂度-O-n-）"><a href="#利用欧拉筛法筛出区间-1-n-所有数的欧拉函数（复杂度-O-n-）" class="headerlink" title="利用欧拉筛法筛出区间$[1,n]$所有数的欧拉函数（复杂度$O(n)$）"></a>利用欧拉筛法筛出区间$[1,n]$所有数的欧拉函数（复杂度$O(n)$）</h4><p>在筛法中，有三种情况需要讨论：</p>
+<ol>
+<li><p><code>i</code>是个质数：</p>
+<p>此时，<code>phi[i]=i-1</code>即可</p>
+</li>
+<li><p><code>i%prime[j]==0</code>：</p>
+<p>此时，<code>phi[i]</code>已经有包含了<code>prime[j]</code>的所有素因数，即<code>phi[i]</code>和<code>phi[i*prime[j]]</code>的推导式内的质因子种类是一样的，只不过<code>i*prime[j]</code>会比<code>i</code>多出一个<code>prime[j]</code>作为素因数，有下式成立：</p>
+<script type="math/tex; mode=display">
+\varphi(i)=i*(1-\frac{1}{p_1})(1-\frac{1}{p_2})...(1-\frac{1}{p_k})\\
+\varphi(i*prime[j])=i*prime[j]*(1-\frac{1}{p_1})(1-\frac{1}{p_2})...(1-\frac{1}{p_k})\\</script><p>很容易看出</p>
+<script type="math/tex; mode=display">
+\varphi(i*prime[j])=\varphi(i)*prime[j]</script></li>
+<li><p><code>i%prime[j]!=0</code>：</p>
+<p>此时，<code>phi[i]</code>中没有<code>pirme[j]</code>这个质因子，但<code>prime[j]</code>又是满足<code>i*prime[j]</code>这个合数的最小质因子，我们得到下式</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+&\varphi(i*prime[j])=i*prime[j]*(1-\frac{1}{p_j})(1-\frac{1}{p_1})(1-\frac{1}{p_2})...(1-\frac{1}{p_k})\\
+&\Rightarrow \varphi(i*prime[j])=\varphi(i)*prime[j]*(1-\frac{1}{p_j})\\
+&化简即可得出\varphi(i*prime[j])=\varphi(i)*(prime[j]-1)\\
+&即\varphi(i*prime[j])=\varphi(i)*\varphi(prime[j])
+\end{aligned}</script></li>
+</ol>
+<p>由情况3，可以得出欧拉函数是一个不完全积性函数的特性</p>
+<h4 id="代码实现-1"><a href="#代码实现-1" class="headerlink" title="代码实现"></a>代码实现</h4><figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">euler</span><span class="hljs-params">(<span class="hljs-type">int</span> n)</span></span>&#123;<br>    phi[<span class="hljs-number">1</span>]=<span class="hljs-number">1</span>; <span class="hljs-comment">//欧拉函数特例</span><br>    f[<span class="hljs-number">0</span>]=f[<span class="hljs-number">1</span>]=<span class="hljs-number">1</span>; <span class="hljs-comment">//0和1都不是素数</span><br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">2</span>;i&lt;=n;i++)&#123;<br>        <span class="hljs-keyword">if</span>(f[i]==<span class="hljs-number">0</span>)&#123; <span class="hljs-comment">//如果该数是素数</span><br>            prime[++cnt]=i; <span class="hljs-comment">//计入素数数组</span><br>            phi[i]=i<span class="hljs-number">-1</span>; <span class="hljs-comment">//情况1</span><br>        &#125;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j=<span class="hljs-number">1</span>;j&lt;=cnt&amp;&amp;i*prime[j]&lt;=n;j++)&#123; <span class="hljs-comment">//欧拉筛核心代码</span><br>            f[i*prime[j]]=<span class="hljs-number">1</span>; <span class="hljs-comment">//筛去</span><br>            <span class="hljs-keyword">if</span>(i%prime[j]==<span class="hljs-number">0</span>)&#123;<br>                <span class="hljs-comment">//情况2</span><br>                phi[i*prime[j]]=phi[i]*prime[j]; <br>                <span class="hljs-keyword">break</span>; <span class="hljs-comment">//核心</span><br>            &#125;<span class="hljs-keyword">else</span>&#123;<br>                <span class="hljs-comment">//情况3，欧拉函数是对于素数的积性函数</span><br>                phi[i*prime[j]]=phi[i]*phi[prime[j]];<br>            &#125;<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+<p>快速分解质因数</p>
+<p>在欧拉筛内部循环，加入如下代码</p>
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j=<span class="hljs-number">1</span>;j&lt;=cnt&amp;&amp;i*prime[j]&lt;=n;j++)&#123;<br>    from[i*prime[j]]=prime[j];<br>    ...<br>&#125;         <br></code></pre></div></td></tr></table></figure>
+<p>记录每个数的最小质因数，随后查询一个数<code>x</code>的质因数时，只需要每次求出<code>from[x]</code>，然后继续求<code>from[x/from[x]]</code>，写个循环或者递归即可</p>
+<h4 id="练习题"><a href="#练习题" class="headerlink" title="练习题"></a>练习题</h4><p><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P2158">洛谷 P2158 仪仗队</a></p>
+<h5 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h5><p>自己在纸上画一画会发现题目意思就是找到一个$n*n$的矩阵里面有多少个点和坐标原点连起来的斜率不同，进而又可以转换成就其中有多少个点的坐标(x,y)满足x与y互素，因为如果不互素的话，就会出现(x/gcd(x,y),y/gcd(x,y))这样的点挡住他们</p>
+<p>我们把矩阵沿着对角线切一刀，去掉对角线的一个点（2，2），剩下的就是算一个三角形内部有多少这样的点对，算好之后最终答案就是（2*ans+1），于是可以想到用欧拉函数来求</p>
+<p>显然答案就是$\sum_{i=1}^{n-1}(\varphi (i))$</p>
+<details>
+    <summary>code</summary>
+
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><span class="hljs-type">int</span> f[<span class="hljs-number">40005</span>],prime[<span class="hljs-number">40005</span>],ans[<span class="hljs-number">40005</span>],cnt;<br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>  <span class="hljs-type">int</span> n;<br>  cin&gt;&gt;n;<br>  <span class="hljs-keyword">if</span>(n==<span class="hljs-number">1</span>)&#123;<br>    cout&lt;&lt;<span class="hljs-number">0</span>&lt;&lt;endl;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>  &#125;<br>  ans[<span class="hljs-number">1</span>]=<span class="hljs-number">1</span>;<br>  f[<span class="hljs-number">0</span>]=f[<span class="hljs-number">1</span>]=<span class="hljs-number">1</span>;<br>  <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">2</span>;i&lt;=n;i++)&#123; <span class="hljs-comment">//欧拉筛欧拉函数</span><br>    <span class="hljs-keyword">if</span>(f[i]==<span class="hljs-number">0</span>)&#123;<br>      prime[++cnt]=i;<br>      ans[i]=i<span class="hljs-number">-1</span>;<br>    &#125;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j=<span class="hljs-number">1</span>;j&lt;=cnt&amp;&amp;i*prime[j]&lt;=n;j++)&#123;<br>      f[i*prime[j]]=<span class="hljs-number">1</span>;<br>      <span class="hljs-keyword">if</span>(i%prime[j]==<span class="hljs-number">0</span>)&#123;<br>        ans[i*prime[j]]=ans[i]*prime[j];<br>        <span class="hljs-keyword">break</span>;<br>      &#125;<span class="hljs-keyword">else</span>&#123;<br>        ans[i*prime[j]]=ans[i]*ans[prime[j]];<br>      &#125;<br>    &#125;<br>  &#125;<br>  <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;n;i++)&#123; <span class="hljs-comment">//累加</span><br>    ans[i]=ans[i]+ans[i<span class="hljs-number">-1</span>];<br>  &#125;<br>  cout&lt;&lt;ans[n<span class="hljs-number">-1</span>]*<span class="hljs-number">2</span>+<span class="hljs-number">1</span>&lt;&lt;endl;<br>  <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+
+</details>
+
+<h2 id="数论分块（整除分块）"><a href="#数论分块（整除分块）" class="headerlink" title="数论分块（整除分块）"></a>数论分块（整除分块）</h2><h3 id="算法介绍"><a href="#算法介绍" class="headerlink" title="算法介绍"></a>算法介绍</h3><p><strong>整除分块</strong>是用来求解形如下式的整除求和式的算法，朴素算法很容易想到，即遍历一遍$[1,n]$求解即可，时间复杂度为$O(n)$，而整除分块的处理能够使得复杂度上界优化到$O(\sqrt n)$</p>
+<script type="math/tex; mode=display">
+\sum_{i=1}^{n}\lfloor\frac{k}{i}\rfloor</script><p>其实数论分块最终就是一个实用结论，其结论为：上式的整除求和式中$\lfloor\frac{k}{i}\rfloor$最多只有$O(\sqrt n)$种取值，且相同的取值总是<strong>连续地一块一块出现</strong>的，因此称之为分块，那么具体如何分块呢？</p>
+<p>经过数学推导，可以知道，对于区间$[1,n]$内的一个左端点$l$，其整除值为$\lfloor\frac{k}{l}\rfloor$，那么就有一段连续的区间整除值与这一块相同，其区间右边界为$\min(n,\lfloor{\frac{k}{\lfloor\frac{k}{l}\rfloor}}\rfloor)$，当然，如果$\lfloor\frac{k}{l}\rfloor=0$，则右边界显然就是$n$（因为此后分母都比分子大了，答案就都是0）</p>
+<h3 id="证明-2"><a href="#证明-2" class="headerlink" title="证明"></a>证明</h3><p>证明选自 <a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/solution/P2261">题解： P2261 [CQOI2007]余数求和</a></p>
+<p><img src="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/imag/image-20200612135223242.png" srcset="/img/loading.gif" lazyload alt="image-20200612135223242"></p>
+<p>（但其实这个规律打个表也能发现）</p>
+<h3 id="代码-8"><a href="#代码-8" class="headerlink" title="代码"></a>代码</h3><figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> l=,r;l&lt;=n;l=r+<span class="hljs-number">1</span>)&#123;<br>    <span class="hljs-type">int</span> tp=k/l;<br>    <span class="hljs-keyword">if</span>(tp) r=<span class="hljs-built_in">min</span>(n,k/tp);<br>    <span class="hljs-keyword">else</span> t=n;<br>   	ans+=(r-l+<span class="hljs-number">1</span>)*tp;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+<p>就是这么简单</p>
+<h3 id="习题"><a href="#习题" class="headerlink" title="习题"></a>习题</h3><p><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P2261">P2261 [CQOI2007]余数求和</a>（取余式转换+数论分块）</p>
+<details>
+    <summary>code</summary>
+
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++">ll n,k,ans;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-built_in">read</span>(n),<span class="hljs-built_in">read</span>(k);<br>    <span class="hljs-keyword">for</span>(ll l=<span class="hljs-number">1</span>,r;l&lt;=n;l=r+<span class="hljs-number">1</span>)&#123;<br>        ll tp=k/l;<br>        <span class="hljs-keyword">if</span>(tp) r=<span class="hljs-built_in">min</span>(k/tp,n);<br>        <span class="hljs-keyword">else</span> r=n;<br>        ans+=(l+r)*(r-l+<span class="hljs-number">1</span>)/<span class="hljs-number">2</span>*tp;<br>    &#125;<br>    ans=n*k-ans;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%lld\n&quot;</span>,ans);<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+
+</details>
+
+<p><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P2260">P2260 [清华集训2012]模积和</a>（数学推导+前缀和+数论分块）</p>
+<details>
+    <summary>code</summary>
+
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++">ll n,m,inv2,ans,inv6,x,y;<br><br><span class="hljs-function"><span class="hljs-keyword">inline</span> ll <span class="hljs-title">f</span><span class="hljs-params">(ll a,ll b)</span></span>&#123;<br>	ll res=<span class="hljs-number">0</span>;<br>	<span class="hljs-keyword">for</span>(ll l=<span class="hljs-number">1</span>,r;l&lt;=a;l=r+<span class="hljs-number">1</span>)&#123;<br>		ll tp=b/l;<br>		<span class="hljs-keyword">if</span>(tp) r=<span class="hljs-built_in">min</span>(b/tp,a);<br>		<span class="hljs-keyword">else</span> r=a;<br>		res=(res%mod+(r-l+<span class="hljs-number">1</span>)%mod*(r+l)%mod*inv2%mod*tp%mod+mod)%mod;<br>	&#125;<br>	<span class="hljs-keyword">return</span> (res%mod+mod)%mod;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">inline</span> ll <span class="hljs-title">sum</span><span class="hljs-params">(ll x)</span></span>&#123;<br>	x%=mod;<br>	<span class="hljs-keyword">return</span> (x%mod*(x+<span class="hljs-number">1</span>)%mod*((x+x)%mod+<span class="hljs-number">1</span>)%mod*inv6%mod+mod)%mod;<br>&#125;<br><br><span class="hljs-function">ll <span class="hljs-title">exgcd</span><span class="hljs-params">(ll a,ll b,ll &amp;x,ll &amp;y)</span></span>&#123;<br>	<span class="hljs-keyword">if</span>(!b)&#123;x=<span class="hljs-number">1</span>,y=<span class="hljs-number">0</span>;<span class="hljs-keyword">return</span> a;&#125;<br>	ll res=<span class="hljs-built_in">exgcd</span>(b,a%b,x,y);<br>	ll tx=x;x=y;y=tx-a/b*y;<br>	<span class="hljs-keyword">return</span> res;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> main</span><br><span class="hljs-function">	<span class="hljs-title">read</span><span class="hljs-params">(n)</span>,<span class="hljs-title">read</span><span class="hljs-params">(m)</span></span>;<br>	<span class="hljs-keyword">if</span>(n&gt;m) <span class="hljs-built_in">swap</span>(n,m);<br>	<span class="hljs-built_in">exgcd</span>(<span class="hljs-number">2</span>,mod,x,y);<br>	inv2=(x+mod)%mod;<br>	x=<span class="hljs-number">0</span>,y=<span class="hljs-number">0</span>;<br>	<span class="hljs-built_in">exgcd</span>(<span class="hljs-number">6</span>,mod,x,y);<br>	inv6=(x+mod)%mod;<br>	<br>	ll fnn=<span class="hljs-built_in">f</span>(n,n)%mod;<br>	ll fmm=<span class="hljs-built_in">f</span>(m,m)%mod;<br>	ll fnm=<span class="hljs-built_in">f</span>(n,m)%mod;<br><br>	ll aa=(n*n%mod-fnn%mod+mod)%mod;<br>	ll bb=(m*m%mod-fmm%mod+mod)%mod;<br>	ans=aa*bb%mod;<br>	ans=(ans-n*n%mod*m%mod+mod)%mod;<br>	ans=(ans+m*fnn%mod+mod)%mod;<br>	ans=(ans+n*fnm%mod+mod)%mod;<br>	<span class="hljs-keyword">for</span>(ll l=<span class="hljs-number">1</span>,r;l&lt;=n;l=r+<span class="hljs-number">1</span>)&#123;<br>		r=<span class="hljs-built_in">min</span>(n/(n/l),m/(m/l));<br>		ll tp=(<span class="hljs-built_in">sum</span>(r)%mod-<span class="hljs-built_in">sum</span>(l<span class="hljs-number">-1</span>)%mod+mod)%mod;<br>		ans=(ans-tp*(n/l)%mod*(m/l)%mod+mod)%mod;<br>	&#125;<br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%lld\n&quot;</span>,ans%mod);<br>    <br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<span class="hljs-comment">// https://www.luogu.com.cn/problem/P2260</span><br></code></pre></div></td></tr></table></figure>
+
+</details>
+
+<p><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P6583">P6583 回首过去</a>（数论+数论分块+容斥）</p>
+<p>题意： 给出一个正整数$n$，求有序整数对$(x,y)$的个数，满足$1\le x,y\le n$，且$\frac{x}{y}$可以表示为十进制有限小数</p>
+<p>题解： 一道数论好题，首先能想到十进制有限小数的分母一定只含有$2,5$两个质因子，因此满足提议的分数一定可以写成$\frac{bc}{2^p5^qc}$的形式，这样一来，可以$[1,n]$枚举分母，然后去掉$2,5$的因子从而获得$c$，最后获得$b$即可算出答案，复杂段接近$O(n)$，只能拿80分</p>
+<details>
+    <summary>code</summary>
+
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++)&#123;<br>    <span class="hljs-type">int</span> tp=i;<br>    <span class="hljs-keyword">while</span>(tp%<span class="hljs-number">2</span>==<span class="hljs-number">0</span>) tp/=<span class="hljs-number">2</span>;<br>    <span class="hljs-keyword">while</span>(tp%<span class="hljs-number">5</span>==<span class="hljs-number">0</span>) tp/=<span class="hljs-number">5</span>;<br>    ans+=n/tp;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+
+</details>
+
+<p>进一步观察上方的式子，发现他是一个类似整除分块的式子，即</p>
+<script type="math/tex; mode=display">
+\sum_{i=1}^n f(\lfloor\frac{n}{i}\rfloor)\cdot\left[\lfloor\frac{n}{i}\rfloor(i\%2\neq 0 且 i\%5\neq 0)\right]</script><p>其中，$f(x)$代表$[1,x]$中质因子只包含$2,5$的数的个数，这样一来，可以先预处理出$f(n)$，然后从小到大排个序，每次整除分块时从后往前寻找$f(\lfloor\frac{n}{i}\rfloor)$，更新答案，但是这里还需要注意一点，就是表达式中的$i$为不包含$2,5$两个因子的数，因此可以通过在整除分块时容斥来解决这一问题（减去$2,5$因子的数的个数，再加上$10$的因子的数的个数）</p>
+<details>
+    <summary>code</summary>
+
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++">ll n,cnt,a[maxn],ans;<br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-built_in">read</span>(n);<br>	<span class="hljs-keyword">for</span>(ll i=<span class="hljs-number">1</span>;i&lt;=n;i*=<span class="hljs-number">2</span>)&#123;<br>		<span class="hljs-keyword">for</span>(ll j=<span class="hljs-number">1</span>;i*j&lt;=n;j*=<span class="hljs-number">5</span>)&#123;<br>			a[++cnt]=i*j;<br>		&#125;<br>	&#125;<br>	<span class="hljs-built_in">sort</span>(a+<span class="hljs-number">1</span>,a+<span class="hljs-number">1</span>+cnt);<br>	ll now=cnt;<br>	<span class="hljs-keyword">for</span>(ll l=<span class="hljs-number">1</span>,r;l&lt;=n;l=r+<span class="hljs-number">1</span>)&#123;<br>		ll b=n/l;<br>		r=n/b;<br>		ll tp=r-l+<span class="hljs-number">1</span>;<br>		ll tp2=r/<span class="hljs-number">2</span>-(l<span class="hljs-number">-1</span>)/<span class="hljs-number">2</span>;<br>		ll tp5=r/<span class="hljs-number">5</span>-(l<span class="hljs-number">-1</span>)/<span class="hljs-number">5</span>;<br>		ll tp10=r/<span class="hljs-number">10</span>-(l<span class="hljs-number">-1</span>)/<span class="hljs-number">10</span>;<br>		tp=tp-tp2-tp5+tp10;<br>		<span class="hljs-keyword">while</span>(a[now]&gt;b&amp;&amp;now) now--;<br>		ans+=tp*b*now;<br>	&#125;<br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%lld\n&quot;</span>,ans);<br>&#125;<br></code></pre></div></td></tr></table></figure>
+
+</details>
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E5%88%B7%E9%A2%98/">刷题</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E6%95%B0%E8%AE%BA/">数论</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/02/25/%E7%AC%94%E8%AE%B0-%E7%87%83%E6%B0%94%E8%BD%AE%E6%9C%BA%E5%8E%9F%E7%90%86%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">笔记-燃气轮机原理及其应用</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/02/22/%E8%A1%A5%E9%A2%98-2020USST%E7%AE%97%E6%B3%95%E7%AB%9E%E8%B5%9B%E7%BB%83%E4%B9%A0%E5%9C%BA1/">
+                        <span class="hidden-mobile">补题-2020USST算法竞赛练习场1</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://fastly.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"8WpS33YNRGD4IQNVQgVCmHQy-gzGzoHsz","appKey":"jed4H3219MxS5igBfmfTU81w","path":"window.location.pathname","placeholder":"write something here","avatar":"retro","meta":["nick","mail","link"],"requiredFields":["nick"],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":true},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://fastly.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://fastly.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://fastly.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://fastly.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://fastly.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://fastly.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://fastly.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://fastly.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- MathJax -->
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']]
+        },
+        loader: {
+          load: ['ui/lazy']
+        },
+        options: {
+          renderActions: {
+            findScript: [10, doc => {
+              document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = { node: text, delim: '', n: 0 };
+                math.end = { node: text, delim: '', n: 0 };
+                doc.math.push(math);
+              });
+            }, '', false],
+            insertedScript: [200, () => {
+              document.querySelectorAll('mjx-container').forEach(node => {
+                let target = node.parentNode;
+                if (target.nodeName.toLowerCase() === 'li') {
+                  target.parentNode.classList.add('has-jax');
+                }
+              });
+            }, '', false]
+          }
+        }
+      };
+    </script>
+
+    <script async src="https://fastly.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" ></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+</body>
+</html>

@@ -1,0 +1,670 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="琉璃糖">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="最近公共祖先LCA的各种算法总结">
+<meta property="og:type" content="article">
+<meta property="og:title" content="最近公共祖先LCA">
+<meta property="og:url" content="http://example.com/2020/04/28/%E6%9C%80%E8%BF%91%E5%85%AC%E5%85%B1%E7%A5%96%E5%85%88LCA/index.html">
+<meta property="og:site_name" content="BlablaWu&#39;s Blog">
+<meta property="og:description" content="最近公共祖先LCA的各种算法总结">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/imag/u=1365587845,1055642733&amp;fm=26&amp;gp=0.jpg">
+<meta property="article:published_time" content="2020-04-28T04:48:06.000Z">
+<meta property="article:modified_time" content="2022-05-17T10:58:48.000Z">
+<meta property="article:author" content="琉璃糖">
+<meta property="article:tag" content="LCA">
+<meta property="article:tag" content="倍增">
+<meta property="article:tag" content="树链剖分">
+<meta property="article:tag" content="Tarjan">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/imag/u=1365587845,1055642733&amp;fm=26&amp;gp=0.jpg">
+  
+  
+  <title>最近公共祖先LCA - BlablaWu&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":50,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>BlablaWu の Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/index_bg.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="最近公共祖先LCA">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2020-04-28 12:48" pubdate>
+        2020年4月28日 下午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      15k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      124 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">最近公共祖先LCA</h1>
+            
+            <div class="markdown-body">
+              <h2 id="最近公共祖先LCA的各种算法总结"><a href="#最近公共祖先LCA的各种算法总结" class="headerlink" title="最近公共祖先LCA的各种算法总结"></a><center>最近公共祖先LCA的各种算法总结</center></h2><p><img src="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/imag/u=1365587845,1055642733&amp;fm=26&amp;gp=0.jpg" srcset="/img/loading.gif" lazyload alt="u=1365587845,1055642733&amp;fm=26&amp;gp=0"></p>
+<span id="more"></span>
+<h2 id="LCA（最近公共祖先）"><a href="#LCA（最近公共祖先）" class="headerlink" title="LCA（最近公共祖先）"></a>LCA（最近公共祖先）</h2><p>模板题链接：<a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P3379">最近公共祖先（LCA）</a></p>
+<p>LCA（最近公共祖先），顾名思义，就是一棵树中两个节点的一个<strong>公共的祖先</strong>，而这个祖先距离这两个节点是<strong>最近的</strong></p>
+<p>关于求LCA的算法，前人已经总结出了很多种，大致分为以下几种：</p>
+<ul>
+<li>暴力求LCA（舍弃）</li>
+<li>倍增算法求LCA</li>
+<li>Tarjan算法求LCA（离线）</li>
+<li>树链剖分求LCA</li>
+</ul>
+<p>这里逐一记录一下</p>
+<h2 id="暴力求LCA"><a href="#暴力求LCA" class="headerlink" title="暴力求LCA"></a>暴力求LCA</h2><p>暴力算法不难想到，对于两个节点的LCA，我们可以先从一个节点出发，（一步一步地）标记出他到达根节点所走过的路径上的所有节点，再从另一个节点出发（一步一步地）往根节点走，走到过的第一个被标记过的节点就是他们俩的LCA，对于有n个节点和q次询问的树，时间复杂度为：$O(nq)$<del>（太鸡儿慢了）</del></p>
+<h2 id="倍增求LCA"><a href="#倍增求LCA" class="headerlink" title="倍增求LCA"></a>倍增求LCA</h2><p>关于倍增算法，已经再熟悉不过了，Vector的实现、ST表 等，都是利用的倍增思想，将复杂度<strong>由线性级别转变为对数级别</strong>，是一个非常实用的优化算法思想</p>
+<p>对于倍增求LCA，其实它就是暴力求LCA算法的一个优化（咱们不要一步一步往上爬，咱们一次跨$2^i$步），它是一个<strong>预处理+在线询问</strong>的算法，预处理复杂度为$O(nlogn)$，一次询问的复杂度为$O(logn)$，所以对于q次询问的操作来说，总复杂度为：$O(nlogn + qlogn)$</p>
+<p>我们可以考虑开一个<code>fa[i][j]</code>数组，<strong>存储这棵树的第$i$号节点的第$2^{j}$个父亲</strong>，利用二进制的优势是倍增算法的核心，这样一来，我们可以利用一个简单的DP方程来完成这个数组的预处理过程：首先我们可以通过一趟DFS（或者BFS）得到对于每个节点$i$的对应<code>fa[i][0]</code>的值（即每个节点的直接父亲节点），以及每个节点的深度（depth）</p>
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">dfs</span><span class="hljs-params">(<span class="hljs-type">int</span> u)</span></span>&#123;<br>    vis[u]=<span class="hljs-number">1</span>;<span class="hljs-comment">//这个节点设置为走过</span><br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=head[u];~i;i=e[i].next)&#123;<br>        <span class="hljs-type">int</span> v=e[i].v;<br>        <span class="hljs-keyword">if</span>(!vis[v])&#123;<br>            dep[v]=dep[u]+<span class="hljs-number">1</span>;<span class="hljs-comment">//深度+1</span><br>            fa[v][<span class="hljs-number">0</span>]=u;<span class="hljs-comment">//求出直接父亲</span><br>            <span class="hljs-built_in">dfs</span>(v);<span class="hljs-comment">//递归</span><br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+<p>然后通过如下转移方程即可完成状态转移<strong>（倍增求LCA的核心1）</strong>：</p>
+<script type="math/tex; mode=display">
+fa[i][j]=fa[fa[i][j-1]][j-1]\\
+因为：2^j=2^{j-1}\cdot2^{j-1}</script><figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">init_lca</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=<span class="hljs-number">20</span>;i++)&#123;<br>    <span class="hljs-comment">//这里的20是一个上界的大致值（一般够用），其实应该等于log2(maxdepth)</span><br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j=<span class="hljs-number">1</span>;j&lt;=n;j++)&#123;<span class="hljs-comment">//枚举树的节点数n</span><br>            fa[j][i]=fa[fa[j][i<span class="hljs-number">-1</span>]][i<span class="hljs-number">-1</span>];<span class="hljs-comment">//状态转移</span><br>        &#125;<br>    &#125;<br>&#125;<br><br></code></pre></div></td></tr></table></figure>
+<p>预处理完毕了，接下来就是求LCA的操作了<strong>（倍增求LCA的核心2）</strong>：对于两个节点$x,y$来说，假设<code>dep[x]&gt;dep[y]</code>，我们需要先让两个节点的深度达到一致（先让更深的节点x不断往父节点跳，一次跳$\log_2(dep[x]-dep[y])$的距离），此时需要特判一下是否x和y就已经重合了，如果是，那说明这次询问的y就是x和y的LCA，直接返回即可，否则执行下一步：此后，再让x和y同时往上跳，只要每一刻他们的第$2^{i-1}$个父节点不一样，他们就可以跳到第$2^{i-1}$个父节点的位置成为这个父节点，循环下去，挑出循环后，由于此时x和y还未重合成为他们的LCA，但他们都只离LCA只有1个节点的距离（也就是说<strong>他们的LCA就是他们的直接父亲节点</strong>），因此最后的答案就是<code>fa[x][0]</code>（当然<code>fa[y][0]</code>也一样）</p>
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">int</span> <span class="hljs-title">LCA</span><span class="hljs-params">(<span class="hljs-type">int</span> x,<span class="hljs-type">int</span> y)</span></span>&#123;<br>    <span class="hljs-keyword">if</span>(dep[x]&lt;dep[y]) <span class="hljs-built_in">swap</span>(x,y);<span class="hljs-comment">//把x调为最深的一个</span><br>    <span class="hljs-keyword">while</span>(dep[x]&gt;dep[y])<br>        x=fa[x][<span class="hljs-built_in">int</span>(<span class="hljs-built_in">log2</span>(dep[x]-dep[y]))];<br>    <span class="hljs-keyword">if</span>(x==y) <span class="hljs-keyword">return</span> x;<span class="hljs-comment">//y就是x、y的LCA</span><br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-built_in">log2</span>(dep[x]);i&gt;=<span class="hljs-number">0</span>;i--)<span class="hljs-comment">//从x的深度的log2开始枚举</span><br>        <span class="hljs-keyword">if</span>(fa[x][i]!=fa[y][i])<span class="hljs-comment">//如果他们俩的该倍父亲不相等</span><br>            x=fa[x][i],y=fa[y][i];<span class="hljs-comment">//跳到这个父亲的位置上，继续循环下去</span><br>    <span class="hljs-keyword">return</span> fa[x][<span class="hljs-number">0</span>];<span class="hljs-comment">//返回直接父亲</span><br>&#125;<br></code></pre></div></td></tr></table></figure>
+<p>当然，倍增LCA由于其独有的<strong>预处理</strong>操作（很像线段树的push_up操作），可以支持维护很多具有结合律的东西，如两节点间的最值、边权之和、点权之和 等，比较灵活</p>
+<ul>
+<li>倍增求LCA模板代码：</li>
+</ul>
+<details>
+<summary>code</summary>
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-comment">//略去头文件</span><br><span class="hljs-comment">//倍增LCA核心部分</span><br><span class="hljs-type">int</span> n,m,s,fa[maxn][<span class="hljs-number">21</span>],dep[maxn],cnt,head[maxn];<br><span class="hljs-type">bool</span> vis[maxn];<br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">dfs</span><span class="hljs-params">(<span class="hljs-type">int</span> u)</span></span>&#123;<br>	vis[u]=<span class="hljs-number">1</span>;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=head[u];~i;i=e[i].next)&#123;<br>		<span class="hljs-type">int</span> v=e[i].v;<br>		<span class="hljs-keyword">if</span>(!vis[v])&#123;<br>			fa[v][<span class="hljs-number">0</span>]=u;<br>			dep[v]=dep[u]+<span class="hljs-number">1</span>;<br>			<span class="hljs-built_in">dfs</span>(v);<br>		&#125;<br>	&#125;<br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">int</span> <span class="hljs-title">LCA</span><span class="hljs-params">(<span class="hljs-type">int</span> x,<span class="hljs-type">int</span> y)</span></span>&#123;<br>	<span class="hljs-keyword">if</span>(dep[x]&lt;dep[y]) <span class="hljs-built_in">swap</span>(x,y);<br>	<span class="hljs-keyword">while</span>(dep[x]&gt;dep[y])&#123;<br>		x=fa[x][<span class="hljs-built_in">int</span>(<span class="hljs-built_in">log2</span>(dep[x]-dep[y]))];<br>	&#125;<br>	<span class="hljs-keyword">if</span>(x==y) <span class="hljs-keyword">return</span> x;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-built_in">log2</span>(dep[x]);i&gt;=<span class="hljs-number">0</span>;i--)&#123;<br>		<span class="hljs-keyword">if</span>(fa[x][i]!=fa[y][i])&#123;<br>			x=fa[x][i],y=fa[y][i];<br>		&#125;<br>	&#125;<br>	<span class="hljs-keyword">return</span> fa[x][<span class="hljs-number">0</span>];<br>&#125;<br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	n=<span class="hljs-built_in">read</span>(),m=<span class="hljs-built_in">read</span>(),s=<span class="hljs-built_in">read</span>();<br>	<span class="hljs-built_in">init</span>();<br>	<span class="hljs-type">int</span> x,y;<br>	<span class="hljs-built_in">rep</span>(i,<span class="hljs-number">1</span>,n<span class="hljs-number">-1</span>)&#123;<br>		x=<span class="hljs-built_in">read</span>(),y=<span class="hljs-built_in">read</span>();<br>		<span class="hljs-built_in">addedge</span>(x,y);<br>		<span class="hljs-built_in">addedge</span>(y,x);<br>	&#125;<br>	<span class="hljs-built_in">dfs</span>(s);<br>	<span class="hljs-built_in">rep</span>(i,<span class="hljs-number">1</span>,<span class="hljs-number">20</span>)&#123;<br>		<span class="hljs-built_in">rep</span>(j,<span class="hljs-number">1</span>,n)&#123;<br>			fa[j][i]=fa[fa[j][i<span class="hljs-number">-1</span>]][i<span class="hljs-number">-1</span>];<br>		&#125;<br>	&#125;<br>	<span class="hljs-built_in">rep</span>(i,<span class="hljs-number">1</span>,m)&#123;<br>		x=<span class="hljs-built_in">read</span>(),y=<span class="hljs-built_in">read</span>();<br>		<span class="hljs-built_in">write</span>(<span class="hljs-built_in">LCA</span>(x,y)),<span class="hljs-built_in">putchar</span>(<span class="hljs-string">&#x27;\n&#x27;</span>);<br>	&#125;<br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+
+</details>
+
+<h2 id="Tarjan算法求LCA（离线）"><a href="#Tarjan算法求LCA（离线）" class="headerlink" title="Tarjan算法求LCA（离线）"></a>Tarjan算法求LCA（离线）</h2><p>对于Tarjan算法，早在SCC（强连通分量）专题就已经有所耳闻了，但没想到的是它居然还能用来求LCA？！（Tarjan简直太巨了！%%%）</p>
+<p>Tarjan求LCA是一种<strong>并査集维护+Tarjan离线处理</strong>的算法，由于并査集路径压缩具有近似于$O(1)$的复杂度，因此对于具有q次询问的操作，Tarjan求LCA的复杂度为：$O(q+n)$，可以说是非常优秀的离线算法了</p>
+<p>核心思想：从根节点开始DFS每一个出边所连的节点，标记访问过，同时将u节点出边所连的节点v全部用并査集合并到其父亲u上，处理完一个节点的所有出边后，再遍历<strong>与该节点u相关联的每一个询问</strong>（用类似前向星的链表存储询问中两节点的关联，即<strong>再对询问建一个图</strong>），如果当前询问所关联的<strong>节点to已经被访问过了</strong>，则这个询问所对应的两个节点的LCA就是<code>find(to)</code>（证明略，其实就是利用的dfs回溯的特点，与Tarjan求SCC很像）</p>
+<p>PS：并査集切记要初始化！！！</p>
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">TarjanLCA</span><span class="hljs-params">(<span class="hljs-type">int</span> u)</span></span>&#123;<span class="hljs-comment">//Tarajn求LCA</span><br>	vis[u]=<span class="hljs-number">1</span>;<span class="hljs-comment">//标记过</span><br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=head[u];~i;i=e[i].next)&#123;<br>		<span class="hljs-type">int</span> v=e[i].v;<br>		<span class="hljs-keyword">if</span>(!vis[v])&#123;<br>			<span class="hljs-built_in">TarjanLCA</span>(v);<span class="hljs-comment">//dfs下去</span><br>			Fa[<span class="hljs-built_in">find</span>(v)]=u;<span class="hljs-comment">//合并到父亲上</span><br>		&#125;<br>	&#125;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=headq[u];~i;i=q[i].next)&#123;<span class="hljs-comment">//遍历每个相关的询问</span><br>		<span class="hljs-type">int</span> to=q[i].to;<br>		<span class="hljs-keyword">if</span>(vis[to])&#123;<span class="hljs-comment">//如果关联节点访问过</span><br>			ans[q[i].id]=<span class="hljs-built_in">find</span>(to);<span class="hljs-comment">//则LCA可直接得出，记得存到对应标号的答案里</span><br>		&#125;<br>	&#125;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+<ul>
+<li>Tarjan求LCA模板代码</li>
+</ul>
+<details>
+<summary>code</summary>
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-type">int</span> n,m,s,cnt,head[maxn];<br><span class="hljs-type">int</span> headq[maxn],qcnt,ans[maxn];<br><span class="hljs-type">bool</span> vis[maxn];<br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Q</span><span class="hljs-comment">//询问的结构体</span><br>&#123;<br>	<span class="hljs-type">int</span> to,next,id;<br>&#125;q[maxn];<br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">TarjanLCA</span><span class="hljs-params">(<span class="hljs-type">int</span> u)</span></span>&#123;<br>	vis[u]=<span class="hljs-number">1</span>;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=head[u];~i;i=e[i].next)&#123;<br>		<span class="hljs-type">int</span> v=e[i].v;<br>		<span class="hljs-keyword">if</span>(!vis[v])&#123;<br>			<span class="hljs-built_in">TarjanLCA</span>(v);<br>			Fa[<span class="hljs-built_in">find</span>(v)]=u;<br>		&#125;<br>	&#125;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=headq[u];~i;i=q[i].next)&#123;<br>		<span class="hljs-type">int</span> to=q[i].to;<br>		<span class="hljs-keyword">if</span>(vis[to])&#123;<br>			ans[q[i].id]=<span class="hljs-built_in">find</span>(to);<br>		&#125;<br>	&#125;<br>&#125;<br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	n=<span class="hljs-built_in">read</span>(),m=<span class="hljs-built_in">read</span>(),s=<span class="hljs-built_in">read</span>();<br>	<span class="hljs-built_in">init</span>();<br>	<span class="hljs-type">int</span> x,y;<br>	<span class="hljs-built_in">rep</span>(i,<span class="hljs-number">1</span>,n<span class="hljs-number">-1</span>)&#123;<br>		x=<span class="hljs-built_in">read</span>(),y=<span class="hljs-built_in">read</span>();<br>		<span class="hljs-built_in">addedge</span>(x,y);<br>		<span class="hljs-built_in">addedge</span>(y,x);<br>	&#125;<br>	<span class="hljs-built_in">rep</span>(i,<span class="hljs-number">1</span>,m)&#123;<br>		x=<span class="hljs-built_in">read</span>(),y=<span class="hljs-built_in">read</span>();<br>		<span class="hljs-built_in">addask</span>(x,y,i);<br>		<span class="hljs-built_in">addask</span>(y,x,i);<br>	&#125;<br>	<span class="hljs-built_in">TarjanLCA</span>(s);<br>	<span class="hljs-built_in">rep</span>(i,<span class="hljs-number">1</span>,m) <span class="hljs-built_in">write</span>(ans[i]),<span class="hljs-built_in">putchar</span>(<span class="hljs-string">&#x27;\n&#x27;</span>);<br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+
+</details>
+
+
+<h2 id="树链剖分求LCA"><a href="#树链剖分求LCA" class="headerlink" title="树链剖分求LCA"></a>树链剖分求LCA</h2><p>终于轮到我们的树上操作の终极大杀器：<strong>树链剖分</strong> 登场了</p>
+<p>树链剖分，顾名思义，就是将一棵树剖分成为一条一条的<strong>链</strong>（也就是序列），然后可以通过某种方式（通常为线段树）维护这一条条链的信息，那么也就成功维护了整棵树的信息了（详情见<u>我的树链剖分专题</u>，这里直接谈简单的树剖LCA）</p>
+<p>树剖求LCA的方法类似于<strong>树上区间修改</strong>的操作，具体说来如下：对于一棵树上的两个点$x,y$，假设$x$<strong>所在链的顶端</strong>深度较深，则直接将$x$跳到它所在链的顶端的父亲节点，如此循环，直到$x,y$两点到达同一条链上，此时直接输出两者中深度较浅的节点的编号即可（这个节点就是$x,y$的LCA）</p>
+<p>时间复杂度：$O(n)$剖分预处理，最坏$O(logn)$查询</p>
+<details>
+<summary>code</summary>
+
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-comment">//略去头文件和一些模板</span><br><span class="hljs-comment">//树剖LCA</span><br><span class="hljs-type">int</span> n,m,r,x,y;<br><span class="hljs-type">int</span> dfsx,csdep[maxn],csid[maxn],csfa[maxn],csson[maxn],cstop[maxn],cssize[maxn];<br><br><span class="hljs-comment">// 第一次dfs：处理出 深度、父亲、子树大小、重儿子</span><br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">dfs1</span><span class="hljs-params">(<span class="hljs-type">int</span> u,<span class="hljs-type">int</span> fath,<span class="hljs-type">int</span> depth)</span></span>&#123;<br>	csdep[u]=depth;<br>	csfa[u]=fath;<br>	cssize[u]=<span class="hljs-number">1</span>;<br>	<span class="hljs-type">int</span> maxsize=<span class="hljs-number">-1</span>;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=head[u];~i;i=e[i].next)&#123;<br>		<span class="hljs-type">int</span> v=e[i].v;<br>		<span class="hljs-keyword">if</span>(v!=fath)&#123;<br>			<span class="hljs-built_in">dfs1</span>(v,u,depth+<span class="hljs-number">1</span>);<br>			cssize[u]+=cssize[v];<br>			<span class="hljs-keyword">if</span>(cssize[v]&gt;maxsize)<br>				maxsize=cssize[v],csson[u]=v;<br>		&#125;<br>	&#125;<br>&#125;<br><br><span class="hljs-comment">// 第二次dfs：求出dfs序、dfs序对应初始值、节点所在链的顶端</span><br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">dfs2</span><span class="hljs-params">(<span class="hljs-type">int</span> u,<span class="hljs-type">int</span> topf)</span></span>&#123;<br>	csid[u]=++dfsx;<br>	cstop[u]=topf;<br>	<span class="hljs-keyword">if</span>(!csson[u]) <span class="hljs-keyword">return</span>;<br>	<span class="hljs-built_in">dfs2</span>(csson[u],topf);<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=head[u];~i;i=e[i].next)&#123;<br>		<span class="hljs-type">int</span> v=e[i].v;<br>		<span class="hljs-keyword">if</span>(v!=csfa[u]&amp;&amp;v!=csson[u])&#123;<br>			<span class="hljs-built_in">dfs2</span>(v,v);<br>		&#125;<br>	&#125;<br>&#125;<br><span class="hljs-comment">// 树剖LCA核心操作</span><br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">int</span> <span class="hljs-title">LCA</span><span class="hljs-params">(<span class="hljs-type">int</span> x,<span class="hljs-type">int</span> y)</span></span>&#123;<br>	<span class="hljs-keyword">while</span>(cstop[x]!=cstop[y])&#123;<br>        <span class="hljs-comment">//每次跳所在链顶端更深的节点</span><br>		<span class="hljs-keyword">if</span>(csdep[cstop[x]]&lt;csdep[cstop[y]]) <span class="hljs-built_in">swap</span>(x,y);<br>		x=csfa[cstop[x]];<br>	&#125;<br>	<span class="hljs-keyword">return</span> csdep[x]&lt;csdep[y]?x:y;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	n=<span class="hljs-built_in">read</span>(),m=<span class="hljs-built_in">read</span>(),r=<span class="hljs-built_in">read</span>();<br>	<span class="hljs-built_in">init</span>();<br>	<span class="hljs-built_in">rep</span>(i,<span class="hljs-number">1</span>,n<span class="hljs-number">-1</span>)&#123;<br>		x=<span class="hljs-built_in">read</span>(),y=<span class="hljs-built_in">read</span>();<br>		<span class="hljs-built_in">addedge</span>(x,y);<br>		<span class="hljs-built_in">addedge</span>(y,x);<br>	&#125;<br>    <span class="hljs-comment">//树剖预处理：两次dfs</span><br>	<span class="hljs-built_in">dfs1</span>(r,<span class="hljs-number">-1</span>,<span class="hljs-number">1</span>);<br>	<span class="hljs-built_in">dfs2</span>(r,r);<br>	<span class="hljs-built_in">rep</span>(i,<span class="hljs-number">1</span>,m)&#123;<br>		x=<span class="hljs-built_in">read</span>(),y=<span class="hljs-built_in">read</span>();<br>		<span class="hljs-built_in">write</span>(<span class="hljs-built_in">LCA</span>(x,y)),<span class="hljs-built_in">putchar</span>(<span class="hljs-string">&#x27;\n&#x27;</span>);<br>	&#125;<br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+
+</details>
+
+
+<h2 id="知识点：树上差分"><a href="#知识点：树上差分" class="headerlink" title="知识点：树上差分"></a>知识点：树上差分</h2><p>参考blog：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/TEoS/p/11376676.html">树上差分详解</a></p>
+<p>这里记录一个比较常用的树上操作：树上差分，顾名思义，就是在树上进行差分操作和DFS求前缀和操作，实现复杂度优化，具体实现如下（很好理解，就不给证明了）</p>
+<h3 id="点差分"><a href="#点差分" class="headerlink" title="点差分"></a>点差分</h3><p>将两点$u,v$之间路径上所有<strong>点权</strong>增加$x$，则操作如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++">diff[u]+=x,diff[v]+=x,diff[<span class="hljs-built_in">LCA</span>(u,v)]-=x,diff[fa[<span class="hljs-built_in">LCA</span>(u,v)]]-=x;<br></code></pre></div></td></tr></table></figure>
+<h3 id="边差分"><a href="#边差分" class="headerlink" title="边差分"></a>边差分</h3><p>将两点$u,v$之间路径上所有<strong>边权</strong>增加$x$，则操作如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++">diff[u]+=x,diff[v]+=x,diff[<span class="hljs-built_in">LCA</span>(u,v)]-=<span class="hljs-number">2</span>*x;<br></code></pre></div></td></tr></table></figure>
+<h3 id="求树上前缀和"><a href="#求树上前缀和" class="headerlink" title="求树上前缀和"></a>求树上前缀和</h3><figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">dfs</span><span class="hljs-params">(<span class="hljs-type">int</span> u,<span class="hljs-type">int</span> fath)</span></span>&#123;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=head[u];~i;i=e[i].next)&#123;<br>        <span class="hljs-type">int</span> v=e[i].v;<br>        <span class="hljs-keyword">if</span>(v!=fath)<br>            presum[u]+=<span class="hljs-built_in">dfs</span>(v,u);<br>    &#125;<br>    <span class="hljs-keyword">return</span> presum[u];<br>&#125;<br></code></pre></div></td></tr></table></figure>
+<p>树上差分模板题：<a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P3128">P3128 Max Flow P</a></p>
+<details>
+<summary>code</summary>
+
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-type">const</span> <span class="hljs-type">int</span> N=<span class="hljs-number">500005</span>,M=<span class="hljs-number">500005</span>;<br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Edge</span>&#123;<br>	<span class="hljs-type">int</span> u,v,w,next;<br>&#125;e[M&lt;&lt;<span class="hljs-number">1</span>];<br><span class="hljs-type">int</span> n,k,cnt,head[N],tdiff[N];<br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">init</span><span class="hljs-params">()</span></span>&#123;<br>	cnt=<span class="hljs-number">0</span>;<br>	<span class="hljs-built_in">memset</span>(head,<span class="hljs-number">-1</span>,<span class="hljs-built_in">sizeof</span>(head));<br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">addedge</span><span class="hljs-params">(<span class="hljs-type">int</span> u,<span class="hljs-type">int</span> v,<span class="hljs-type">int</span> w=<span class="hljs-number">0</span>)</span></span>&#123;<br>	e[cnt]=Edge&#123;u,v,w,head[u]&#125;;<br>	head[u]=cnt++;<br>&#125;<br><span class="hljs-type">int</span> vis[N],fa[N][<span class="hljs-number">21</span>],dep[N],ans;<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">lcadfs</span><span class="hljs-params">(<span class="hljs-type">int</span> u)</span></span>&#123;<br>	vis[u]=<span class="hljs-number">1</span>;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=head[u];~i;i=e[i].next)&#123;<br>		<span class="hljs-type">int</span> v=e[i].v;<br>		<span class="hljs-keyword">if</span>(!vis[v])&#123;<br>			fa[v][<span class="hljs-number">0</span>]=u;<br>			dep[v]=dep[u]+<span class="hljs-number">1</span>;<br>			<span class="hljs-built_in">lcadfs</span>(v);<br>		&#125;<br>	&#125;<br>&#125;<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">init_lca</span><span class="hljs-params">()</span></span>&#123;<br>	<span class="hljs-built_in">rep</span>(i,<span class="hljs-number">1</span>,<span class="hljs-number">20</span>)&#123;<br>		<span class="hljs-built_in">rep</span>(j,<span class="hljs-number">1</span>,n)&#123;<br>			fa[j][i]=fa[fa[j][i<span class="hljs-number">-1</span>]][i<span class="hljs-number">-1</span>];<br>		&#125;<br>	&#125;<br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">int</span> <span class="hljs-title">LCA</span><span class="hljs-params">(<span class="hljs-type">int</span> x,<span class="hljs-type">int</span> y)</span></span>&#123;<br>	<span class="hljs-keyword">if</span>(dep[x]&lt;dep[y]) <span class="hljs-built_in">swap</span>(x,y);<br>	<span class="hljs-keyword">while</span>(dep[x]&gt;dep[y]) x=fa[x][<span class="hljs-built_in">int</span>(<span class="hljs-built_in">log2</span>(dep[x]-dep[y]))];<br>	<span class="hljs-keyword">if</span>(x==y) <span class="hljs-keyword">return</span> x;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-built_in">log2</span>(dep[x]);i&gt;=<span class="hljs-number">0</span>;i--)&#123;<br>		<span class="hljs-keyword">if</span>(fa[x][i]!=fa[y][i])&#123;<br>			x=fa[x][i],y=fa[y][i];<br>		&#125;<br>	&#125;<br>	<span class="hljs-keyword">return</span> fa[x][<span class="hljs-number">0</span>];<br>&#125;<br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">dfs</span><span class="hljs-params">(<span class="hljs-type">int</span> u,<span class="hljs-type">int</span> fath)</span></span>&#123;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=head[u];~i;i=e[i].next)&#123;<br>		<span class="hljs-type">int</span> v=e[i].v;<br>		<span class="hljs-keyword">if</span>(v!=fath)&#123;<br>			tdiff[u]+=<span class="hljs-built_in">dfs</span>(v,u);<br>		&#125;<br>	&#125;<br>	ans=<span class="hljs-built_in">max</span>(ans,tdiff[u]);<br>	<span class="hljs-keyword">return</span> tdiff[u];<br>&#125;<br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>,&amp;n,&amp;k);<br>	<span class="hljs-built_in">init</span>();<br>	<span class="hljs-type">int</span> x,y;<br>	<span class="hljs-built_in">rep</span>(i,<span class="hljs-number">1</span>,n<span class="hljs-number">-1</span>) <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>,&amp;x,&amp;y),<span class="hljs-built_in">addedge</span>(x,y),<span class="hljs-built_in">addedge</span>(y,x);<br>	<span class="hljs-built_in">lcadfs</span>(<span class="hljs-number">1</span>);<br>	<span class="hljs-built_in">init_lca</span>();<br>	<span class="hljs-built_in">rep</span>(i,<span class="hljs-number">1</span>,k)&#123;<br>		<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>,&amp;x,&amp;y);<br>		<span class="hljs-type">int</span> lca=<span class="hljs-built_in">LCA</span>(x,y);<br>		tdiff[y]++;<br>		tdiff[x]++;<br>		tdiff[lca]--;<br>		tdiff[fa[lca][<span class="hljs-number">0</span>]]--;<br>	&#125;<br>	<span class="hljs-built_in">dfs</span>(<span class="hljs-number">1</span>,<span class="hljs-number">-1</span>);<br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>,ans);<br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+
+</details>
+
+
+
+<h2 id="习题汇总"><a href="#习题汇总" class="headerlink" title="习题汇总"></a>习题汇总</h2><p><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P1967">P1967 货车运输</a>（最大生成树建树+LCA求最小值）</p>
+<details>
+<summary>code</summary>
+
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-comment">// 略去头文件</span><br><span class="hljs-type">int</span> n,m,q,Fa[maxn],fa[maxn][<span class="hljs-number">21</span>],w[maxn][<span class="hljs-number">21</span>],dep[maxn],cnt1,cnt2,head1[maxn],head2[maxn];<br><span class="hljs-type">bool</span> vis[maxn];<br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">int</span> <span class="hljs-title">find</span><span class="hljs-params">(<span class="hljs-type">int</span> x)</span></span>&#123;<span class="hljs-keyword">return</span> x==Fa[x]?x:Fa[x]=<span class="hljs-built_in">find</span>(Fa[x]);&#125;<br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Edge</span><br>&#123;<br>	<span class="hljs-type">int</span> u,v,w,next;<br>&#125;e1[maxn&lt;&lt;<span class="hljs-number">1</span>],e2[maxn&lt;&lt;<span class="hljs-number">1</span>];<br><span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">cmp</span><span class="hljs-params">(Edge x1,Edge x2)</span></span>&#123;<br>	<span class="hljs-keyword">return</span> x1.w&gt;x2.w;<br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">addedge1</span><span class="hljs-params">(<span class="hljs-type">int</span> u,<span class="hljs-type">int</span> v,<span class="hljs-type">int</span> w=<span class="hljs-number">0</span>)</span></span>&#123;<br>	e1[++cnt1]=Edge&#123;u,v,w,head1[u]&#125;;<br>	head1[u]=cnt1;<br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">addedge2</span><span class="hljs-params">(<span class="hljs-type">int</span> u,<span class="hljs-type">int</span> v,<span class="hljs-type">int</span> w=<span class="hljs-number">0</span>)</span></span>&#123;<br>	e2[++cnt2]=Edge&#123;u,v,w,head2[u]&#125;;<br>	head2[u]=cnt2;<br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">init</span><span class="hljs-params">()</span></span>&#123;<br>	<span class="hljs-built_in">rep</span>(i,<span class="hljs-number">1</span>,n) Fa[i]=i;<br>	cnt1=cnt2=<span class="hljs-number">0</span>;<br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">dfs</span><span class="hljs-params">(<span class="hljs-type">int</span> u)</span></span>&#123;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=head2[u];i;i=e2[i].next)&#123;<br>		<span class="hljs-type">int</span> v=e2[i].v;<br>		<span class="hljs-keyword">if</span>(!vis[v])&#123;<br>			vis[v]=<span class="hljs-number">1</span>;<br>			dep[v]=dep[u]+<span class="hljs-number">1</span>;<br>			fa[v][<span class="hljs-number">0</span>]=u;<br>			w[v][<span class="hljs-number">0</span>]=e2[i].w;<br>			<span class="hljs-built_in">dfs</span>(v);<br>		&#125;<br>	&#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">int</span> <span class="hljs-title">LCAmin</span><span class="hljs-params">(<span class="hljs-type">int</span> x,<span class="hljs-type">int</span> y)</span></span>&#123;<br>	<span class="hljs-keyword">if</span>(<span class="hljs-built_in">find</span>(x)!=<span class="hljs-built_in">find</span>(y)) <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>	<span class="hljs-type">int</span> ans=inf;<br>	<span class="hljs-keyword">if</span>(dep[x]&lt;dep[y]) x^=y^=x^=y;<br>	<span class="hljs-keyword">while</span>(dep[x]&gt;dep[y])&#123;<br>		ans=<span class="hljs-built_in">min</span>(ans,w[x][<span class="hljs-built_in">int</span>(<span class="hljs-built_in">log2</span>(dep[x]-dep[y]))]);<br>		x=fa[x][<span class="hljs-built_in">int</span>(<span class="hljs-built_in">log2</span>(dep[x]-dep[y]))];<br>	&#125;<br>	<span class="hljs-keyword">if</span>(x==y) <span class="hljs-keyword">return</span> ans;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-built_in">log2</span>(dep[x]);i&gt;=<span class="hljs-number">0</span>;i--)&#123;<br>		<span class="hljs-keyword">if</span>(fa[x][i]!=fa[y][i])&#123;<br>			ans=<span class="hljs-built_in">min</span>(ans,<span class="hljs-built_in">min</span>(w[x][i],w[y][i]));<br>			x=fa[x][i],y=fa[y][i];<br>		&#125;<br>	&#125;<br>	<span class="hljs-keyword">return</span> <span class="hljs-built_in">min</span>(ans,<span class="hljs-built_in">min</span>(w[x][<span class="hljs-number">0</span>],w[y][<span class="hljs-number">0</span>]));<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">kruskal</span><span class="hljs-params">()</span></span>&#123;<br>	<span class="hljs-built_in">init</span>();<br>	<span class="hljs-built_in">sort</span>(e1+<span class="hljs-number">1</span>,e1+<span class="hljs-number">1</span>+m,cmp);<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=m;i++)&#123;<br>		<span class="hljs-type">int</span> eu=<span class="hljs-built_in">find</span>(e1[i].u),ev=<span class="hljs-built_in">find</span>(e1[i].v);<br>		<span class="hljs-keyword">if</span>(eu!=ev)&#123;<br>			Fa[eu]=ev;<br>			<span class="hljs-built_in">addedge2</span>(e1[i].u,e1[i].v,e1[i].w);<br>			<span class="hljs-built_in">addedge2</span>(e1[i].v,e1[i].u,e1[i].w);<br>		&#125;<br>	&#125;<br>&#125;<br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	<span class="hljs-comment">// freopen(&quot;P1967_1.in&quot;,&quot;r&quot;,stdin);</span><br>	<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>,&amp;n,&amp;m);<br>	<span class="hljs-type">int</span> x,y,z;<br>	<span class="hljs-built_in">rep</span>(i,<span class="hljs-number">1</span>,m)&#123;<br>		<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d%d&quot;</span>,&amp;x,&amp;y,&amp;z);<br>		<span class="hljs-built_in">addedge1</span>(x,y,z);<br>	&#125;<br>	<span class="hljs-built_in">kruskal</span>();<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++)&#123;<br>		<span class="hljs-keyword">if</span>(!vis[i])&#123;<br>			vis[i]=<span class="hljs-number">1</span>;<br>			<span class="hljs-built_in">dfs</span>(i);<br>		&#125;<br>	&#125;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=<span class="hljs-number">20</span>;i++)&#123;<br>		<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j=<span class="hljs-number">1</span>;j&lt;=n;j++)&#123;<br>			fa[j][i]=fa[fa[j][i<span class="hljs-number">-1</span>]][i<span class="hljs-number">-1</span>];<br>			w[j][i]=<span class="hljs-built_in">min</span>(w[j][i<span class="hljs-number">-1</span>],w[fa[j][i<span class="hljs-number">-1</span>]][i<span class="hljs-number">-1</span>]);<br>		&#125;<br>	&#125;<br>	<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>,&amp;q);<br>	<span class="hljs-built_in">rep</span>(i,<span class="hljs-number">1</span>,q)&#123;<br>		<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>,&amp;x,&amp;y);<br>		<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>,<span class="hljs-built_in">LCAmin</span>(x,y));<br>	&#125;<br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+
+</details>
+
+<p><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P2680">P2680 运输计划</a>（树上差分+二分答案+树剖LCA，倍增LCA似乎会T）</p>
+<details>
+<summary>code</summary>
+
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-comment">// 略去头文件</span><br><span class="hljs-type">int</span> n,m,lcafa[maxn][<span class="hljs-number">25</span>],sum[maxn][<span class="hljs-number">25</span>],head[maxn],dep[maxn],LG[maxn],cnt;<br><span class="hljs-type">int</span> longest,dfscnt,treediff[maxn],sta[maxn],top;<br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Edge</span><br>&#123;<br>	<span class="hljs-type">int</span> u,v,w,next;<br>&#125;e[maxn&lt;&lt;<span class="hljs-number">1</span>];<br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Q</span><br>&#123;<br>	<span class="hljs-type">int</span> u,v,lca,routesum;<br>&#125;q[maxn];<br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">addedge</span><span class="hljs-params">(<span class="hljs-type">int</span> u,<span class="hljs-type">int</span> v,<span class="hljs-type">int</span> w=<span class="hljs-number">0</span>)</span></span>&#123;<br>	e[cnt]=Edge&#123;u,v,w,head[u]&#125;;<br>	head[u]=cnt++;<br>&#125;<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">dfs1</span><span class="hljs-params">(<span class="hljs-type">int</span> u,<span class="hljs-type">int</span> fath)</span></span>&#123;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=head[u];~i;i=e[i].next)&#123;<br>		<span class="hljs-type">int</span> v=e[i].v,w=e[i].w;<br>		<span class="hljs-keyword">if</span>(v!=fath)&#123;<br>			dep[v]=dep[u]+<span class="hljs-number">1</span>;<br>			lcafa[v][<span class="hljs-number">0</span>]=u;<br>			sum[v][<span class="hljs-number">0</span>]=w;<br>			<span class="hljs-built_in">dfs1</span>(v,u);<br>		&#125;<br>	&#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">int</span> <span class="hljs-title">LCA</span><span class="hljs-params">(<span class="hljs-type">int</span> x,<span class="hljs-type">int</span> y,<span class="hljs-type">int</span> &amp;Sum)</span></span>&#123;<br>	<span class="hljs-keyword">if</span>(dep[x]&lt;dep[y]) <span class="hljs-built_in">swap</span>(x,y);<br>	<span class="hljs-keyword">while</span>(dep[x]&gt;dep[y])&#123;<br>		Sum+=sum[x][LG[dep[x]-dep[y]]];<br>		x=lcafa[x][LG[dep[x]-dep[y]]];<br>	&#125;<br>	<span class="hljs-keyword">if</span>(x==y) <span class="hljs-keyword">return</span> x;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=LG[dep[x]];i&gt;=<span class="hljs-number">0</span>;i--)&#123;<br>		<span class="hljs-keyword">if</span>(lcafa[x][i]!=lcafa[y][i])&#123;<br>			Sum+=sum[x][i]+sum[y][i];<br>			x=lcafa[x][i];<br>			y=lcafa[y][i];<br>		&#125;<br>	&#125;<br>	Sum+=sum[x][<span class="hljs-number">0</span>]+sum[y][<span class="hljs-number">0</span>];<br>	<span class="hljs-keyword">return</span> lcafa[x][<span class="hljs-number">0</span>];<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">int</span> <span class="hljs-title">dfs2</span><span class="hljs-params">(<span class="hljs-type">int</span> u,<span class="hljs-type">int</span> fath)</span></span>&#123;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=head[u];~i;i=e[i].next)&#123;<br>		<span class="hljs-type">int</span> v=e[i].v;<br>		<span class="hljs-keyword">if</span>(v!=fath)&#123;<br>			treediff[u]+=<span class="hljs-built_in">dfs2</span>(v,u);<br>		&#125;<br>	&#125;<br>	<span class="hljs-keyword">if</span>(treediff[u]==dfscnt)&#123;<br>		sta[++top]=sum[u][<span class="hljs-number">0</span>];<br>	&#125;<br>	<span class="hljs-keyword">return</span> treediff[u];<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">bool</span> <span class="hljs-title">check</span><span class="hljs-params">(<span class="hljs-type">int</span> x)</span></span>&#123;<br>	<span class="hljs-built_in">memset</span>(treediff,<span class="hljs-number">0</span>,<span class="hljs-built_in">sizeof</span>(treediff));<br>	<span class="hljs-type">int</span> maxh=<span class="hljs-number">0</span>;<br>	dfscnt=<span class="hljs-number">0</span>;<br>	<span class="hljs-built_in">rep</span>(i,<span class="hljs-number">1</span>,m)&#123;<br>		<span class="hljs-keyword">if</span>(q[i].routesum&gt;x)&#123;<span class="hljs-comment">//树上差分</span><br>			dfscnt++;<br>			treediff[q[i].u]++;<br>			treediff[q[i].v]++;<br>			treediff[q[i].lca]-=<span class="hljs-number">2</span>;<br>		&#125;<br>	&#125;<br>	<span class="hljs-built_in">dfs2</span>(<span class="hljs-number">1</span>,<span class="hljs-number">0</span>);<br>	<span class="hljs-keyword">while</span>(top)&#123;<br>		maxh=<span class="hljs-built_in">max</span>(maxh,sta[top--]);<br>	&#125;<br>	<span class="hljs-keyword">return</span> longest-maxh&gt;x;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	<span class="hljs-comment">// freopen(&quot;P2680_13.in&quot;,&quot;r&quot;,stdin);</span><br>	n=<span class="hljs-built_in">read</span>(),m=<span class="hljs-built_in">read</span>();<br>	<span class="hljs-built_in">memset</span>(head,<span class="hljs-number">-1</span>,<span class="hljs-built_in">sizeof</span>(head));<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>,u,v,w;i&lt;n;i++)&#123;<br>		u=<span class="hljs-built_in">read</span>(),v=<span class="hljs-built_in">read</span>(),w=<span class="hljs-built_in">read</span>();<br>		<span class="hljs-built_in">addedge</span>(u,v,w);<br>		<span class="hljs-built_in">addedge</span>(v,u,w);<br>	&#125;<br><br>	<span class="hljs-built_in">rep</span>(i,<span class="hljs-number">1</span>,n) LG[i]=<span class="hljs-built_in">log2</span>(i);<br>	<span class="hljs-built_in">dfs1</span>(<span class="hljs-number">1</span>,<span class="hljs-number">0</span>);<br>	<span class="hljs-built_in">rep</span>(i,<span class="hljs-number">1</span>,<span class="hljs-number">24</span>)&#123;<br>		<span class="hljs-built_in">rep</span>(j,<span class="hljs-number">1</span>,n)&#123;<br>			lcafa[j][i]=lcafa[lcafa[j][i<span class="hljs-number">-1</span>]][i<span class="hljs-number">-1</span>];<br>			sum[j][i]=sum[j][i<span class="hljs-number">-1</span>]+sum[lcafa[j][i<span class="hljs-number">-1</span>]][i<span class="hljs-number">-1</span>];<br>		&#125;<br>	&#125;<br>	<span class="hljs-built_in">rep</span>(i,<span class="hljs-number">1</span>,m)&#123;<br>		q[i].u=<span class="hljs-built_in">read</span>(),q[i].v=<span class="hljs-built_in">read</span>();<br>		q[i].lca=<span class="hljs-built_in">LCA</span>(q[i].u,q[i].v,q[i].routesum);<br>		longest=<span class="hljs-built_in">max</span>(longest,q[i].routesum);<br>	&#125;<br><br>	<span class="hljs-type">int</span> l=<span class="hljs-number">0</span>,r=longest;<br>	<span class="hljs-keyword">while</span>(l&lt;=r)&#123;<span class="hljs-comment">//二分答案</span><br>		<span class="hljs-type">int</span> mid=(l+r)&gt;&gt;<span class="hljs-number">1</span>;<br>		<span class="hljs-keyword">if</span>(<span class="hljs-built_in">check</span>(mid)) l=mid+<span class="hljs-number">1</span>;<br>		<span class="hljs-keyword">else</span> r=mid<span class="hljs-number">-1</span>;<br>	&#125;<br>	<span class="hljs-built_in">write</span>(l),<span class="hljs-built_in">putchar</span>(<span class="hljs-string">&#x27;\n&#x27;</span>);<br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+
+</details>
+
+<p><a target="_blank" rel="noopener" href="https://www.acwing.com/problem/content/description/399">逃不掉的路</a>（E-DCC缩点建树+LCA求树上两点距离）</p>
+<details>
+<summary>code</summary>
+
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-comment">// 忽略头文件</span><br><span class="hljs-type">const</span> <span class="hljs-type">int</span> maxn=<span class="hljs-number">500005</span>;<br><span class="hljs-type">const</span> <span class="hljs-type">int</span> N=<span class="hljs-number">500005</span>,M=<span class="hljs-number">2</span>*<span class="hljs-number">500005</span>;<br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Edge</span>&#123;<br>	<span class="hljs-type">int</span> u,v,w,next;<br>&#125;e1[M&lt;&lt;<span class="hljs-number">1</span>],e2[M&lt;&lt;<span class="hljs-number">1</span>];<br><span class="hljs-type">int</span> cnt1,head1[N],cnt2,head2[N];<br><span class="hljs-type">int</span> n,m,q;<br><span class="hljs-type">int</span> low[maxn],dfn[maxn],sta[maxn],vis[maxn],color[maxn],top,scc,deep;<br><span class="hljs-type">int</span> fa[maxn][<span class="hljs-number">21</span>],dist[maxn][<span class="hljs-number">21</span>],dep[maxn];<br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">init</span><span class="hljs-params">()</span></span>&#123;<br>	cnt1=cnt2=<span class="hljs-number">0</span>;<br>	<span class="hljs-built_in">memset</span>(head1,<span class="hljs-number">-1</span>,<span class="hljs-built_in">sizeof</span>(head1));<br>	<span class="hljs-built_in">memset</span>(head2,<span class="hljs-number">-1</span>,<span class="hljs-built_in">sizeof</span>(head2));<br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">addedge1</span><span class="hljs-params">(<span class="hljs-type">int</span> u,<span class="hljs-type">int</span> v,<span class="hljs-type">int</span> w=<span class="hljs-number">0</span>)</span></span>&#123;<br>	e1[cnt1]=Edge&#123;u,v,w,head1[u]&#125;;<br>	head1[u]=cnt1++;<br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">addedge2</span><span class="hljs-params">(<span class="hljs-type">int</span> u,<span class="hljs-type">int</span> v,<span class="hljs-type">int</span> w=<span class="hljs-number">0</span>)</span></span>&#123;<br>	e2[cnt2]=Edge&#123;u,v,w,head2[u]&#125;;<br>	head2[u]=cnt2++;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">tarjan</span><span class="hljs-params">(<span class="hljs-type">int</span> u,<span class="hljs-type">int</span> fath)</span></span>&#123;<span class="hljs-comment">//tarjan缩点</span><br>	vis[sta[++top]=u]=<span class="hljs-number">1</span>;<br>	low[u]=dfn[u]=++deep;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=head1[u];~i;i=e1[i].next)&#123;<br>		<span class="hljs-type">int</span> v=e1[i].v;<br>		<span class="hljs-keyword">if</span>(v==fath) <span class="hljs-keyword">continue</span>;<br>		<span class="hljs-comment">// if(i==(fath^1)) continue;</span><br>		<span class="hljs-keyword">if</span>(!dfn[v])&#123;<br>			<span class="hljs-built_in">tarjan</span>(v,u);<br>			low[u]=<span class="hljs-built_in">min</span>(low[u],low[v]);<br>		&#125;<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(vis[v]) low[u]=<span class="hljs-built_in">min</span>(low[u],dfn[v]);<br>	&#125;<br>	<span class="hljs-keyword">if</span>(dfn[u]==low[u])&#123;<br>		vis[u]=<span class="hljs-number">0</span>;<br>		color[u]=++scc;<br>		<span class="hljs-keyword">while</span>(sta[top]!=u)&#123;<br>			vis[sta[top]]=<span class="hljs-number">0</span>;<br>			color[sta[top--]]=scc;<br>		&#125;<br>		top--;<br>	&#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">dfs</span><span class="hljs-params">(<span class="hljs-type">int</span> u)</span></span>&#123;<br>	vis[u]=<span class="hljs-number">1</span>;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=head2[u];~i;i=e2[i].next)&#123;<br>		<span class="hljs-type">int</span> v=e2[i].v;<br>		<span class="hljs-keyword">if</span>(!vis[v])&#123;<br>			dep[v]=dep[u]+<span class="hljs-number">1</span>;<br>			fa[v][<span class="hljs-number">0</span>]=u;<br>			dist[v][<span class="hljs-number">0</span>]=<span class="hljs-number">1</span>;<br>			<span class="hljs-built_in">dfs</span>(v);<br>		&#125;<br>	&#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">int</span> <span class="hljs-title">LCA</span><span class="hljs-params">(<span class="hljs-type">int</span> x,<span class="hljs-type">int</span> y)</span></span>&#123;<br>	<span class="hljs-keyword">if</span>(dep[x]&lt;dep[y]) <span class="hljs-built_in">swap</span>(x,y);<br>	<span class="hljs-type">int</span> ans=<span class="hljs-number">0</span>;<br>	<span class="hljs-keyword">while</span>(dep[x]&gt;dep[y])&#123;<br>		ans+=dist[x][<span class="hljs-built_in">int</span>(<span class="hljs-built_in">log2</span>(dep[x]-dep[y]))];<br>		x=fa[x][<span class="hljs-built_in">int</span>(<span class="hljs-built_in">log2</span>(dep[x]-dep[y]))];<br>	&#125;<br>	<span class="hljs-keyword">if</span>(x==y) <span class="hljs-keyword">return</span> ans;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-built_in">log2</span>(dep[x]);i&gt;=<span class="hljs-number">0</span>;i--)&#123;<br>		<span class="hljs-keyword">if</span>(fa[x][i]!=fa[y][i])&#123;<br>			ans+=dist[x][i]+dist[y][i];<br>			x=fa[x][i],y=fa[y][i];<br>		&#125;<br>	&#125;<br>	ans+=dist[x][<span class="hljs-number">0</span>]+dist[y][<span class="hljs-number">0</span>];<br>	<span class="hljs-keyword">return</span> ans;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>,&amp;n,&amp;m);<br>	<span class="hljs-built_in">init</span>();<br>	<span class="hljs-built_in">rep</span>(i,<span class="hljs-number">1</span>,m)&#123;<br>		<span class="hljs-type">int</span> u,v;<br>		<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>,&amp;u,&amp;v);<br>		<span class="hljs-built_in">addedge1</span>(u,v,<span class="hljs-number">1</span>);<br>		<span class="hljs-built_in">addedge1</span>(v,u,<span class="hljs-number">1</span>);<br>	&#125;<br><br>	<span class="hljs-built_in">rep</span>(i,<span class="hljs-number">1</span>,n) <span class="hljs-keyword">if</span>(!dfn[i]) <span class="hljs-built_in">tarjan</span>(i,<span class="hljs-number">-1</span>);<br><br>	<span class="hljs-built_in">rep</span>(u,<span class="hljs-number">1</span>,n)&#123;<br>		<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=head1[u];~i;i=e1[i].next)&#123;<br>			<span class="hljs-type">int</span> v=e1[i].v;<br>			<span class="hljs-keyword">if</span>(color[u]!=color[v])&#123;<br>				<span class="hljs-built_in">addedge2</span>(color[u],color[v],<span class="hljs-number">1</span>);<br>			&#125;<br>		&#125;<br>	&#125;<br>	<span class="hljs-comment">// rep(i,1,n) printf(&quot;%d scc:%d\n&quot;,i,color[i]);</span><br>	<span class="hljs-built_in">memset</span>(vis,<span class="hljs-number">0</span>,<span class="hljs-built_in">sizeof</span>(vis));<br>	<span class="hljs-built_in">dfs</span>(<span class="hljs-number">1</span>);<br>	<span class="hljs-built_in">rep</span>(i,<span class="hljs-number">1</span>,<span class="hljs-number">20</span>)&#123;<br>		<span class="hljs-built_in">rep</span>(j,<span class="hljs-number">1</span>,scc)&#123;<br>			fa[j][i]=fa[fa[j][i<span class="hljs-number">-1</span>]][i<span class="hljs-number">-1</span>];<br>			dist[j][i]=dist[j][i<span class="hljs-number">-1</span>]+dist[fa[j][i<span class="hljs-number">-1</span>]][i<span class="hljs-number">-1</span>];<br>		&#125;<br>	&#125;<br><br>	<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>,&amp;q);<br>	<span class="hljs-built_in">rep</span>(i,<span class="hljs-number">1</span>,q)&#123;<br>		<span class="hljs-type">int</span> x,y;<br>		<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>,&amp;x,&amp;y);<br>		<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>,<span class="hljs-built_in">LCA</span>(color[x],color[y]));<br>	&#125;<br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+
+</details>
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/LCA/">LCA</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E5%80%8D%E5%A2%9E/">倍增</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E6%A0%91%E9%93%BE%E5%89%96%E5%88%86/">树链剖分</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Tarjan/">Tarjan</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/04/30/%E7%A7%91%E6%99%AE%E7%9F%A5%E8%AF%86%EF%BC%9A%E5%86%B7%E5%8D%B4%E5%A1%94%E4%B8%BA%E4%BB%80%E4%B9%88%E6%98%AF%E6%9B%B2%E9%9D%A2%E7%9A%84%EF%BC%9F/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">科普知识：冷却塔为什么是曲面的？</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/04/25/%E8%8E%AB%E9%98%9F%E7%AE%97%E6%B3%95/">
+                        <span class="hidden-mobile">莫队算法</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://fastly.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"8WpS33YNRGD4IQNVQgVCmHQy-gzGzoHsz","appKey":"jed4H3219MxS5igBfmfTU81w","path":"window.location.pathname","placeholder":"write something here","avatar":"retro","meta":["nick","mail","link"],"requiredFields":["nick"],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":true},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://fastly.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://fastly.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://fastly.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://fastly.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://fastly.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://fastly.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://fastly.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://fastly.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- MathJax -->
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']]
+        },
+        loader: {
+          load: ['ui/lazy']
+        },
+        options: {
+          renderActions: {
+            findScript: [10, doc => {
+              document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = { node: text, delim: '', n: 0 };
+                math.end = { node: text, delim: '', n: 0 };
+                doc.math.push(math);
+              });
+            }, '', false],
+            insertedScript: [200, () => {
+              document.querySelectorAll('mjx-container').forEach(node => {
+                let target = node.parentNode;
+                if (target.nodeName.toLowerCase() === 'li') {
+                  target.parentNode.classList.add('has-jax');
+                }
+              });
+            }, '', false]
+          }
+        }
+      };
+    </script>
+
+    <script async src="https://fastly.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" ></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+</body>
+</html>

@@ -1,0 +1,622 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="琉璃糖">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="渣渣本渣得知自己研究生研究方向为计算成像，而且自己可能会主要负责编程及算法实现这块的内容，于是将重心移至矩阵这块（因为老板说这块以后要用到很多），那这次先系统学习一下关于矩阵的基础常用算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于矩阵的算法">
+<meta property="og:url" content="http://example.com/2020/07/31/%E5%85%B3%E4%BA%8E%E7%9F%A9%E9%98%B5%E7%9A%84%E7%AE%97%E6%B3%95/index.html">
+<meta property="og:site_name" content="BlablaWu&#39;s Blog">
+<meta property="og:description" content="渣渣本渣得知自己研究生研究方向为计算成像，而且自己可能会主要负责编程及算法实现这块的内容，于是将重心移至矩阵这块（因为老板说这块以后要用到很多），那这次先系统学习一下关于矩阵的基础常用算法">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-07-31T08:05:09.000Z">
+<meta property="article:modified_time" content="2020-08-01T05:07:04.000Z">
+<meta property="article:author" content="琉璃糖">
+<meta property="article:tag" content="矩阵">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  <title>关于矩阵的算法 - BlablaWu&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":50,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>BlablaWu の Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/index_bg.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="关于矩阵的算法">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2020-07-31 16:05" pubdate>
+        2020年7月31日 下午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      5.1k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      43 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">关于矩阵的算法</h1>
+            
+            <div class="markdown-body">
+              <p>渣渣本渣得知自己研究生研究方向为计算成像，而且自己可能会主要负责编程及算法实现这块的内容，于是将重心移至矩阵这块（因为老板说这块以后要用到很多），那这次先系统学习一下关于矩阵的基础常用算法<br><span id="more"></span></p>
+<h2 id="高斯消元-amp-高斯-约旦消元"><a href="#高斯消元-amp-高斯-约旦消元" class="headerlink" title="高斯消元 &amp; 高斯-约旦消元"></a>高斯消元 &amp; 高斯-约旦消元</h2><h3 id="高斯消元"><a href="#高斯消元" class="headerlink" title="高斯消元"></a>高斯消元</h3><p>对于一个线性方程组，我们可以把它写成增广矩阵的形式（就是把等号右侧的列向量拼到系数矩阵右侧）</p>
+<script type="math/tex; mode=display">
+Ax=b \Rightarrow (A\ b)</script><p>然后对增广矩阵不断进行初等行变换（只能进行一种变换），将其化为<strong>上三角矩阵</strong>，最后可以得到，矩阵最后一行最后一个元素的值就是对应的最后一个未知数的解，把这个解代入倒数第二行，得到倒数第二个未知数的解，以此类推，可以得到方程的所有解</p>
+<p>时间复杂度：$O(n^3)$</p>
+<p>举个栗子：</p>
+<figure class="highlight apache"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs apache"><span class="hljs-attribute">x</span> - <span class="hljs-number">2</span>y + <span class="hljs-number">3</span>z = <span class="hljs-number">6</span><br><span class="hljs-attribute">4x</span> - <span class="hljs-number">5</span>y + <span class="hljs-number">6</span>z = <span class="hljs-number">12</span><br><span class="hljs-attribute">7x</span> - <span class="hljs-number">8</span>y + <span class="hljs-number">10</span>z = <span class="hljs-number">21</span><br></code></pre></div></td></tr></table></figure>
+<p>写成增广矩阵为：</p>
+<figure class="highlight basic"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs basic"><span class="hljs-symbol">1 </span>-<span class="hljs-number">2</span> <span class="hljs-number">3</span>  | <span class="hljs-number">6</span><br><span class="hljs-symbol">4 </span>-<span class="hljs-number">5</span> <span class="hljs-number">6</span>  | <span class="hljs-number">12</span><br><span class="hljs-symbol">7 </span>-<span class="hljs-number">8</span> <span class="hljs-number">10</span> | <span class="hljs-number">21</span><br></code></pre></div></td></tr></table></figure>
+<p>首先把他化为上三角矩阵，用第一行消掉之后所有行的第一个元素</p>
+<p>PS：往往是将一列中最大的一个元素所对应的行作为消去使用的行（因为这样会减少误差，一些意会的证明见：<a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/solution/P3389">P3389 【模板】高斯消元 题解</a>）所以这里把第三行和第一行交换，然后用第一行消，为了写程序方便，先将首元素化为1</p>
+<figure class="highlight basic"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs basic"><span class="hljs-symbol">1 </span>-<span class="hljs-number">8</span>/<span class="hljs-number">7</span> <span class="hljs-number">10</span>/<span class="hljs-number">7</span> | <span class="hljs-number">3</span><br><span class="hljs-symbol">0 </span>-<span class="hljs-number">3</span>/<span class="hljs-number">7</span> -<span class="hljs-number">2</span>/<span class="hljs-number">7</span> | <span class="hljs-number">0</span><br><span class="hljs-symbol">0 </span>-<span class="hljs-number">6</span>/<span class="hljs-number">7</span> <span class="hljs-number">11</span>/<span class="hljs-number">7</span> | <span class="hljs-number">3</span><br></code></pre></div></td></tr></table></figure>
+<p>以此类推，可以得到一个上三角阵：</p>
+<figure class="highlight basic"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs basic"><span class="hljs-symbol">1 </span>-<span class="hljs-number">8</span>/<span class="hljs-number">7</span> <span class="hljs-number">10</span>/<span class="hljs-number">7</span> | <span class="hljs-number">3</span><br><span class="hljs-symbol">0 </span>  <span class="hljs-number">1</span>  -<span class="hljs-number">2</span>/<span class="hljs-number">3</span> | <span class="hljs-number">0</span><br><span class="hljs-symbol">0 </span>  <span class="hljs-number">0</span>    <span class="hljs-number">1</span>  | <span class="hljs-number">3</span><br></code></pre></div></td></tr></table></figure>
+<p>得出$x_3=3$，然后将其回代入第二个式子得到$x_2$，再回代入第一个式子得到$x_1$</p>
+<h4 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h4><p><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P3389">P3389 【模板】高斯消元法</a></p>
+<details>
+    <summary>code</summary>
+
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><span class="hljs-keyword">typedef</span> <span class="hljs-type">long</span> <span class="hljs-type">long</span> ll;<br><span class="hljs-type">const</span> <span class="hljs-type">int</span> maxn=<span class="hljs-number">105</span>;<br><span class="hljs-type">const</span> <span class="hljs-type">double</span> eps=<span class="hljs-number">1e-6</span>;<br><span class="hljs-type">int</span> n;<br><span class="hljs-type">double</span> a[maxn][maxn],ans[maxn];<br><br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">Gauss</span><span class="hljs-params">()</span></span>&#123;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++)&#123;<br>		<span class="hljs-type">int</span> tp=i;<span class="hljs-comment">// 记当前元素为最大</span><br>		<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j=i+<span class="hljs-number">1</span>;j&lt;=n;j++)&#123;<span class="hljs-comment">// 选出当前列最大元素对应的行</span><br>			<span class="hljs-keyword">if</span>(<span class="hljs-built_in">fabs</span>(a[j][i])&gt;<span class="hljs-built_in">fabs</span>(a[tp][i]))<br>				tp=j;<br>		&#125;<br>		<span class="hljs-keyword">if</span>(<span class="hljs-built_in">fabs</span>(a[tp][i])&lt;eps)&#123;<span class="hljs-comment">// 如果最大元素都是0，则无解</span><br>			<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;No Solution\n&quot;</span>);<br>			<span class="hljs-keyword">return</span>;<br>		&#125;<br>		<span class="hljs-keyword">if</span>(tp!=i) <span class="hljs-built_in">swap</span>(a[tp],a[i]);<span class="hljs-comment">// 将该行与当前行交换</span><br>		<span class="hljs-type">double</span> div=a[i][i];<br>		<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j=i;j&lt;=n+<span class="hljs-number">1</span>;j++)<br>			a[i][j]/=div;<span class="hljs-comment">// 单位化首元素，对应行内元素也要同样处理</span><br>		<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j=i+<span class="hljs-number">1</span>;j&lt;=n;j++)&#123;<span class="hljs-comment">// 从下一行开始消元素</span><br>			div=a[j][i];<br>			<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> k=i;k&lt;=n+<span class="hljs-number">1</span>;k++)&#123;<br>				a[j][k]-=a[i][k]*div;<br>			&#125;<br>		&#125;<br>	&#125;<br>	ans[n]=a[n][n+<span class="hljs-number">1</span>];<span class="hljs-comment">// 右下角元素为最后一个未知数的解</span><br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=n<span class="hljs-number">-1</span>;i&gt;=<span class="hljs-number">1</span>;i--)&#123;<span class="hljs-comment">// 从导数第二行开始回代操作</span><br>		ans[i]=a[i][n+<span class="hljs-number">1</span>];<span class="hljs-comment">// 记录答案</span><br>		<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j=i+<span class="hljs-number">1</span>;j&lt;=n;j++)&#123;<span class="hljs-comment">// 从改行元素往后，每一个都要被消掉，对应解都要减去一个值</span><br>			ans[i]-=ans[j]*a[i][j];<br>		&#125;<br>	&#125;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++)<span class="hljs-comment">// 输出答案</span><br>		<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%.2lf\n&quot;</span>,ans[i]);<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>,&amp;n);<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++)<br>		<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j=<span class="hljs-number">1</span>;j&lt;=n+<span class="hljs-number">1</span>;j++)<br>			<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%lf&quot;</span>,&amp;a[i][j]);<br>	<span class="hljs-built_in">Gauss</span>();<br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+
+</details>
+
+<h3 id="高斯-约旦消元"><a href="#高斯-约旦消元" class="headerlink" title="高斯-约旦消元"></a>高斯-约旦消元</h3><p>操作步骤和<strong>高斯消元</strong>相同，只不过最后将增广阵消为对角阵，从而去除了繁复的回代操作，经过证明，该方法精度最高，代码也相对较短</p>
+<p>时间复杂度：$O(n^3)$</p>
+<h4 id="代码-1"><a href="#代码-1" class="headerlink" title="代码"></a>代码</h4><details>
+    <summary>code</summary>
+
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">Gauss_Jordan</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++)&#123;<br>        <span class="hljs-type">int</span> tp=i;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j=i+<span class="hljs-number">1</span>;j&lt;=n;j++)&#123;<br>            <span class="hljs-keyword">if</span>(<span class="hljs-built_in">fabs</span>(a[j][i])&gt;<span class="hljs-built_in">fabs</span>(a[tp][i]))<br>                tp=j;<br>        &#125;<br>        <span class="hljs-keyword">if</span>(a[tp][i]&lt;eps)&#123;<br>            <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;No Solution\n&quot;</span>);<br>            <span class="hljs-keyword">return</span>;<br>        &#125;<br>        <span class="hljs-keyword">if</span>(tp!=i) <span class="hljs-built_in">swap</span>(a[tp],a[i]);<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j=<span class="hljs-number">1</span>;j&lt;=n;j++)&#123;<span class="hljs-comment">// 注意从第一行开始</span><br>            <span class="hljs-keyword">if</span>(j!=i)&#123;<span class="hljs-comment">// 且跳过当前用来消的行</span><br>                <span class="hljs-type">double</span> div=a[j][i]/a[i][i];<span class="hljs-comment">// 记住要消的倍数</span><br>                <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> k=i;k&lt;=n+<span class="hljs-number">1</span>;k++)&#123;<br>                    a[j][k]-=a[i][k]*div;<span class="hljs-comment">//每行对应元素减去这个倍数的值</span><br>                &#125;<br>            &#125;<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++)&#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%.2lf\n&quot;</span>,a[i][n+<span class="hljs-number">1</span>]/a[i][i]);<span class="hljs-comment">//最后答案要再除以一个系数</span><br>    &#125;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+
+</details>
+
+<h3 id="矩阵求逆"><a href="#矩阵求逆" class="headerlink" title="矩阵求逆"></a>矩阵求逆</h3><p>学过线代的我们都知道，一个矩阵的逆矩阵的求法（前提是该矩阵可逆，可以通过行列式值不为零或满秩等判断），最常用的就是在它右边拼一个同大小单位阵，然后通过初等行变换把左侧矩阵化为单位阵，则此时右侧矩阵即原矩阵的逆矩阵（证明略）</p>
+<p>对于这样一个情况，我们很容易发现这就是一个<strong>高斯-约旦消元</strong>的过程，只不过右侧不是一个列向量，而是一个同阶矩阵，那么如法炮制，很容易得到解法</p>
+<h4 id="代码-2"><a href="#代码-2" class="headerlink" title="代码"></a>代码</h4><p><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P4783">P4783 【模板】矩阵求逆</a></p>
+<p>这个题需要注意的是有个模数，因此不需要用<code>double</code>存矩阵元素，除法用扩欧或费马小定理算下逆元就行了，注意出现负数，我在一开始就把他全部转正了</p>
+<details>
+    <summary>code</summary>
+
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><span class="hljs-keyword">typedef</span> <span class="hljs-type">long</span> <span class="hljs-type">long</span> ll;<br><span class="hljs-type">const</span> ll mod=<span class="hljs-number">1e9</span>+<span class="hljs-number">7</span>;<br><span class="hljs-type">int</span> n;<br>ll a[<span class="hljs-number">405</span>][<span class="hljs-number">805</span>];<br><br><span class="hljs-function">ll <span class="hljs-title">exgcd</span><span class="hljs-params">(ll &amp;x,ll &amp;y,ll a,ll b)</span></span>&#123;<br>	<span class="hljs-keyword">if</span>(b==<span class="hljs-number">0</span>)&#123;<br>		x=<span class="hljs-number">1</span>,y=<span class="hljs-number">0</span>;<span class="hljs-keyword">return</span> a;<br>	&#125;<br>	ll res=<span class="hljs-built_in">exgcd</span>(x,y,b,a%b);<br>	ll tx=x;<br>	x=y;<br>	y=tx-a/b*y;<br>	<span class="hljs-keyword">return</span> res;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">Gauss_Jordan</span><span class="hljs-params">()</span></span>&#123;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++)&#123;<br>		<span class="hljs-type">int</span> tp=i;<br>		<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j=i+<span class="hljs-number">1</span>;j&lt;=n;j++)&#123;<br>			<span class="hljs-keyword">if</span>(a[j][i]&gt;a[tp][i])<br>				tp=j;<br>		&#125;<br>		<span class="hljs-keyword">if</span>(a[tp][i]==<span class="hljs-number">0</span>)&#123;<br>			<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;No Solution\n&quot;</span>);<br>			<span class="hljs-keyword">return</span>;<br>		&#125;<br>		<span class="hljs-keyword">if</span>(tp!=i) <span class="hljs-built_in">swap</span>(a[tp],a[i]);<br>		<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j=<span class="hljs-number">1</span>;j&lt;=n;j++)&#123;<br>			<span class="hljs-keyword">if</span>(j!=i)&#123;<br>				ll x,y;<br>				<span class="hljs-built_in">exgcd</span>(x,y,a[i][i],mod);<br>				x=(x+mod)%mod;<br>				ll div=a[j][i]*x%mod;<br>				<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> k=i;k&lt;=n+n;k++)&#123;<span class="hljs-comment">// 这里要到2n</span><br>					a[j][k]-=a[i][k]*div%mod;<br>					a[j][k]=(a[j][k]+mod)%mod;<br>				&#125;<br>			&#125;<br>		&#125;<br>	&#125;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++)&#123;<br>		ll x,y;<br>		<span class="hljs-built_in">exgcd</span>(x,y,a[i][i],mod);<br>		x=(x+mod)%mod;<br>		<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j=<span class="hljs-number">1</span>;j&lt;=n;j++)&#123;<br>			<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%lld &quot;</span>,a[i][j+n]*x%mod);<br>		&#125;<br>		<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;\n&quot;</span>);<br>	&#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>,&amp;n);<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++)<br>		<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j=<span class="hljs-number">1</span>;j&lt;=n;j++)<br>			<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%lld&quot;</span>,&amp;a[i][j]),<br>			a[i][j]=(a[i][j]+mod)%mod;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++) a[i][i+n]=<span class="hljs-number">1</span>;<span class="hljs-comment">// 拼一个单位阵</span><br>	<span class="hljs-built_in">Gauss_Jordan</span>();<br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+
+</details>
+
+<h2 id="线性基"><a href="#线性基" class="headerlink" title="线性基"></a>线性基</h2><p>参考blog：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/a_forever_dream/article/details/83654397">CSDN 线性基详解</a></li>
+</ul>
+<p>这是一个比较偏<strong>程序设计竞赛</strong>的算法（应该叫数据结构），可以用来存储一组集合的一种<strong>基</strong>，类似于线代里面的线性无关组，线性基内的元素通过<strong>异或</strong>操作能不多不少恰好表示出整个集合的所有元素</p>
+<h3 id="构造方式"><a href="#构造方式" class="headerlink" title="构造方式"></a>构造方式</h3><p><strong>通过不断插入集合元素来完成构造</strong></p>
+<p>从集合内元素最高位开始，往低位数，如果插入的数字$x$当前位为1，则判断是否该位的线性基已存在，若存在，则让$x$异或该基，看下一位，重复上述操作；否则令该位线性基为$x$，结束</p>
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">insert</span><span class="hljs-params">(ll x)</span></span>&#123;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">60</span>;i&gt;=<span class="hljs-number">0</span>;i--)&#123;<br>        <span class="hljs-keyword">if</span>((<span class="hljs-number">1ll</span>&lt;&lt;i)&amp;x)&#123;<br>            <span class="hljs-keyword">if</span>(p[i]) x^=p[i];<br>            <span class="hljs-keyword">else</span>&#123;<br>                p[i]=x;<br>                <span class="hljs-keyword">break</span>;<br>            &#125;<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+<p>经过构造过程，我们可以得到一组集合的线性基，该线性基集合中存储了从高位到低位每一位为1的所有信息，并且这些信息都是通过原集合中若干元素异或得到的，因此，可以通过线性基表示出原集合的所有元素（具体证明见上方blog）</p>
+<h3 id="给定集合取出任意个求最大异或和"><a href="#给定集合取出任意个求最大异或和" class="headerlink" title="给定集合取出任意个求最大异或和"></a>给定集合取出任意个求最大异或和</h3><p><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P3812">P3812 【模板】线性基</a></p>
+<p>构造好线性基后，只需要通过从高位到低位的贪心过程就可以AC此题，具体贪心流程为：</p>
+<p>初始解为<code>ans=0</code>，从最高位开始遍历，如果<code>(p[i]^ans)&gt;ans</code>则让<code>ans^=p[i]</code>，最后得到的<code>ans</code>就是答案</p>
+<p>证明：显然可以发现，不断使得当前最高位变大的过程是最优的，因此只需要不断取能使答案变大的就行了</p>
+<p>PS：<code>^</code>运算符优先级低于<code>&gt;</code>，因此要加括号</p>
+<details>
+    <summary>code</summary>
+
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><span class="hljs-keyword">typedef</span> <span class="hljs-type">long</span> <span class="hljs-type">long</span> ll;<br><span class="hljs-type">int</span> n;<br>ll p[<span class="hljs-number">65</span>];<br>ll x;<br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">ins</span><span class="hljs-params">(ll x)</span></span>&#123;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">50</span>;i&gt;=<span class="hljs-number">0</span>;i--)&#123;<br>		<span class="hljs-keyword">if</span>((<span class="hljs-number">1ll</span>&lt;&lt;i)&amp;x)&#123;<br>			<span class="hljs-keyword">if</span>(p[i]) x^=p[i];<br>			<span class="hljs-keyword">else</span>&#123;<br>				p[i]=x;<br>				<span class="hljs-keyword">break</span>;<br>			&#125;<br>		&#125;<br>	&#125;<br>&#125;<br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>,&amp;n);<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++)<br>		<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%lld&quot;</span>,&amp;x),<span class="hljs-built_in">ins</span>(x);<br>	ll ans=<span class="hljs-number">0</span>;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">50</span>;i&gt;=<span class="hljs-number">0</span>;i--)<br>		<span class="hljs-keyword">if</span>((ans^p[i])&gt;ans) ans^=p[i];<br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%lld\n&quot;</span>,ans);<br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+
+</details>
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E7%9F%A9%E9%98%B5/">矩阵</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/08/01/%E6%8B%89%E6%A0%BC%E6%9C%97%E6%97%A5%E6%8F%92%E5%80%BC/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">拉格朗日插值</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/07/02/temp-%E9%A2%84%E6%B5%8B%E6%83%85%E5%86%B5%E6%B1%87%E6%8A%A52/">
+                        <span class="hidden-mobile">[temp]预测情况汇报2</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://fastly.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"8WpS33YNRGD4IQNVQgVCmHQy-gzGzoHsz","appKey":"jed4H3219MxS5igBfmfTU81w","path":"window.location.pathname","placeholder":"write something here","avatar":"retro","meta":["nick","mail","link"],"requiredFields":["nick"],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":true},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://fastly.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://fastly.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://fastly.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://fastly.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://fastly.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://fastly.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://fastly.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://fastly.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- MathJax -->
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']]
+        },
+        loader: {
+          load: ['ui/lazy']
+        },
+        options: {
+          renderActions: {
+            findScript: [10, doc => {
+              document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = { node: text, delim: '', n: 0 };
+                math.end = { node: text, delim: '', n: 0 };
+                doc.math.push(math);
+              });
+            }, '', false],
+            insertedScript: [200, () => {
+              document.querySelectorAll('mjx-container').forEach(node => {
+                let target = node.parentNode;
+                if (target.nodeName.toLowerCase() === 'li') {
+                  target.parentNode.classList.add('has-jax');
+                }
+              });
+            }, '', false]
+          }
+        }
+      };
+    </script>
+
+    <script async src="https://fastly.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" ></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+</body>
+</html>
