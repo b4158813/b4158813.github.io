@@ -4,11 +4,11 @@
   
   
   <entry>
-    <title>Windows系统安装cuda和cudnn精细教程</title>
-    <link href="/2022/07/19/Windows%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85cuda%E5%92%8Ccudnn%E7%B2%BE%E7%BB%86%E6%95%99%E7%A8%8B/"/>
-    <url>/2022/07/19/Windows%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85cuda%E5%92%8Ccudnn%E7%B2%BE%E7%BB%86%E6%95%99%E7%A8%8B/</url>
+    <title>Windows系统安装cuda和cudnn简单教程</title>
+    <link href="/2022/07/19/Windows%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85cuda%E5%92%8Ccudnn%E7%AE%80%E5%8D%95%E6%95%99%E7%A8%8B/"/>
+    <url>/2022/07/19/Windows%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85cuda%E5%92%8Ccudnn%E7%AE%80%E5%8D%95%E6%95%99%E7%A8%8B/</url>
     
-    <content type="html"><![CDATA[<p>本篇主要记录Windows系统安装cuda和cudnn时的步骤和踩过的坑，以及重要的资源链接等。<br><span id="more"></span></p>]]></content>
+    <content type="html"><![CDATA[<p>本篇主要记录Windows系统安装cuda和cudnn时的步骤和踩过的坑，以及重要的资源链接等。<br><span id="more"></span></p><p>两个重要链接：</p><a class="btn" href="https://developer.nvidia.com/cuda-toolkit-archive"  target="_blank">CUDA Toolkit Archive</a><a class="btn" href="https://developer.nvidia.com/rdp/cudnn-archive"  target="_blank">cuDNN Archive | NVIDIA Developer</a><p>参考：</p><ul><li><a href="https://blog.csdn.net/Jin1Yang/article/details/124754015">https://blog.csdn.net/Jin1Yang/article/details/124754015</a></li></ul><h2 id="CUDA的安装"><a href="#CUDA的安装" class="headerlink" title="CUDA的安装"></a>CUDA的安装</h2><p>我们首先需要知道自己的Nvidia显卡对应的CUDA版本，这需要进入 <strong>NVIDIA控制面板=&gt;系统性息</strong> 进行查看：（如下图所示，我这台电脑对应了CUDA 11.6.134版本）</p><p><img src="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/img/image-20220721210208439.png" alt="查看NVIDIA属性"></p><p>然后下载对应版本的CUDA Toolkit，CUDA下载地址：<a href="https://developer.nvidia.com/cuda-toolkit-archive">CUDA Toolkit Archive | NVIDIA Developer</a></p><p>然后安装即可，安装完成后，打开<code>cmd</code>输入<code>nvcc -V</code>查看是否安装成功：</p><p><img src="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/img/image-20220721210623363.png" alt="检查cuda是否安装成功"></p><h2 id="cuDNN的安装"><a href="#cuDNN的安装" class="headerlink" title="cuDNN的安装"></a>cuDNN的安装</h2><p>cuDNN下载链接：<a href="https://developer.nvidia.com/rdp/cudnn-archive">cuDNN Archive | NVIDIA Developer</a></p><p>选择与自己的CUDA版本对应的cuDNN版本下载，得到压缩包并解压。将其中的三个文件夹（<code>bin</code>、<code>include</code>、<code>lib</code>）复制粘贴至CUDA的根目录下并替换。</p><p>检查是否安装成功：进入CUDA根目录下的<code>.\extras\demo_suite</code>目录，并执行<code>bandwidthTest.exe</code>和<code>deviceQuery.exe</code>检查是否安装成功：</p><p><img src="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/img/image-20220721211320638.png" alt="deviceQuery.exe"></p><p><img src="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/img/image-20220721212006039.png" alt="bandwidthTest.exe"></p>]]></content>
     
     
     <categories>
@@ -1508,9 +1508,9 @@
     
     <tags>
       
-      <tag>图论</tag>
-      
       <tag>二分图匹配</tag>
+      
+      <tag>图论</tag>
       
     </tags>
     
@@ -2538,11 +2538,11 @@
     
     <tags>
       
+      <tag>图论</tag>
+      
       <tag>最小生成树</tag>
       
       <tag>并査集</tag>
-      
-      <tag>图论</tag>
       
     </tags>
     
@@ -2567,9 +2567,9 @@
     
     <tags>
       
-      <tag>并査集</tag>
-      
       <tag>数据结构</tag>
+      
+      <tag>并査集</tag>
       
     </tags>
     
@@ -3071,9 +3071,9 @@
     
     <tags>
       
-      <tag>背包问题</tag>
-      
       <tag>刷题</tag>
+      
+      <tag>背包问题</tag>
       
       <tag>动态规划</tag>
       

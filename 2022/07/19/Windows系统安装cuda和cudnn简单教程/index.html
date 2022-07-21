@@ -18,19 +18,21 @@
   
     <meta name="description" content="本篇主要记录Windows系统安装cuda和cudnn时的步骤和踩过的坑，以及重要的资源链接等。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Windows系统安装cuda和cudnn精细教程">
-<meta property="og:url" content="http://example.com/2022/07/19/Windows%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85cuda%E5%92%8Ccudnn%E7%B2%BE%E7%BB%86%E6%95%99%E7%A8%8B/index.html">
+<meta property="og:title" content="Windows系统安装cuda和cudnn简单教程">
+<meta property="og:url" content="http://example.com/2022/07/19/Windows%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85cuda%E5%92%8Ccudnn%E7%AE%80%E5%8D%95%E6%95%99%E7%A8%8B/index.html">
 <meta property="og:site_name" content="BlablaWu&#39;s Blog">
 <meta property="og:description" content="本篇主要记录Windows系统安装cuda和cudnn时的步骤和踩过的坑，以及重要的资源链接等。">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/img/cudalogo.webp">
 <meta property="article:published_time" content="2022-07-19T15:21:31.000Z">
-<meta property="article:modified_time" content="2022-07-19T15:24:44.316Z">
+<meta property="article:modified_time" content="2022-07-21T13:22:04.541Z">
 <meta property="article:author" content="琉璃糖">
 <meta property="article:tag" content="配置">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/img/cudalogo.webp">
   
   
-  <title>Windows系统安装cuda和cudnn精细教程 - BlablaWu&#39;s Blog</title>
+  <title>Windows系统安装cuda和cudnn简单教程 - BlablaWu&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
 
@@ -192,7 +194,7 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="Windows系统安装cuda和cudnn精细教程">
+            <span class="h2" id="subtitle" title="Windows系统安装cuda和cudnn简单教程">
               
             </span>
 
@@ -213,7 +215,7 @@
   
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      48 字
+      565 字
     </span>
   
 
@@ -222,7 +224,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      1 分钟
+      5 分钟
     </span>
   
 
@@ -251,10 +253,27 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">Windows系统安装cuda和cudnn精细教程</h1>
+            <h1 style="display: none">Windows系统安装cuda和cudnn简单教程</h1>
             
             <div class="markdown-body">
               <p>本篇主要记录Windows系统安装cuda和cudnn时的步骤和踩过的坑，以及重要的资源链接等。<br><span id="more"></span></p>
+<p>两个重要链接：</p>
+<a class="btn" href="https://developer.nvidia.com/cuda-toolkit-archive"  target="_blank">CUDA Toolkit Archive</a>
+<a class="btn" href="https://developer.nvidia.com/rdp/cudnn-archive"  target="_blank">cuDNN Archive | NVIDIA Developer</a>
+<p>参考：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/Jin1Yang/article/details/124754015">https://blog.csdn.net/Jin1Yang/article/details/124754015</a></li>
+</ul>
+<h2 id="CUDA的安装"><a href="#CUDA的安装" class="headerlink" title="CUDA的安装"></a>CUDA的安装</h2><p>我们首先需要知道自己的Nvidia显卡对应的CUDA版本，这需要进入 <strong>NVIDIA控制面板=&gt;系统性息</strong> 进行查看：（如下图所示，我这台电脑对应了CUDA 11.6.134版本）</p>
+<p><img src="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/img/image-20220721210208439.png" srcset="/img/loading.gif" lazyload alt="查看NVIDIA属性"></p>
+<p>然后下载对应版本的CUDA Toolkit，CUDA下载地址：<a target="_blank" rel="noopener" href="https://developer.nvidia.com/cuda-toolkit-archive">CUDA Toolkit Archive | NVIDIA Developer</a></p>
+<p>然后安装即可，安装完成后，打开<code>cmd</code>输入<code>nvcc -V</code>查看是否安装成功：</p>
+<p><img src="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/img/image-20220721210623363.png" srcset="/img/loading.gif" lazyload alt="检查cuda是否安装成功"></p>
+<h2 id="cuDNN的安装"><a href="#cuDNN的安装" class="headerlink" title="cuDNN的安装"></a>cuDNN的安装</h2><p>cuDNN下载链接：<a target="_blank" rel="noopener" href="https://developer.nvidia.com/rdp/cudnn-archive">cuDNN Archive | NVIDIA Developer</a></p>
+<p>选择与自己的CUDA版本对应的cuDNN版本下载，得到压缩包并解压。将其中的三个文件夹（<code>bin</code>、<code>include</code>、<code>lib</code>）复制粘贴至CUDA的根目录下并替换。</p>
+<p>检查是否安装成功：进入CUDA根目录下的<code>.\extras\demo_suite</code>目录，并执行<code>bandwidthTest.exe</code>和<code>deviceQuery.exe</code>检查是否安装成功：</p>
+<p><img src="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/img/image-20220721211320638.png" srcset="/img/loading.gif" lazyload alt="deviceQuery.exe"></p>
+<p><img src="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/img/image-20220721212006039.png" srcset="/img/loading.gif" lazyload alt="bandwidthTest.exe"></p>
 
             </div>
             <hr>
