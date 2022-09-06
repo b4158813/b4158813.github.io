@@ -41,8 +41,11 @@
 <meta property="og:image" content="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/img/image-20220902200443609.png">
 <meta property="og:image" content="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/img/image-20220902234150377.png">
 <meta property="og:image" content="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/img/image-20220903110129753.png">
+<meta property="og:image" content="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/img/image-20220906234027583.png">
+<meta property="og:image" content="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/img/image-20220906234318205.png">
+<meta property="og:image" content="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/img/image-20220906234353581.png">
 <meta property="article:published_time" content="2022-08-27T11:55:12.000Z">
-<meta property="article:modified_time" content="2022-09-05T15:56:52.439Z">
+<meta property="article:modified_time" content="2022-09-06T15:49:12.848Z">
 <meta property="article:author" content="琉璃糖">
 <meta property="article:tag" content="OS">
 <meta property="article:tag" content="Linux">
@@ -233,7 +236,7 @@
   
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      32k 字
+      35k 字
     </span>
   
 
@@ -242,7 +245,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      263 分钟
+      288 分钟
     </span>
   
 
@@ -684,6 +687,78 @@
 
 </details>
 
+<hr>
+<p>内存映射经典问题：</p>
+<ol>
+<li>如果对mmap的返回值(ptr)做++操作(ptr++)，munmap能否成功？</li>
+</ol>
+<figure class="highlight scss"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs scss">可以进行++操作，但是<span class="hljs-built_in">munmap</span>(ptr, len)需要传首地址<br></code></pre></div></td></tr></table></figure>
+<ol>
+<li>如果open时O_RDONLY，mmap时prot指定PROT_READ | PROT_WRITE会怎样？</li>
+</ol>
+<figure class="highlight arduino"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs arduino">错误，返回MAP_FAILED。open函数权限建议和prot参数权限保持一致（prot时open权限的子集）<br></code></pre></div></td></tr></table></figure>
+<ol>
+<li>如果文件偏移量为1000会怎样？</li>
+</ol>
+<figure class="highlight"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs">偏移量必须是4k的整数倍，否则返回MAP_FAILED<br></code></pre></div></td></tr></table></figure>
+<ol>
+<li>mmap什么情况下会调用失败？</li>
+</ol>
+<figure class="highlight markdown"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs markdown"><span class="hljs-bullet">-</span> 第一个参数：length = 0<br><span class="hljs-bullet">-</span> 第三个参数：prot<br><span class="hljs-bullet">	-</span> 只指定了写权限<br><span class="hljs-bullet">	-</span> prot为PROT<span class="hljs-emphasis">_READ | PROT_</span>WRITE，而fd为O<span class="hljs-emphasis">_RDONLY / O_</span>WRONLY<br></code></pre></div></td></tr></table></figure>
+<ol>
+<li>可以open的时候O_CREAT一个新文件来创建映射区吗？</li>
+</ol>
+<figure class="highlight markdown"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs markdown"><span class="hljs-bullet">-</span> 可以，但是文件大小不能为0<br><span class="hljs-bullet">-</span> 可以对新文件进行扩展:<br><span class="hljs-bullet">	-</span> lseek()<br><span class="hljs-bullet">	-</span> truncate()<br></code></pre></div></td></tr></table></figure>
+<ol>
+<li>mmap后关闭文件描述符，对mmap映射有没有影响？</li>
+</ol>
+<figure class="highlight perl"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs perl"><span class="hljs-keyword">int</span> fd = <span class="hljs-keyword">open</span>(<span class="hljs-string">&quot;xxx&quot;</span>);<br>mmap(,,,,fd,<span class="hljs-number">0</span>);<br><span class="hljs-keyword">close</span>(fd);<br>映射区还存在，创建映射区的fd关闭，没有任何影响<br></code></pre></div></td></tr></table></figure>
+<ol>
+<li>对ptr越界操作会怎样？</li>
+</ol>
+<figure class="highlight arcade"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs arcade"><span class="hljs-keyword">void</span> *ptr = mmap(<span class="hljs-literal">NULL</span>, <span class="hljs-number">100</span>,,,,,);<br><span class="hljs-number">4</span>K<br>越界操作，操作的是非法内存 -&gt; segmentation fault<br></code></pre></div></td></tr></table></figure>
+<hr>
+<details>
+    <summary>使用文件映射实现文件拷贝功能（通常不会用）</summary>
+
+<figure class="highlight c"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c"><span class="hljs-comment">// 使用文件映射实现文件拷贝功能（通常不会用）</span><br><br><span class="hljs-comment">/*</span><br><span class="hljs-comment"></span><br><span class="hljs-comment">    思路：</span><br><span class="hljs-comment">        1. 对原始文件进行内存映射</span><br><span class="hljs-comment">        2. 创建新文件（扩展）</span><br><span class="hljs-comment">        3. 把新文件数据映射到内存中</span><br><span class="hljs-comment">        4. 通过内存映射将第一个文件的内存数据拷贝到新文件中</span><br><span class="hljs-comment">        5. 释放数据</span><br><span class="hljs-comment"></span><br><span class="hljs-comment">*/</span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sys/mman.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sys/types.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sys/stat.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;fcntl.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span>&#123;<br><br>    <span class="hljs-comment">// 1. 对原始文件进行内存映射</span><br>    <span class="hljs-type">int</span> fd = open(<span class="hljs-string">&quot;english.txt&quot;</span>, O_RDWR);<br>    <span class="hljs-keyword">if</span>(fd == <span class="hljs-number">-1</span>)&#123;<br>        perror(<span class="hljs-string">&quot;open&quot;</span>);<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>    &#125;<br><br>    <span class="hljs-comment">// 获取原始文件的大小</span><br>    <span class="hljs-type">int</span> len = lseek(fd, <span class="hljs-number">0</span>, SEEK_END);<br><br>    <span class="hljs-comment">// 2. 创建新文件（扩展）</span><br>    <span class="hljs-type">int</span> fd1 = open(<span class="hljs-string">&quot;cpy.txt&quot;</span>, O_RDWR | O_CREAT, <span class="hljs-number">0664</span>);<br>    <span class="hljs-keyword">if</span>(fd1 == <span class="hljs-number">-1</span>)&#123;<br>        perror(<span class="hljs-string">&quot;open&quot;</span>);<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>    &#125;<br><br>    <span class="hljs-comment">// 对新文件进行扩展</span><br>    truncate(<span class="hljs-string">&quot;cpy.txt&quot;</span>, len);<br>    write(fd1, <span class="hljs-string">&quot; &quot;</span>, <span class="hljs-number">1</span>);<br><br>    <span class="hljs-comment">// 3. 分别做内存映射</span><br>    <span class="hljs-type">void</span> *ptr = mmap(<span class="hljs-literal">NULL</span>, len, PROT_READ | PROT_WRITE, MAP_SHARED, fd, <span class="hljs-number">0</span>);<br>    <span class="hljs-type">void</span> *ptr1 = mmap(<span class="hljs-literal">NULL</span>, len, PROT_READ | PROT_WRITE, MAP_SHARED, fd1, <span class="hljs-number">0</span>);<br>    <span class="hljs-keyword">if</span>(ptr == MAP_FAILED || ptr1 == MAP_FAILED)&#123;<br>        perror(<span class="hljs-string">&quot;mmap&quot;</span>);<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>    &#125;<br><br>    <span class="hljs-comment">// 4. 通过内存映射将第一个文件的内存数据拷贝到新文件中</span><br>    <span class="hljs-built_in">memcpy</span>(ptr1, ptr, len);<br><br>    <span class="hljs-comment">// 5. 释放资源</span><br>    munmap(ptr1, len);<br>    munmap(ptr, len);<br>    close(fd1);<br>    close(fd);<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+
+</details>
+
+<hr>
+<h5 id="匿名映射"><a href="#匿名映射" class="headerlink" title="匿名映射"></a>匿名映射</h5><details>
+    <summary>匿名映射（父子进程通信）</summary>
+
+<figure class="highlight c"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c"><span class="hljs-comment">/*</span><br><span class="hljs-comment">    匿名映射：不需要文件实体的内存映射</span><br><span class="hljs-comment">    用于父子间进程通信</span><br><span class="hljs-comment">*/</span><br><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sys/mman.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sys/types.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sys/stat.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;fcntl.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;wait.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span>&#123;<br><br>    <span class="hljs-comment">// 1. 创建匿名内存映射区</span><br>    <span class="hljs-type">int</span> len = <span class="hljs-number">4096</span>;<br>    <span class="hljs-type">void</span> *ptr = mmap(<span class="hljs-literal">NULL</span>, len, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, <span class="hljs-number">-1</span>, <span class="hljs-number">0</span>);<br>    <span class="hljs-keyword">if</span>(ptr == MAP_FAILED)&#123;<br>        perror(<span class="hljs-string">&quot;mmap&quot;</span>);<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>    &#125;<br>    <span class="hljs-comment">// 2. 父子进程间通信</span><br>    <span class="hljs-type">pid_t</span> pid = fork();<br>    <span class="hljs-keyword">if</span>(pid &gt; <span class="hljs-number">0</span>)&#123;<br>        <span class="hljs-comment">// parent</span><br>        <span class="hljs-built_in">strcpy</span>((<span class="hljs-type">char</span> *)ptr, <span class="hljs-string">&quot;hello world&quot;</span>);<br>        wait(<span class="hljs-literal">NULL</span>);<br>    &#125;<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(pid == <span class="hljs-number">0</span>)&#123;<br>        <span class="hljs-comment">// child</span><br>        sleep(<span class="hljs-number">1</span>);<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%s\n&quot;</span>, (<span class="hljs-type">char</span> *)ptr);<br>    &#125;<br><br>    <span class="hljs-comment">// 3. 释放内存映射区</span><br>    <span class="hljs-type">int</span> ret = munmap(ptr, len);<br>    <span class="hljs-keyword">if</span>(ret == <span class="hljs-number">-1</span>)&#123;<br>        perror(<span class="hljs-string">&quot;munmap&quot;</span>);<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>    &#125;<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+
+</details>
+
+<hr>
+<h4 id="信号"><a href="#信号" class="headerlink" title="信号"></a>信号</h4><p>又称为<strong>软件中断</strong>，时一种<strong>异步</strong>通信的方式，发往进程的诸多信号通常都源于<strong>内核</strong>，其事件如下：</p>
+<ul>
+<li>对于前台进程，用户可以通过输入特殊的终端字符来给它发送信号。比如输入<code>Ctrl+C</code>通常会给进程发送一个中断信号。</li>
+<li>硬件发生异常，即硬件检测到一个错误条件并通知内核，随即再由内核发送相应信号给相关进程。比如执行一条异常的机器语言指令，诸如被0除，或者引用了无法访问的内存区域。</li>
+<li>系统状态变化，比如alarm定时器到期将引起SIGALRM信号，进程执行的CPU时间超限，或者该进程的某个子进程退出。</li>
+<li>运行kill 命令或调用kill 函数。</li>
+</ul>
+<p>使用信号的两个主要<strong>目的</strong>是:</p>
+<ul>
+<li>让进程知道已经发生了一个特定的事情。</li>
+<li>强迫进程执行它自己代码中的信号处理程序。</li>
+</ul>
+<p>信号的特点:</p>
+<ul>
+<li>简单</li>
+<li>不能携带大量信息</li>
+<li>满足某个特定条件才发送<strong>优先级比较高</strong></li>
+<li>查看系统定义的信号列表: <code>kill -l</code></li>
+<li>前31个信号为常规信号，其余为实时信号。</li>
+</ul>
+<p>可以通过 <code>man 7 signal</code>查看文档</p>
+<p>五种默认处理动作：Term, Ign, Core, Stop, Cont</p>
+<p><img src="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/img/image-20220906234027583.png" srcset="/img/loading.gif" lazyload alt="常用信号1"></p>
+<p><img src="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/img/image-20220906234318205.png" srcset="/img/loading.gif" lazyload alt="常用信号2"></p>
+<p><img src="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/img/image-20220906234353581.png" srcset="/img/loading.gif" lazyload alt="常用信号3"></p>
 
             </div>
             <hr>
