@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/img/ssqfshb.webp">
 <meta property="article:published_time" content="2022-09-17T11:36:33.000Z">
-<meta property="article:modified_time" content="2022-09-21T09:26:34.755Z">
+<meta property="article:modified_time" content="2022-09-21T09:29:44.984Z">
 <meta property="article:author" content="琉璃糖">
 <meta property="article:tag" content="启发式合并">
 <meta name="twitter:card" content="summary_large_image">
@@ -276,7 +276,7 @@
 <hr>
 <p>对于一种询问统计所有子树的贡献一类题，首先考虑一种暴力的思路，对于每一棵子树$O(n)$进行统计，再将统计的结果清空（因为我们要保证空间复杂度也是$O(n)$），这样算下来，总的时间复杂度是$O(n^2)$的，考虑如何优化这个暴力过程。</p>
 <p>我们发现，对于一个节点$u$的1次统计来说，我们需要对$u$的所有儿子$v$对应子树进行一次统计 + 一次清空操作，然后将$u$节点的贡献算上，再统计所有子节点一次，从而更新$u$这棵子树的贡献。</p>
-<p>实际上，当我们统计完了$u$的最后一个子节点$v<em>{last}$子树的贡献后，并不需要将其贡献清空，而是可以直接继承这个贡献。显然，我们需要让这个$v</em>{last}$对应子树<strong>越大越好</strong>！自然而然地，我们便想到了<strong>重儿子</strong>这个概念。</p>
+<p>实际上，当我们统计完了$u$的最后一个子节点$v_l$子树的贡献后，并不需要将其贡献清空，而是可以直接继承这个贡献。显然，我们需要让这个$v_l$对应子树<strong>越大越好</strong>！自然而然地，我们便想到了<strong>重儿子</strong>这个概念。</p>
 <p>通常情况下，我们定义启发式合并的思路都是源自于<strong>树链剖分</strong>（重链剖分 or 长链剖分），原因是它预处理出了每个节点的<strong>重儿子</strong>！我们利用这个性质，在暴力时每次将重儿子所在子树的贡献保留并继承，对于轻儿子子树仍然采取暴力统计+清空的策略，于是便有了如下递归步骤：</p>
 <ol>
 <li>统计轻儿子子树贡献 + 清空贡献</li>
