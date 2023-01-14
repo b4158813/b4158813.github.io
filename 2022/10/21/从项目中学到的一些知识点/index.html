@@ -23,15 +23,15 @@
 <meta property="og:site_name" content="BlablaWu&#39;s Blog">
 <meta property="og:description" content="从C++开源项目中学到的一些知识点，包括C++和并发方面的内容">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/img/src=http___i0.hdslb.com_bfs_article_fe3a135bd78293cb838ec818af872beeed306fe0.png&refer=http___i0.hdslb.webp">
+<meta property="og:image" content="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/img/ktv_1124688351_V3hUODlYVU5RMGhFRVE4cjZmd1g0UT09_1585141612062.png">
 <meta property="article:published_time" content="2022-10-21T15:22:59.000Z">
-<meta property="article:modified_time" content="2022-10-21T16:11:15.385Z">
+<meta property="article:modified_time" content="2023-01-14T06:32:32.309Z">
 <meta property="article:author" content="琉璃糖">
 <meta property="article:tag" content="C++">
 <meta property="article:tag" content="并发">
 <meta property="article:tag" content="项目">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/img/src=http___i0.hdslb.com_bfs_article_fe3a135bd78293cb838ec818af872beeed306fe0.png&refer=http___i0.hdslb.webp">
+<meta name="twitter:image" content="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/img/ktv_1124688351_V3hUODlYVU5RMGhFRVE4cjZmd1g0UT09_1585141612062.png">
   
   
   <title>从项目中学到的一些知识点 - BlablaWu&#39;s Blog</title>
@@ -217,7 +217,7 @@
   
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      807 字
+      1.1k 字
     </span>
   
 
@@ -226,7 +226,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      7 分钟
+      10 分钟
     </span>
   
 
@@ -270,6 +270,8 @@
 </blockquote>
 <hr>
 <h2 id="利用std-chrono获取当前时刻的精确到微秒的时间"><a href="#利用std-chrono获取当前时刻的精确到微秒的时间" class="headerlink" title="利用std::chrono获取当前时刻的精确到微秒的时间"></a>利用std::chrono获取当前时刻的精确到微秒的时间</h2><figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++">std::<span class="hljs-type">time_t</span> time_now_us = std::chrono::<span class="hljs-built_in">duration_cast</span>&lt;std::chrono::microseconds&gt;((std::chrono::high_resolution_clock::<span class="hljs-built_in">now</span>().<span class="hljs-built_in">time_since_epoch</span>())).<span class="hljs-built_in">count</span>();<br><br>std::<span class="hljs-type">time_t</span> time_now_s = time_now_us / <span class="hljs-number">1000000</span>; <span class="hljs-comment">// seconds</span><br>time_now_s += <span class="hljs-number">28800</span>; <span class="hljs-comment">// UTC + 8</span><br>std::tm* time_now = std::<span class="hljs-built_in">gmtime</span>(&amp;time_now_s); <span class="hljs-comment">// format</span><br><br><span class="hljs-type">char</span> buff[<span class="hljs-number">32</span>], usbuff[<span class="hljs-number">7</span>];<br><span class="hljs-built_in">strftime</span>(buff, <span class="hljs-number">32</span>, <span class="hljs-string">&quot;%Y-%m-%d %H:%M:%S.&quot;</span>, time_now);<br><span class="hljs-built_in">sprintf</span>(usbuff, <span class="hljs-string">&quot;%06llu&quot;</span>, time_now_us % <span class="hljs-number">1000000</span>);<br>cout &lt;&lt; buff &lt;&lt; usbuff &lt;&lt; endl;<br><br><span class="hljs-comment">/*</span><br><span class="hljs-comment">output:</span><br><span class="hljs-comment">2022-10-22 00:09:29.651801</span><br><span class="hljs-comment">*/</span><br></code></pre></div></td></tr></table></figure>
+<hr>
+<h2 id="C-17利用内存池加速"><a href="#C-17利用内存池加速" class="headerlink" title="C++17利用内存池加速"></a>C++17利用内存池加速</h2><figure class="highlight cpp"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs cpp"><span class="hljs-keyword">auto</span> set_pmr = []&#123;<br>    <span class="hljs-type">static</span> byte buffer [<span class="hljs-number">1</span> &lt;&lt; <span class="hljs-number">30</span>];<br>    <span class="hljs-type">static</span> pmr::monotonic_buffer_resource pool &#123;<span class="hljs-built_in">data</span>(buffer), <span class="hljs-built_in">size</span>(buffer)&#125;;<br>    <span class="hljs-built_in">set_default_resource</span>(&amp;pool);<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;();<br><br>pmr::unordered_map&lt;string, pmr::set&lt;string&gt;&gt; mp[<span class="hljs-number">100</span>]; <br>pmr::unordered_map&lt;string, pmr::set&lt;string&gt;&gt; mp1[<span class="hljs-number">100</span>]; <br></code></pre></div></td></tr></table></figure>
 
             </div>
             <hr>
