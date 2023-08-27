@@ -9508,7 +9508,7 @@ s_2=tanh(Ux_2+Ws_1)</script><p>因此真正的求导过程长这样</p>
 <li><a href="https://blog.csdn.net/nicejw/article/details/106444221">论SCTP协议与TCP协议的区别 烟柳寒殇的博客-CSDN博客_sctp和tcp</a></li>
 </ul>
 <p><img src="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/img/image-20230321011715919.png" alt="SCTP vs TCP"></p>
-<h2 id="直播技术-一些问题和应对方案"><a href="#直播技术-一些问题和应对方案" class="headerlink" title="直播技术 一些问题和应对方案"></a>直播技术 一些问题和应对方案</h2><p><img src="C:\Users\wlx\AppData\Roaming\Typora\typora-user-images\image-20230320221742351.png" alt="image-20230320221742351"></p>
+<h2 id="直播技术-一些问题和应对方案"><a href="#直播技术-一些问题和应对方案" class="headerlink" title="直播技术 一些问题和应对方案"></a>直播技术 一些问题和应对方案</h2><p><img src="C:\Users\wlx\AppData\Roaming\Typora\typora-user-images\image-20230320221742351.png" alt="常见推流架构"></p>
 <h3 id="网络拥塞导致的延迟问题"><a href="#网络拥塞导致的延迟问题" class="headerlink" title="网络拥塞导致的延迟问题"></a>网络拥塞导致的延迟问题</h3><ol>
 <li>在推流端drop数据 或 音频做变速、视频drop非I帧（难度较高）</li>
 <li>在拉流端drop数据 或 变速处理（难度较高）</li>
@@ -9641,6 +9641,47 @@ df = \frac{\partial f}{\partial x}dx+\frac{\partial f}{\partial y}dy</script><ul
       </categories>
       <tags>
         <tag>热力学</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C++编译优化那些事儿</title>
+    <url>/2023/08/27/C-%E7%BC%96%E8%AF%91%E4%BC%98%E5%8C%96%E9%82%A3%E4%BA%9B%E4%BA%8B%E5%84%BF/</url>
+    <content><![CDATA[<p>关于C++编译优化的一些探究</p>
+<span id="more"></span>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>今天在群里看到这么个问题，就是下面这个代码在执行时每次判断都要计算一次sqrt函数吗？</p>
+<p><img src="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/img/image-20230827224959737.png" alt="problem1"></p>
+<p>我猜想群里一直探讨的是某种语言的原生编译器情况下（不带任何编译优化选项的情况下）编译完成后执行程序，这个sqrt()是否会只计算一次。</p>
+<p>对于别的语言我不熟，但是我知道C++的开了-Ox优化一定是可以优化的，其实这是个老生常谈的问题，那就是编译器优化。</p>
+<h2 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h2><p>启动<a href="https://gcc.godbolt.org/">Compiler Explorer (godbolt.org)</a>，看下汇编代码就行，输入以下代码：</p>
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;cmath&gt;</span></span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">fun</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-type">int</span> n = <span class="hljs-number">10</span>;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;<span class="hljs-built_in">sqrt</span>(n);++i) &#123;&#125;<br>    <span class="hljs-keyword">return</span>;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+<p>看一下<strong>x86-64 gcc 6.4</strong>的汇编代码，可以发现每次都调用了sqrt函数：</p>
+<p><img src="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/img/image-20230827230829259.png" alt="x86-64 gcc 6.4" style="zoom:67%;" /></p>
+<h3 id="O2的威力"><a href="#O2的威力" class="headerlink" title="-O2的威力"></a>-O2的威力</h3><p>如果我们加入了<code>-O2</code>选项，则整个代码会被直接优化为空：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs assembly">fun():<br>        rep ret<br></code></pre></div></td></tr></table></figure>
+<p>经过验证，<code>-O2</code>太过强悍，基本可以优化所有的架构+编译器下的类似代码</p>
+<h3 id="constexpr的威力"><a href="#constexpr的威力" class="headerlink" title="constexpr的威力"></a>constexpr的威力</h3><p>我们发现C++代码中局部变量n的值是一个普通的整型，我们考虑对其使用<code>constexpr</code>（或者const）修饰，看看是否有改变，输入以下代码：</p>
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;cmath&gt;</span></span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">fun</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-keyword">constexpr</span> <span class="hljs-type">int</span> n = <span class="hljs-number">10</span>;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;<span class="hljs-built_in">sqrt</span>(n);++i) &#123;&#125;<br>    <span class="hljs-keyword">return</span>;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+<p>看一下<strong>x86-64 gcc 6.4</strong>的汇编代码，可以发现for的小于判断处已经被.data段常量替代了，每次仅需从代码段读取该数据到寄存器中而不需要耗费调用函数的开销：</p>
+<p><img src="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/img/image-20230827230537327.png" alt="x86-64 gcc 6.4" style="zoom: 67%;" /></p>
+<p>当升级到<strong>x86-64 gcc 8.1</strong>以后，这个值在程序编译完成后的汇编代码中是直接被常量值替换的<strong>（sqrt(10)直接替换为3）</strong>：</p>
+<p><img src="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/img/image-20230827231100257.png" alt="x86-64 gcc 8.1" style="zoom:67%;" /></p>
+<p>当然，这个优化并不是所有编译器都有（但是-O2是都有的），例如，如果采用<strong>x86 msvc v19.36</strong>或者更高版本的msvc，还是会每次判断都调用一次sqrt：</p>
+<p><img src="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/img/image-20230827231413336.png" alt="x86 msvc v19.36" style="zoom: 50%;" /></p>
+<p>同时，<strong>x86-64 clang 15.0.0</strong>也是一样：（虽然都会把值放到常量区）</p>
+<p><img src="https://blog-1301883815.cos.ap-nanjing.myqcloud.com/img/image-20230827232209960.png" alt="image-20230827232209960" style="zoom:50%;" /></p>
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>经验证：</p>
+<ul>
+<li><code>-O2</code>基本可以优化所有的类似行为，并且优化力度极大，对于所有架构和所有类型的编译器均有效（目前没有发现例外，x86、arm、risc-v下的llvm、clang、gcc、msvc均受益）</li>
+<li>x86-64下的GCC 在constexpr或者const的加持下可以实现只计算一次的优化</li>
+<li>x86-64下的GCC 7.5 -&gt; 8.1的升级，将 结果常量存储在代码段 升级为 汇编代码中结果常量值直接替换，达到进一步优化（不需要从代码段加载）</li>
+</ul>
+]]></content>
+      <categories>
+        <category>计算机</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>编译优化</tag>
       </tags>
   </entry>
 </search>
